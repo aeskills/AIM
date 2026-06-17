@@ -1,0 +1,9 @@
+.DS_Store
+*.log
+test_screenshot.png
+test_welcome.png
+test_english.png
+test_hindi.png
+test_welcome_noflags.png
+welcome_no_hash.png
+test_english_clicked.png

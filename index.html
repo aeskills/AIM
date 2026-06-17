@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest - Student Tutorial Platform</title>
+    <meta name="description" content="Explore and learn with EduQuest, a self-paced tutorial platform for K-12 students. Choose your grade and start learning today.">
+    <!-- Google Fonts: Outfit (headings) & Inter (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=1.3">
+    <!-- Local libraries for offline-first resilience -->
+    <script src="xlsx.full.min.js" defer></script>
+    <script src="papaparse.min.js" defer></script>
+    <script src="app.js?v=1.3" defer></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <a href="#" class="logo-group" id="header-logo" aria-label="EduQuest Home">
+                <span class="logo-icon" aria-hidden="true">🚀</span>
+                <span class="logo-text">EduQuest</span>
+            </a>
+            <div class="header-right">
+                <div class="lang-toggle-container">
+                    <button id="lang-toggle-btn" class="lang-toggle-btn" aria-label="Switch Language / भाषा बदलें">
+                        🌐 <span id="lang-toggle-text">Hindi / हिंदी</span>
+                    </button>
+                </div>
+                <button id="download-submissions-btn" class="btn btn-secondary btn-sm hidden" aria-label="Download student submissions as CSV">
+                    📥 Download Submissions (0)
+                </button>
+                <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+                    <ol class="breadcrumbs" id="breadcrumbs-list">
+                        <!-- Breadcrumbs will be rendered dynamically -->
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main" id="main-content">
+        <!-- Loader Screen (Skeletons) -->
+        <div id="loader-view" class="loader-view hidden" aria-live="polite" aria-busy="true">
+            <div class="skeleton-header animate-pulse"></div>
+            <div class="skeleton-grid">
+                <div class="skeleton-card animate-pulse"></div>
+                <div class="skeleton-card animate-pulse"></div>
+                <div class="skeleton-card animate-pulse"></div>
+            </div>
+        </div>
+
+        <!-- Error Screen -->
+        <div id="error-view" class="error-view hidden" role="alert">
+            <div class="error-card">
+                <span class="error-icon">⚠️</span>
+                <h2 data-i18n="failedLoadActivities">Failed to Load Activities</h2>
+                <p id="error-message" data-i18n="failedLoadDesc">The activities database could not be loaded or is in an invalid format.</p>
+                <button id="retry-btn" class="btn btn-primary" data-i18n="tryAgain">Try Again</button>
+            </div>
+        </div>
+
+        <!-- Step 0: Welcome / Language Selection Screen -->
+        <section id="step-welcome" class="step-section hidden">
+            <div class="hero-section">
+                <h1 class="hero-title">Welcome to EduQuest</h1>
+                <p class="hero-subtitle">Choose your learning path / अपनी सीखने की भाषा चुनें</p>
+            </div>
+
+            <div class="welcome-container">
+                <div class="welcome-choices-grid">
+                    <a href="#" class="welcome-choice-card card-accent-indigo" id="choice-english">
+                        <div class="welcome-icon-wrapper" style="color: var(--color-primary); font-family: var(--font-heading); font-weight: 600;">A</div>
+                        <h3>English Tutorials</h3>
+                        <p>Explore grades 6, 7, and 8 tutorials and activities in English.</p>
+                        <span class="btn btn-primary">Start English</span>
+                    </a>
+                    <a href="#" class="welcome-choice-card card-accent-pink" id="choice-hindi">
+                        <div class="welcome-icon-wrapper" style="color: var(--color-subject-5); font-family: var(--font-heading); font-weight: 600;">अ</div>
+                        <h3>हिंदी ट्यूटोरियल</h3>
+                        <p>कक्षा 3 और 5 के ट्यूटोरियल और गतिविधियां हिंदी में देखें।</p>
+                        <span class="btn btn-primary" style="background-color: var(--color-accent-success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">हिंदी शुरू करें</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 1: Grade Selection Screen -->
+        <section id="step-grade" class="step-section">
+            <div class="back-link-wrapper">
+                <a href="#" id="back-to-welcome-link" class="back-link">
+                    <span class="arrow" aria-hidden="true">←</span> <span data-i18n="backToWelcome">Back to Language Selection</span>
+                </a>
+            </div>
+            <div class="hero-section">
+                <h1 id="grade-title" class="hero-title" tabindex="-1" data-i18n="readyToExplore">Ready to Explore?</h1>
+                <p class="hero-subtitle" data-i18n="heroSubtitle">Choose your grade level to discover fun and interactive tutorials tailored just for you.</p>
+            </div>
+
+            <div class="grades-container">
+                <h2 class="section-title" data-i18n="selectYourGrade">Select Your Grade</h2>
+                
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <span class="search-icon" aria-hidden="true">🔍</span>
+                        <input type="text" id="grade-search" placeholder="Search for your grade..." aria-label="Search grades" data-i18n-placeholder="searchGradesPlaceholder" data-i18n-aria="searchGradesPlaceholder">
+                        <button type="button" id="clear-search-btn" class="clear-search-btn hidden" aria-label="Clear search">&times;</button>
+                    </div>
+                </div>
+
+                <div class="grades-grid" id="grades-grid">
+                    <!-- Grade cards rendered dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: Activity Selection Screen -->
+        <section id="step-activities" class="step-section hidden">
+            <div class="back-link-wrapper">
+                <a href="#" id="back-to-grades-link" class="back-link">
+                    <span class="arrow" aria-hidden="true">←</span> <span data-i18n="backToHome">Back to Home</span>
+                </a>
+            </div>
+            <div class="step-header">
+                <h1 id="activities-title" class="section-title" tabindex="-1" data-i18n="exploreActivities">Explore Activities</h1>
+                <p class="section-subtitle" id="activities-subtitle">Showing activities for your selected grade</p>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar" role="search" aria-label="Filter activities">
+                <div class="filter-group">
+                    <label for="subject-filter" class="filter-label" data-i18n="monthLabel">Month</label>
+                    <div class="select-wrapper">
+                        <select id="subject-filter" class="filter-select">
+                            <option value="All" data-i18n="allMonthsOption">All Months</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activities Grid -->
+            <div class="activities-grid" id="activities-grid">
+                <!-- Activity cards rendered dynamically -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-activities-view" class="empty-view hidden">
+                <div class="empty-card">
+                    <span class="empty-icon">🔍</span>
+                    <h2 data-i18n="noActivitiesFound">No Activities Found</h2>
+                    <p data-i18n="emptyActivitiesDesc">Try clearing your filters or choosing another grade level to see what is available.</p>
+                    <button id="reset-filters-btn" class="btn btn-secondary" data-i18n="resetFilters">Reset Filters</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Activity Detail Screen -->
+        <section id="step-detail" class="step-section hidden">
+            <div class="detail-container">
+                <div class="back-link-wrapper">
+                    <a href="#" id="back-to-activities-link" class="back-link">
+                        <span class="arrow" aria-hidden="true">←</span> <span data-i18n="backToActivities">Back to activities</span>
+                    </a>
+                </div>
+
+                <article class="detail-panel">
+                    <header class="detail-header">
+                        <div class="detail-tags" id="detail-tags">
+                            <!-- Month and grade pills rendered dynamically -->
+                        </div>
+                        <h1 id="detail-title" class="detail-main-title" tabindex="-1">Activity Name</h1>
+                    </header>
+
+                    <section class="detail-body">
+                        <h2 class="detail-section-title" data-i18n="descriptionTitle">Description</h2>
+                        <div id="detail-description" class="detail-description-container">Full activity description...</div>
+                    </section>
+
+                    <section class="detail-skills-instructions" id="detail-skills-instructions-section">
+                        <h2 class="detail-section-title" data-i18n="skillsTitle">Skills in Focus</h2>
+                        <p id="detail-skills" class="detail-skills-text">Skills focus...</p>
+                        
+                        <h2 class="detail-section-title" style="margin-top: 1.5rem;" data-i18n="instructionsTitle">Instructions</h2>
+                        <div id="detail-instructions" class="detail-instructions-text">Instructions details...</div>
+                    </section>
+
+                    <footer class="detail-cta-section" style="margin-top: 1rem; margin-bottom: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <div id="tutorial-cta-container" class="cta-buttons-container">
+                            <!-- Buttons or disabled notices rendered dynamically -->
+                        </div>
+                    </footer>
+
+                    <!-- Work Submission Section -->
+                    <section class="detail-submission-section" id="submission-section">
+                        <h2 class="detail-section-title" data-i18n="submitYourWork">Submit Your Work</h2>
+                        <div id="submission-initial-view">
+                            <p class="submission-prompt" data-i18n="submitWorkPrompt">Completed this activity? Paste your project link to submit your work!</p>
+                            <button id="show-submission-form-btn" class="btn btn-secondary" type="button" data-i18n="submitProjectBtn">Submit Project Link</button>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p data-i18n="footerText">&copy; 2026 EduQuest. Crafted for young explorers.</p>
+        </div>
+    </footer>
+
+    <!-- Submission Modal Popup -->
+    <div id="submission-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close-btn" id="close-modal-btn" aria-label="Close popup">&times;</button>
+            <h2 id="modal-title" class="detail-section-title" style="border-left: 3px solid var(--color-primary); padding-left: 0.75rem; margin-bottom: 1rem;" data-i18n="submitProjectTitle">Submit Your Project</h2>
+            <form id="submission-form" class="submission-form">
+                <p class="submission-subtext" style="color: var(--color-text-secondary); margin-bottom: 1.25rem;" data-i18n="submitProjectSubtitle">Fill in the details below to submit your project link.</p>
+                
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="submit-student-name" class="form-label" style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.03em;" data-i18n="fullNameLabel">Full Name</label>
+                    <input type="text" id="submit-student-name" class="form-input" placeholder="e.g. Ashish Dokwal" data-i18n-placeholder="studentNamePlaceholder" style="width: 100%; font-family: var(--font-body); font-size: 0.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary);">
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="submit-school-name" class="form-label" style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.03em;" data-i18n="schoolNameLabel">School Name</label>
+                    <input type="text" id="submit-school-name" class="form-input" placeholder="e.g. Delhi Public School" data-i18n-placeholder="schoolNamePlaceholder" style="width: 100%; font-family: var(--font-body); font-size: 0.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary);">
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="submit-work-link" class="form-label" style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.03em;" data-i18n="projectLinkLabel">Project/Work Link</label>
+                    <input type="url" id="submit-work-link" class="form-input" placeholder="e.g. https://new.express.adobe.com/..." data-i18n-placeholder="projectLinkPlaceholder" required style="width: 100%; font-family: var(--font-body); font-size: 0.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary);">
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: 0.75rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;" data-i18n="submitBtnText">Submit Project</button>
+                    <button type="button" id="cancel-submission-btn" class="btn btn-secondary" style="flex: 1;" data-i18n="cancelBtnText">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Custom Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+        <div class="modal-content" style="max-width: 400px; text-align: center; display: flex; flex-direction: column; gap: 1.25rem; align-items: center;">
+            <button type="button" class="modal-close-btn" id="close-confirm-modal-btn" aria-label="Close popup" style="top: 0.75rem; right: 1rem;">&times;</button>
+            <div style="font-size: 3rem; line-height: 1; margin-top: 0.5rem;">❓</div>
+            <h2 id="confirm-modal-title" style="font-family: var(--font-heading); font-size: 1.375rem; font-weight: 600; color: var(--color-text-primary); margin: 0;" data-i18n="confirmTitle">Do you want to submit the work?</h2>
+            <p style="font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;" data-i18n="confirmSubtitle">You will be guided to the submission form to enter your details and project link.</p>
+            <div style="display: flex; gap: 0.75rem; width: 100%; margin-top: 0.5rem;">
+                <button type="button" id="confirm-yes-btn" class="btn btn-primary" style="flex: 1; padding: 0.625rem 1.25rem;" data-i18n="confirmYes">Yes</button>
+                <button type="button" id="confirm-no-btn" class="btn btn-secondary" style="flex: 1; padding: 0.625rem 1.25rem;" data-i18n="confirmNo">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Success Modal -->
+    <div id="success-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="success-modal-title">
+        <div class="modal-content" style="max-width: 400px; text-align: center; display: flex; flex-direction: column; gap: 1.25rem; align-items: center;">
+            <div style="font-size: 3.5rem; line-height: 1; margin-top: 0.5rem;">🎉</div>
+            <h2 id="success-modal-title" style="font-family: var(--font-heading); font-size: 1.375rem; font-weight: 600; color: var(--color-text-primary); margin: 0;" data-i18n="successTitle">Project Submitted!</h2>
+            <p style="font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;" data-i18n="successSubtitle">Your work has been submitted successfully. Thank you for sharing your project!</p>
+            <button type="button" id="success-ok-btn" class="btn btn-primary" style="width: 100%; padding: 0.625rem 1.25rem; margin-top: 0.5rem;" data-i18n="successOk">Awesome</button>
+        </div>
+    </div>
+
+    <!-- Custom Password Modal -->
+    <div id="password-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="password-modal-title">
+        <div class="modal-content" style="max-width: 400px; text-align: center; display: flex; flex-direction: column; gap: 1.25rem; align-items: center;">
+            <button type="button" class="modal-close-btn" id="close-password-modal-btn" aria-label="Close popup" style="top: 0.75rem; right: 1rem;">&times;</button>
+            <div style="font-size: 3rem; line-height: 1; margin-top: 0.5rem;">🔒</div>
+            <h2 id="password-modal-title" style="font-family: var(--font-heading); font-size: 1.375rem; font-weight: 600; color: var(--color-text-primary); margin: 0;" data-i18n="enterAdminPassword">Enter Admin Password</h2>
+            <p style="font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;" data-i18n="passwordPrompt">Please enter the password to download the student submissions CSV.</p>
+            
+            <form id="password-form" style="width: 100%; display: flex; flex-direction: column; gap: 1rem; align-items: stretch;">
+                <div class="form-group" style="text-align: left;">
+                    <input type="password" id="admin-password-input" class="form-input" placeholder="Password" data-i18n-placeholder="passwordInputPlaceholder" required style="width: 100%; font-family: var(--font-body); font-size: 0.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary);">
+                    <p id="password-error-message" class="hidden" style="color: var(--color-accent-danger); font-size: 0.8125rem; font-weight: 600; margin-top: 0.375rem; text-align: center;" data-i18n="incorrectPassword">Incorrect password. Please try again.</p>
+                </div>
+                
+                <div style="display: flex; gap: 0.75rem; width: 100%; margin-top: 0.5rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1; padding: 0.625rem 1.25rem;" data-i18n="unlockAndDownload">Unlock & Download</button>
+                    <button type="button" id="cancel-password-btn" class="btn btn-secondary" style="flex: 1; padding: 0.625rem 1.25rem;" data-i18n="cancelBtnText">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

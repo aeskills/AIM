@@ -1,0 +1,25 @@
+grade,activity_name,description,subject,duration,difficulty,tutorial_url,instructor,materials_needed,estimated_points
+Grade 3,Intro to Addition,Learn the basic concepts of addition with fun visual puzzles and interactive exercises.,Math,15 mins,Beginner,https://www.youtube.com/watch?v=Fe8u2I3VMvI,Mr. Smith,Pencil and paper,100
+Grade 3,Solar System Explorer,Discover the planets in our solar system and draw your favorite planet.,Science,20 mins,Beginner,https://solarsystem.nasa.gov,Mrs. Davis,Crayons and drawing paper,150
+Grade 3,Sentence Builder,Practice building complete sentences using nouns verbs and adjectives.,English,15 mins,Beginner,,Ms. Higgins,None,100
+Grade 3,Basic Pixels,Create your first digital pixel art using simple grid coloring techniques.,Coding,25 mins,Intermediate,https://code.org,Mr. Lee,Computer,200
+Grade 3,Watercolor Fun,Learn how to mix primary colors to create beautiful watercolor gradients.,Art,30 mins,Intermediate,https://example.com/watercolor,Mrs. Gray,Watercolors and brush,250
+Grade 5,Fractions Master,Dive deep into fractions and learn how to add and subtract them with different denominators.,Math,20 mins,Intermediate,https://www.khanacademy.org,Mr. Smith,Notebook,150
+Grade 5,Volcano Eruption,Build a model volcano and learn about chemical reactions using kitchen items.,Science,45 mins,Advanced,https://www.sciencefun.org/kidszone/experiments/how-to-make-a-volcano/,Mrs. Davis,Baking soda and vinegar,300
+Grade 5,Ancient Egypt,Explore the pyramids and learn about the lives of ancient Egyptian pharaohs.,History,25 mins,Beginner,https://www.history.com,Mr. Jones,Library book,120
+Grade 5,Scratch Maze Game,Program a simple cat-and-mouse maze game using Scratch block programming.,Coding,40 mins,Intermediate,https://scratch.mit.edu,Mr. Lee,Computer,250
+Grade 5,Paper Origami,Master the art of folding paper to create animal shapes like frogs and cranes.,Art,15 mins,Beginner,https://example.com/origami,Mrs. Gray,Square origami paper,100
+Grade 5,Story Spark,Write an imaginative short story using creative writing prompts.,English,30 mins,Intermediate,,Ms. Higgins,Notebook,150
+Grade 8,Algebraic Thinking,Learn how to solve single-variable algebraic equations using modern visual methods.,Math,30 mins,Intermediate,https://www.khanacademy.org,Mr. Smith,Calculator,200
+Grade 8,Photosynthesis Lab,Conduct an online virtual lab to see how light intensity affects plant growth.,Science,35 mins,Advanced,https://example.com/photosynthesis,Mrs. Davis,Computer,300
+Grade 8,Civil War Overview,Analyze the causes and key battles of the American Civil War.,History,30 mins,Intermediate,https://example.com/civilwar,Mr. Jones,Notebook,180
+Grade 8,Python Turtle Graphics,Write your first Python script to draw geometric shapes on a screen.,Coding,45 mins,Intermediate,https://example.com/python-turtle,Mr. Lee,Python IDE,300
+Grade 8,Clay Sculpting,Learn basic sculpting techniques to model a human face with air-dry clay.,Art,50 mins,Advanced,,Mrs. Gray,Air-dry clay,350
+Grade 8,Poetry Workshop,Explore different poetic forms including sonnets haikus and free verse.,English,25 mins,Beginner,https://poetry.org,Ms. Higgins,Notebook,120
+Grade 10,Quadratic Equations,Master solving quadratic equations using factoring and the quadratic formula.,Math,40 mins,Advanced,https://www.khanacademy.org,Mr. Smith,Scientific Calculator,250
+Grade 10,Genetics and DNA,Explore how traits are inherited and build a digital 3D model of DNA.,Science,35 mins,Intermediate,https://learn.genetics.utah.edu,Mrs. Davis,Computer,200
+Grade 10,World War II Impact,Evaluate the global social and economic impacts of World War II.,History,40 mins,Advanced,https://www.history.com,Mr. Jones,Notebook,300
+Grade 10,Web Dev Basics,Build your first responsive HTML and CSS webpage from scratch.,Coding,50 mins,Intermediate,https://freecodecamp.org,Mr. Lee,Text Editor,350
+Grade 10,Color Theory in Design,Apply advanced color harmony principles to digital web layout mockups.,Art,30 mins,Intermediate,https://example.com/color-theory,Mrs. Gray,Computer,200
+Grade 10,Persuasive Essay,Write a compelling persuasive essay analyzing the impact of technology on society.,English,45 mins,Advanced,,Ms. Higgins,Word processor,300
+Grade 10,Intro to Chemistry,Learn about atomic structures the periodic table and balancing chemical equations.,Science,30 mins,Beginner,https://example.com/chem-intro,Mrs. Davis,Periodic table,150
