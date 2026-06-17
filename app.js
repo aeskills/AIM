@@ -518,7 +518,7 @@ function setupEventListeners() {
 async function loadDefaultExcel() {
     showLoader();
     try {
-        const fetchUrl = 'implemetation Plane.xlsx';
+        const fetchUrl = 'implemetation Plane.xlsx?v=' + Date.now();
         const response = await fetch(fetchUrl);
         if (!response.ok) {
             throw new Error(`Server returned status: ${response.status}`);
