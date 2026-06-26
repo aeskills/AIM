@@ -3,31 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduQuest - Student Tutorial Platform</title>
-    <meta name="description" content="Explore and learn with EduQuest, a self-paced tutorial platform for K-12 students. Choose your grade and start learning today.">
+    <title>AIM - Adobe Implementation Plane</title>
+    <meta name="description" content="Explore and learn with AIM - Adobe Implementation Plane, a self-paced tutorial platform for K-12 students. Choose your grade and start learning today.">
     <!-- Google Fonts: Outfit (headings) & Inter (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=1.3">
+    <link rel="stylesheet" href="styles.css?v=1.5">
     <!-- Local libraries for offline-first resilience -->
     <script src="xlsx.full.min.js" defer></script>
     <script src="papaparse.min.js" defer></script>
-    <script src="app.js?v=1.3" defer></script>
+    <script src="app.js?v=1.5" defer></script>
 </head>
 <body>
     <header class="app-header">
         <div class="header-container">
-            <a href="#" class="logo-group" id="header-logo" aria-label="EduQuest Home">
+            <a href="#" class="logo-group" id="header-logo" aria-label="AIM - Adobe Implementation Plane Home">
                 <span class="logo-icon" aria-hidden="true">🚀</span>
-                <span class="logo-text">EduQuest</span>
+                <span class="logo-text">AIM - Adobe Implementation Plane</span>
             </a>
             <div class="header-right">
-                <div class="lang-toggle-container">
-                    <button id="lang-toggle-btn" class="lang-toggle-btn" aria-label="Switch Language / भाषा बदलें">
-                        🌐 <span id="lang-toggle-text">Hindi / हिंदी</span>
-                    </button>
-                </div>
                 <button id="download-submissions-btn" class="btn btn-secondary btn-sm hidden" aria-label="Download student submissions as CSV">
                     📥 Download Submissions (0)
                 </button>
@@ -64,23 +59,31 @@
         <!-- Step 0: Welcome / Language Selection Screen -->
         <section id="step-welcome" class="step-section hidden">
             <div class="hero-section">
-                <h1 class="hero-title">Welcome to EduQuest</h1>
-                <p class="hero-subtitle">Choose your learning path / अपनी सीखने की भाषा चुनें</p>
+                <h1 class="hero-title">Welcome to AIM</h1>
+                <p class="hero-subtitle">Choose your preferred language</p>
             </div>
 
             <div class="welcome-container">
                 <div class="welcome-choices-grid">
                     <a href="#" class="welcome-choice-card card-accent-indigo" id="choice-english">
-                        <div class="welcome-icon-wrapper" style="color: var(--color-primary); font-family: var(--font-heading); font-weight: 600;">A</div>
+                        <div class="welcome-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                        </div>
                         <h3>English Tutorials</h3>
-                        <p>Explore grades 6, 7, and 8 tutorials and activities in English.</p>
-                        <span class="btn btn-primary">Start English</span>
+                        <span class="btn btn-primary">Start</span>
                     </a>
                     <a href="#" class="welcome-choice-card card-accent-pink" id="choice-hindi">
-                        <div class="welcome-icon-wrapper" style="color: var(--color-subject-5); font-family: var(--font-heading); font-weight: 600;">अ</div>
-                        <h3>हिंदी ट्यूटोरियल</h3>
-                        <p>कक्षा 3 और 5 के ट्यूटोरियल और गतिविधियां हिंदी में देखें।</p>
-                        <span class="btn btn-primary" style="background-color: var(--color-accent-success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">हिंदी शुरू करें</span>
+                        <div class="welcome-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20h9"></path>
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                            </svg>
+                        </div>
+                        <h3>Hindi Tutorials</h3>
+                        <span class="btn btn-primary" style="background-color: var(--color-accent-success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">Start</span>
                     </a>
                 </div>
             </div>
@@ -206,7 +209,7 @@
 
     <footer class="app-footer">
         <div class="footer-container">
-            <p data-i18n="footerText">&copy; 2026 EduQuest. Crafted for young explorers.</p>
+            <p data-i18n="footerText">&copy; 2026 AIM - Adobe Implementation Plane. Crafted for young explorers.</p>
         </div>
     </footer>
 
@@ -284,6 +287,11 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <!-- Floating Tooltip for Activities -->
+    <div id="activity-tooltip" class="activity-tooltip hidden" aria-hidden="true">
+        <div class="tooltip-title"></div>
     </div>
 </body>
 </html>

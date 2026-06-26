@@ -1,5 +1,5 @@
 /**
- * @fileoverview Main application logic for EduQuest Student Tutorial Platform.
+ * @fileoverview Main application logic for AIM - Adobe Implementation Plane Student Tutorial Platform.
  * Parses Excel files using SheetJS (XLSX) and manages the step routing, filtering,
  * metadata rendering, modal project submissions, and CSV download capabilities.
  */
@@ -43,8 +43,8 @@ const state = {
 
 const translations = {
     en: {
-        readyToExplore: "Ready to Explore?",
-        heroSubtitle: "Choose your grade level to discover fun and interactive tutorials tailored just for you.",
+        readyToExplore: "Let's begin!",
+        heroSubtitle: "Choose your grade level and proceed with the activities",
         selectYourGrade: "Select Your Grade",
         searchGradesPlaceholder: "Search for your grade...",
         noGradesMatch: "No grades match your search query.",
@@ -88,7 +88,7 @@ const translations = {
         schoolNamePlaceholder: "e.g. Delhi Public School",
         projectLinkPlaceholder: "e.g. https://new.express.adobe.com/...",
         passwordInputPlaceholder: "Password",
-        footerText: "© 2026 EduQuest. Crafted for young explorers.",
+        footerText: "© 2026 AIM - Adobe Implementation Plane. Crafted for young explorers.",
         failedLoadActivities: "Failed to Load Activities",
         failedLoadDesc: "The activities database could not be loaded or is in an invalid format.",
         tryAgain: "Try Again",
@@ -124,8 +124,8 @@ const translations = {
         }
     },
     hi: {
-        readyToExplore: "तैयार हैं सीखने के लिए?",
-        heroSubtitle: "अपने लिए विशेष रूप से तैयार की गई मजेदार और इंटरैक्टिव गतिविधियां खोजने के लिए अपनी कक्षा चुनें।",
+        readyToExplore: "आइए शुरू करें!",
+        heroSubtitle: "अपनी कक्षा चुनें और गतिविधियों के साथ आगे बढ़ें",
         selectYourGrade: "अपनी कक्षा चुनें",
         searchGradesPlaceholder: "अपनी कक्षा खोजें...",
         noGradesMatch: "आपकी खोज से मेल खाती कोई कक्षा नहीं मिली।",
@@ -169,7 +169,7 @@ const translations = {
         schoolNamePlaceholder: "जैसे: दिल्ली पब्लिक स्कूल",
         projectLinkPlaceholder: "जैसे: https://new.express.adobe.com/...",
         passwordInputPlaceholder: "पासवर्ड",
-        footerText: "© 2026 EduQuest. युवा खोजकर्ताओं के लिए निर्मित।",
+        footerText: "© 2026 AIM - Adobe Implementation Plane. युवा खोजकर्ताओं के लिए निर्मित।",
         failedLoadActivities: "गतिविधियां लोड करने में विफल",
         failedLoadDesc: "गतिविधि डेटाबेस लोड नहीं किया जा सका या यह अमान्य प्रारूप में है।",
         tryAgain: "पुनः प्रयास करें",
@@ -213,7 +213,7 @@ const translations = {
  */
 async function init() {
     // Wipe all existing submissions unconditionally for a clean slate
-    localStorage.setItem('eduquest_submissions', JSON.stringify([]));
+    localStorage.setItem('aim_submissions', JSON.stringify([]));
     state.submissions = [];
     
     detectMode();
@@ -494,14 +494,7 @@ function setupEventListeners() {
         });
     }
 
-    // Language Toggle Click
-    const langToggleBtn = document.getElementById('lang-toggle-btn');
-    if (langToggleBtn) {
-        langToggleBtn.addEventListener('click', () => {
-            state.language = state.language === 'en' ? 'hi' : 'en';
-            render();
-        });
-    }
+
 
     // Listen for hash changes to support back/forward browser navigation
     window.addEventListener('hashchange', () => {
@@ -509,6 +502,87 @@ function setupEventListeners() {
             window.location.hash = '';
         }
     });
+
+    // Activity Card Tooltip Handlers
+    document.addEventListener('mouseover', (e) => {
+        const card = e.target.closest('.activity-card');
+        if (!card) return;
+
+        const tooltip = document.getElementById('activity-tooltip');
+        if (!tooltip) return;
+
+        const title = decodeURIComponent(card.getAttribute('data-tooltip-title') || '');
+
+        tooltip.querySelector('.tooltip-title').innerText = title;
+
+        tooltip.classList.remove('hidden');
+        // Force reflow
+        tooltip.offsetHeight;
+        tooltip.classList.add('visible');
+
+        positionTooltip(e, tooltip);
+    });
+
+    document.addEventListener('mouseout', (e) => {
+        const card = e.target.closest('.activity-card');
+        if (!card) return;
+
+        const tooltip = document.getElementById('activity-tooltip');
+        if (tooltip) {
+            tooltip.classList.remove('visible');
+            setTimeout(() => {
+                if (!tooltip.classList.contains('visible')) {
+                    tooltip.classList.add('hidden');
+                }
+            }, 150);
+        }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        const card = e.target.closest('.activity-card');
+        if (!card) return;
+
+        const tooltip = document.getElementById('activity-tooltip');
+        if (tooltip && tooltip.classList.contains('visible')) {
+            positionTooltip(e, tooltip);
+        }
+    });
+}
+
+/**
+ * Positions the floating activity tooltip relative to the cursor with screen boundary safety.
+ * @param {MouseEvent} e - Mouse event.
+ * @param {HTMLElement} tooltip - Tooltip DOM element.
+ * @returns {void}
+ */
+function positionTooltip(e, tooltip) {
+    const mouseX = e.pageX;
+    const mouseY = e.pageY;
+    const tooltipWidth = tooltip.offsetWidth;
+    const tooltipHeight = tooltip.offsetHeight;
+
+    // Offset from cursor
+    let left = mouseX + 15;
+    let top = mouseY + 15;
+
+    // Boundary checks (right and bottom edges)
+    if (left + tooltipWidth > window.innerWidth + window.pageXOffset - 20) {
+        left = mouseX - tooltipWidth - 15;
+    }
+    if (top + tooltipHeight > window.innerHeight + window.pageYOffset - 20) {
+        top = mouseY - tooltipHeight - 15;
+    }
+
+    // Boundary checks (left and top edges)
+    if (left < window.pageXOffset + 10) {
+        left = window.pageXOffset + 10;
+    }
+    if (top < window.pageYOffset + 10) {
+        top = window.pageYOffset + 10;
+    }
+
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
 }
 
 /**
@@ -766,20 +840,12 @@ function render() {
 
     const isChoose = state.tutorialMode === 'choose';
     const breadcrumbNav = document.querySelector('.breadcrumb-nav');
-    const langToggle = document.querySelector('.lang-toggle-container');
 
     if (breadcrumbNav) {
         if (isChoose) {
             breadcrumbNav.classList.add('hidden');
         } else {
             breadcrumbNav.classList.remove('hidden');
-        }
-    }
-    if (langToggle) {
-        if (isChoose) {
-            langToggle.classList.add('hidden');
-        } else {
-            langToggle.classList.remove('hidden');
         }
     }
 
@@ -1037,7 +1103,7 @@ function renderFilteredActivities() {
             const monthText = dict.monthNames[activity.month] || activity.month || dict.curriculum;
 
             html += `
-                <button class="activity-card card-accent-${colorClass}" type="button" data-activity-name="${encodeURIComponent(activity.activity_name)}" aria-label="${activity.activity_name}, ${monthText}">
+                <button class="activity-card card-accent-${colorClass}" type="button" data-activity-name="${encodeURIComponent(activity.activity_name)}" data-tooltip-title="${encodeURIComponent(activity.activity_name)}" aria-label="${activity.activity_name}, ${monthText}">
                     <div class="activity-card-header">
                         <span class="subject-pill ${colorClass}">${monthText}</span>
                     </div>
@@ -1180,7 +1246,7 @@ function handleStudentSubmission() {
     };
 
     state.submissions.push(newSubmission);
-    localStorage.setItem('eduquest_submissions', JSON.stringify(state.submissions));
+    localStorage.setItem('aim_submissions', JSON.stringify(state.submissions));
 
     updateDownloadButtonState();
     closeSubmissionModal();
@@ -1356,7 +1422,7 @@ function downloadSubmissionsCSV() {
 
     const downloadLink = document.createElement('a');
     downloadLink.setAttribute('href', blobUrl);
-    downloadLink.setAttribute('download', `eduquest_student_submissions_${new Date().toISOString().split('T')[0]}.csv`);
+    downloadLink.setAttribute('download', `aim_student_submissions_${new Date().toISOString().split('T')[0]}.csv`);
     downloadLink.style.visibility = 'hidden';
 
     document.body.appendChild(downloadLink);
@@ -1444,11 +1510,7 @@ function translateUIInternal() {
         }
     });
 
-    // Update Language Toggle Button text
-    const langBtnText = document.getElementById('lang-toggle-text');
-    if (langBtnText) {
-        langBtnText.innerText = lang === 'en' ? "Hindi / हिंदी" : "English / English";
-    }
+
 
     // Refresh dynamic download button text count
     updateDownloadButtonState();

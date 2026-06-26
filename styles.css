@@ -1394,39 +1394,7 @@ a:hover {
     font-weight: 600;
 }
 
-/* Language Switcher Styling */
-.lang-toggle-container {
-    display: inline-flex;
-    align-items: center;
-}
 
-.lang-toggle-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-body);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: var(--transition-fast);
-    box-shadow: var(--shadow-sm);
-}
-
-.lang-toggle-btn:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    background-color: var(--color-primary-light);
-    transform: translateY(-1px);
-}
-
-.lang-toggle-btn:active {
-    transform: translateY(0);
-}
 
 
 /* Modal overlay and popup container styling */
@@ -1503,8 +1471,8 @@ a:hover {
 .welcome-choice-card {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 3rem 2rem;
+    border-radius: 24px;
+    padding: 3.5rem 2.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1512,29 +1480,63 @@ a:hover {
     text-decoration: none;
     cursor: pointer;
     box-shadow: var(--shadow-sm);
-    transition: var(--transition-normal);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
 }
 
 .welcome-choice-card:hover {
     background-color: var(--color-surface-elevated);
-    border-color: var(--color-border-hover);
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-premium);
+    border-color: var(--color-primary);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15);
+}
+
+.welcome-choice-card.card-accent-pink:hover {
+    border-color: var(--color-accent-success);
+    box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.15);
 }
 
 .welcome-icon-wrapper {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    line-height: 1;
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.75rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-accent-indigo .welcome-icon-wrapper {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.card-accent-pink .welcome-icon-wrapper {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-accent-success);
+}
+
+.welcome-choice-card:hover .welcome-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .welcome-choice-card h3 {
-    font-size: 1.35rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin-bottom: 1.75rem;
     color: var(--color-text-primary);
+    transition: var(--transition-fast);
+}
+
+.welcome-choice-card:hover h3 {
+    color: var(--color-primary);
+}
+
+.welcome-choice-card.card-accent-pink:hover h3 {
+    color: var(--color-accent-success);
 }
 
 .welcome-choice-card p {
@@ -1547,6 +1549,16 @@ a:hover {
 .welcome-choice-card .btn {
     width: 100%;
     max-width: 200px;
+    transition: all 0.3s ease;
+}
+
+.welcome-choice-card:hover .btn {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+}
+
+.welcome-choice-card.card-accent-pink:hover .btn {
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
 }
 
 
@@ -1661,4 +1673,39 @@ a:hover {
 /* General visibility utility */
 .hidden {
     display: none !important;
+}
+
+/* Premium Floating Tooltip */
+.activity-tooltip {
+    position: absolute;
+    z-index: 10000;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    max-width: 360px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+}
+
+.activity-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.activity-tooltip .tooltip-title {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0;
+    line-height: 1.3;
 }
