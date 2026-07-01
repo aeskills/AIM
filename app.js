@@ -586,13 +586,13 @@ function positionTooltip(e, tooltip) {
 }
 
 /**
- * Fetches the default Excel curriculum sheet 'implemetation Plane.xlsx' from the server.
+ * Fetches the default Excel curriculum sheet 'Implementation plan.xlsx' from the server.
  * @returns {Promise<void>}
  */
 async function loadDefaultExcel() {
     showLoader();
     try {
-        const fetchUrl = 'implemetation Plane.xlsx?v=' + Date.now();
+        const fetchUrl = 'Implementation plan.xlsx?v=' + Date.now();
         const response = await fetch(fetchUrl);
         if (!response.ok) {
             throw new Error(`Server returned status: ${response.status}`);
@@ -600,7 +600,7 @@ async function loadDefaultExcel() {
         const arrayBuffer = await response.arrayBuffer();
         parseExcel(arrayBuffer);
     } catch (error) {
-        showError('Could not auto-load the curriculum excel file. Please make sure implemetation Plane.xlsx is in the root folder.');
+        showError('Could not auto-load the curriculum excel file. Please make sure Implementation plan.xlsx is in the root folder.');
     }
 }
 
@@ -691,9 +691,20 @@ function parseExcel(arrayBuffer) {
                     continue;
                 }
 
-                // Month header (Row index 2) - Fill down merged cell value
-                const monthVal = (rows[2] && rows[2][c]) ? rows[2][c].toString().trim() : null;
-                if (monthVal && monthVal !== "" && !monthVal.toUpperCase().startsWith("GRADE")) {
+                // Month header (Search rows 3, 4, 5 / index 2, 3, 4) - Fill down merged cell value
+                let monthVal = null;
+                for (let rIdx of [2, 3, 4]) {
+                    const val = (rows[rIdx] && rows[rIdx][c]) ? rows[rIdx][c].toString().trim() : null;
+                    if (val && val !== "" && 
+                        !val.toUpperCase().startsWith("GRADE") && 
+                        !val.toUpperCase().startsWith("कक्षा") && 
+                        !val.toUpperCase().startsWith("WEEK") && 
+                        !val.toUpperCase().startsWith("सप्ताह")) {
+                        monthVal = val;
+                        break;
+                    }
+                }
+                if (monthVal) {
                     currentMonth = monthVal;
                 }
 
@@ -753,7 +764,7 @@ function extractGrades(activities) {
     if (state.tutorialMode === 'hindi') {
         gradesArray = gradesArray.filter(g => g.toLowerCase().includes('(hindi)'));
     } else if (state.tutorialMode === 'english') {
-        gradesArray = gradesArray.filter(g => g.toLowerCase().includes('(english)'));
+        gradesArray = gradesArray.filter(g => !g.toLowerCase().includes('(hindi)'));
     }
 
     return gradesArray.sort((a, b) => {
@@ -1023,7 +1034,7 @@ function renderGradeSelection() {
         card.addEventListener('click', () => {
             const grade = decodeURIComponent(card.getAttribute('data-grade'));
             state.selectedGrade = grade;
-            state.filterSubject = 'All';
+            state.filterSubject = state.language === 'hi' ? 'जुलाई' : 'July';
             state.currentStep = 'activities';
             render();
         });
@@ -1042,11 +1053,21 @@ function populateMonthDropdown(activities) {
     const currentSel = state.filterSubject;
     const months = Array.from(new Set(activities.map(a => a.month).filter(Boolean)));
     
-    // Sort months chronologically
-    const monthOrder = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    // Sort months chronologically starting from July (academic session)
+    const monthMap = {
+        "जुलाई": "July", "अगस्त": "August", "सितम्बर": "September", "अक्टूबर": "October", 
+        "नवंबर": "November", "दिसंबर": "December", "जनवरी": "January", "फरवरी": "February", 
+        "मार्च": "March", "अप्रैल": "April", "मई": "May", "जून": "June",
+        "July": "July", "August": "August", "September": "September", "October": "October",
+        "November": "November", "December": "December", "January": "January", "February": "February",
+        "March": "March", "April": "April", "May": "May", "June": "June"
+    };
+    const monthOrder = ["July", "August", "September", "October", "November", "December", "January", "February", "March", "April", "May", "June"];
     months.sort((a, b) => {
-        const idxA = monthOrder.indexOf(a);
-        const idxB = monthOrder.indexOf(b);
+        const engA = monthMap[a] || a;
+        const engB = monthMap[b] || b;
+        const idxA = monthOrder.indexOf(engA);
+        const idxB = monthOrder.indexOf(engB);
         if (idxA !== -1 && idxB !== -1) return idxA - idxB;
         return a.localeCompare(b);
     });
