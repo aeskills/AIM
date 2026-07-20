@@ -3,34 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIM - Adobe Implementation Plane</title>
-    <meta name="description" content="Explore and learn with AIM - Adobe Implementation Plane, a self-paced tutorial platform for K-12 students. Choose your grade and start learning today.">
-    <!-- Google Fonts: Outfit (headings) & Inter (body) -->
+    <title>AIM - Adobe Implementation Plan</title>
+    <meta name="description" content="Explore and learn with AIM - Adobe Implementation Plan, a self-paced tutorial platform for K-12 students. Choose your grade and start learning today.">
+    <!-- Google Fonts: Inter (all weights) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=1.5">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=1.6">
     <!-- Local libraries for offline-first resilience -->
     <script src="xlsx.full.min.js" defer></script>
     <script src="papaparse.min.js" defer></script>
-    <script src="app.js?v=1.5" defer></script>
+    <script src="app.js?v=1.6" defer></script>
 </head>
 <body>
+    <!-- Global Background Removed -->
     <header class="app-header">
         <div class="header-container">
-            <a href="#" class="logo-group" id="header-logo" aria-label="AIM - Adobe Implementation Plane Home">
-                <span class="logo-icon" aria-hidden="true">🚀</span>
-                <span class="logo-text">AIM - Adobe Implementation Plane</span>
+            <a href="#" class="logo-group" id="header-logo" aria-label="AIM - Adobe Implementation Plan Home">
+                <span class="logo-icon-box">AIM</span>
+                <span class="logo-text-solid">Adobe Implementation Plan</span>
             </a>
             <div class="header-right">
-                <button id="download-submissions-btn" class="btn btn-secondary btn-sm hidden" aria-label="Download student submissions as CSV">
-                    📥 Download Submissions (0)
-                </button>
                 <nav class="breadcrumb-nav" aria-label="Breadcrumb">
                     <ol class="breadcrumbs" id="breadcrumbs-list">
                         <!-- Breadcrumbs will be rendered dynamically -->
                     </ol>
                 </nav>
+                <!-- Language Toggle Switch (Extreme Right) -->
+                <div class="welcome-lang-toggle" id="global-lang-toggle">
+                    <span style="font-size: 0.85rem; margin-right: 0.15rem; margin-left: 0.15rem;">🌐</span>
+                    <button type="button" id="lang-toggle-en" class="lang-toggle-btn active-lang">English</button>
+                    <button type="button" id="lang-toggle-hi" class="lang-toggle-btn">हिंदी</button>
+                </div>
             </div>
         </div>
     </header>
@@ -58,33 +62,79 @@
 
         <!-- Step 0: Welcome / Language Selection Screen -->
         <section id="step-welcome" class="step-section hidden">
-            <div class="hero-section">
-                <h1 class="hero-title">Welcome to AIM</h1>
-                <p class="hero-subtitle">Choose your preferred language</p>
-            </div>
+            <div style="display: flex; flex-direction: column; min-height: calc(100vh - 64px); margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); margin-top: -2rem; margin-bottom: -4rem;">
+                <!-- Welcome Header (Spanning Full Width) -->
+                <div class="welcome-header-wrapper" style="width: 100%; text-align: center; padding: 2rem 1.5rem 1rem; background-color: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <h1 class="hero-title" style="margin-bottom: 0.25rem; font-size: 2.25rem;" data-i18n="welcomeTitle">Welcome to AIM</h1>
+                    <p class="hero-subtitle" style="max-width: 800px; margin: 0 auto; color: rgba(255,255,255,0.95); line-height: 1.5; font-size: 0.95rem;" data-i18n="welcomeDesc">AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, Generate Images, Create videos, build things that are yours. Start simple. Level up every week.</p>
+                </div>
+                
+                <!-- Full Layout Row -->
+                <div style="flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; background-color: transparent;">
+                    <!-- Left 75% - Independence Day Activity & Tutorials -->
+                    <div style="flex: 1 1 75%; min-width: 300px; padding: 1rem 2rem 3rem; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem; position: relative; background-color: transparent;">
+                        
+                        <!-- Content Card (Tricolor) -->
+                        <div style="background: radial-gradient(circle at top left, #ffe8d6 0%, transparent 60%), radial-gradient(circle at bottom right, #d4f0d4 0%, transparent 60%), #ffffff; padding: 2rem; border-radius: var(--radius-xl); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); text-align: center; max-width: 700px; position: relative; z-index: 10; width: 100%; overflow: hidden;">
+                            <!-- Red Ribbon -->
+                            <div style="position: absolute; top: 1.5rem; right: -2.5rem; background-color: #eb1000; color: white; padding: 0.25rem 3rem; font-size: 0.75rem; font-weight: 800; transform: rotate(45deg); box-shadow: 0 2px 8px rgba(235, 16, 0, 0.4); letter-spacing: 0.05em; text-transform: uppercase; z-index: 20;">Highlight</div>
+                            
+                            <div style="font-size: 2rem; margin-bottom: 0.25rem; line-height: 1;">🇮🇳</div>
+                            <div style="display: inline-block; padding: 0.2rem 0.6rem; background-color: rgba(235, 16, 0, 0.08); color: var(--color-primary); border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;" data-i18n="activityOfMonthTag">Activity of the Month</div>
+                            <h2 style="font-size: 1.5rem; color: var(--color-text-primary); margin-bottom: 0.25rem; font-family: var(--font-heading); font-weight: 800;" data-i18n="independenceTitle">Independence Day Special</h2>
+                            <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.4;" data-i18n="independenceDesc">Celebrate India's Independence Day by creating patriotic posters and videos using Adobe Express for Education!</p>
+                            <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+                                <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:2313db0a-a09f-5f71-8b5f-d07c4cc6df42?category=text&taskID=digital-activity" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn" style="background-color: #ff9933; border: none; box-shadow: 0 4px 12px rgba(255, 153, 51, 0.4); color: white; padding: 0.6rem 1.2rem; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="exploreActivityBtn">Activity Template</a>
+                                <button class="btn btn-secondary" id="submit-monthly-activity-btn" style="border-color: #eb1000; color: #eb1000; background-color: #ffffff; padding: 0.6rem 1.2rem; font-size: 0.95rem; font-weight: 600;" data-i18n="submitMonthlyBtn">Submit Activity Link</button>
+                            </div>
+                        </div>
 
-            <div class="welcome-container">
-                <div class="welcome-choices-grid">
-                    <a href="#" class="welcome-choice-card card-accent-indigo" id="choice-english">
-                        <div class="welcome-icon-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                            </svg>
+                        <!-- Monthly Activity Tutorials (Tricolor Section) -->
+                        <div style="margin-top: 0; background: radial-gradient(circle at top left, #ffe8d6 0%, transparent 60%), radial-gradient(circle at bottom right, #d4f0d4 0%, transparent 60%), #fcfcf9; padding: 1.5rem 2rem; border-radius: var(--radius-lg); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); width: 100%; max-width: 700px; position: relative; z-index: 10;">
+                            <h3 style="color: var(--color-text-primary); text-align: center; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: 0.02em;" data-i18n="monthlyTutorialsTitle">Monthly Activity Tutorials</h3>
+                            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                <!-- English Tutorial Card -->
+                                <a href="#" style="flex: 1; min-width: 180px; background-color: #ffffff; border-radius: var(--radius-md); padding: 1.25rem 1rem; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                                    <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #fff0f0; display: flex; justify-content: center; align-items: center; margin-bottom: 0.75rem; color: #eb1000;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    </div>
+                                    <span style="color: var(--color-text-primary); font-weight: 600; font-size: 1rem;" data-i18n="englishTutorial">English Tutorial</span>
+                                </a>
+                                <!-- Hindi Tutorial Card -->
+                                <a href="#" style="flex: 1; min-width: 180px; background-color: #ffffff; border-radius: var(--radius-md); padding: 1.25rem 1rem; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                                    <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #fff0f0; display: flex; justify-content: center; align-items: center; margin-bottom: 0.75rem; color: #eb1000;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    </div>
+                                    <span style="color: var(--color-text-primary); font-weight: 600; font-size: 1rem;" data-i18n="hindiTutorial">Hindi Tutorial</span>
+                                </a>
+                            </div>
                         </div>
-                        <h3>English Tutorials</h3>
-                        <span class="btn btn-primary">Start</span>
-                    </a>
-                    <a href="#" class="welcome-choice-card card-accent-pink" id="choice-hindi">
-                        <div class="welcome-icon-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 20h9"></path>
-                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                            </svg>
-                        </div>
-                        <h3>Hindi Tutorials</h3>
-                        <span class="btn btn-primary" style="background-color: var(--color-accent-success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">Start</span>
-                    </a>
+                    </div>
+
+                    <!-- Right 25% - Language Tabs -->
+                    <div style="flex: 1 1 25%; min-width: 250px; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; justify-content: center; align-items: center; background-color: transparent;">
+                        <h3 class="go-to-activity-heading" style="color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.75); font-size: 1.65rem; font-weight: 800; margin-bottom: 0.5rem; text-align: center; letter-spacing: -0.01em;" data-i18n="goToActivityPage">Go to activity page</h3>
+                        <a href="#" class="welcome-choice-card card-accent-indigo" id="choice-english" style="width: 100%; max-width: 360px; text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 1.5rem; border: 1px solid var(--color-border); border-top: 3px solid var(--color-subject-1); border-radius: var(--radius-lg); background-color: var(--color-surface); transition: var(--transition-normal); gap: 1rem; box-shadow: var(--shadow-sm);">
+                            <div class="welcome-icon-wrapper" style="width: 56px; height: 56px; border-radius: 50%; background-color: var(--color-subject-1-bg); color: var(--color-subject-1); display: flex; justify-content: center; align-items: center; margin-bottom: 0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                </svg>
+                            </div>
+                            <h3 style="font-size: 1.125rem; margin: 0; color: var(--color-text-primary);" data-i18n="englishTutorials">English Tutorials</h3>
+                            <span class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; padding: 0.75rem;" data-i18n="startBtn">Start</span>
+                        </a>
+                        <a href="#" class="welcome-choice-card card-accent-pink" id="choice-hindi" style="width: 100%; max-width: 360px; text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 1.5rem; border: 1px solid var(--color-border); border-top: 3px solid var(--color-subject-5); border-radius: var(--radius-lg); background-color: var(--color-surface); transition: var(--transition-normal); gap: 1rem; box-shadow: var(--shadow-sm);">
+                            <div class="welcome-icon-wrapper" style="width: 56px; height: 56px; border-radius: 50%; background-color: var(--color-subject-5-bg); color: var(--color-subject-5); display: flex; justify-content: center; align-items: center; margin-bottom: 0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg>
+                            </div>
+                            <h3 style="font-size: 1.125rem; margin: 0; color: var(--color-text-primary);" data-i18n="hindiTutorials">Hindi Tutorials</h3>
+                            <span class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; padding: 0.75rem;" data-i18n="startBtn">Start</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -175,10 +225,7 @@
                         <h1 id="detail-title" class="detail-main-title" tabindex="-1">Activity Name</h1>
                     </header>
 
-                    <section class="detail-body">
-                        <h2 class="detail-section-title" data-i18n="descriptionTitle">Description</h2>
-                        <div id="detail-description" class="detail-description-container">Full activity description...</div>
-                    </section>
+                    <!-- Description section removed as requested -->
 
                     <section class="detail-skills-instructions" id="detail-skills-instructions-section">
                         <h2 class="detail-section-title" data-i18n="skillsTitle">Skills in Focus</h2>
@@ -186,6 +233,7 @@
                         
                         <h2 class="detail-section-title" style="margin-top: 1.5rem;" data-i18n="instructionsTitle">Instructions</h2>
                         <div id="detail-instructions" class="detail-instructions-text">Instructions details...</div>
+                        <div id="detail-book-screenshot-container" style="margin-top: 1.5rem; display: none;"></div>
                     </section>
 
                     <footer class="detail-cta-section" style="margin-top: 1rem; margin-bottom: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
@@ -209,7 +257,7 @@
 
     <footer class="app-footer">
         <div class="footer-container">
-            <p data-i18n="footerText">&copy; 2026 AIM - Adobe Implementation Plane. Crafted for young explorers.</p>
+            <p data-i18n="footerText">&copy; 2026 AIM - Adobe Implementation Plan. All rights reserved.</p>
         </div>
     </footer>
 
@@ -224,6 +272,16 @@
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label for="submit-student-name" class="form-label" style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.03em;" data-i18n="fullNameLabel">Full Name</label>
                     <input type="text" id="submit-student-name" class="form-input" placeholder="e.g. Ashish Dokwal" data-i18n-placeholder="studentNamePlaceholder" style="width: 100%; font-family: var(--font-body); font-size: 0.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary);">
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="submit-student-grade" class="form-label" style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.03em;" data-i18n="gradeLabel">Grade</label>
+                    <input type="text" id="submit-student-grade" class="form-input" placeholder="e.g. Grade 3" data-i18n-placeholder="gradePlaceholder" required style="width: 100%; font-family: var(--font-body); font-size: 0.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary);">
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="submit-activity-name" class="form-label" style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.03em;" data-i18n="activityNameLabel">Activity Name</label>
+                    <input type="text" id="submit-activity-name" class="form-input" placeholder="e.g. Summer Vacation Memories" data-i18n-placeholder="activityNamePlaceholder" required style="width: 100%; font-family: var(--font-body); font-size: 0.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary);">
                 </div>
                 
                 <div class="form-group" style="margin-bottom: 1rem;">
@@ -267,27 +325,7 @@
         </div>
     </div>
 
-    <!-- Custom Password Modal -->
-    <div id="password-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="password-modal-title">
-        <div class="modal-content" style="max-width: 400px; text-align: center; display: flex; flex-direction: column; gap: 1.25rem; align-items: center;">
-            <button type="button" class="modal-close-btn" id="close-password-modal-btn" aria-label="Close popup" style="top: 0.75rem; right: 1rem;">&times;</button>
-            <div style="font-size: 3rem; line-height: 1; margin-top: 0.5rem;">🔒</div>
-            <h2 id="password-modal-title" style="font-family: var(--font-heading); font-size: 1.375rem; font-weight: 600; color: var(--color-text-primary); margin: 0;" data-i18n="enterAdminPassword">Enter Admin Password</h2>
-            <p style="font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;" data-i18n="passwordPrompt">Please enter the password to download the student submissions CSV.</p>
-            
-            <form id="password-form" style="width: 100%; display: flex; flex-direction: column; gap: 1rem; align-items: stretch;">
-                <div class="form-group" style="text-align: left;">
-                    <input type="password" id="admin-password-input" class="form-input" placeholder="Password" data-i18n-placeholder="passwordInputPlaceholder" required style="width: 100%; font-family: var(--font-body); font-size: 0.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary);">
-                    <p id="password-error-message" class="hidden" style="color: var(--color-accent-danger); font-size: 0.8125rem; font-weight: 600; margin-top: 0.375rem; text-align: center;" data-i18n="incorrectPassword">Incorrect password. Please try again.</p>
-                </div>
-                
-                <div style="display: flex; gap: 0.75rem; width: 100%; margin-top: 0.5rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 1; padding: 0.625rem 1.25rem;" data-i18n="unlockAndDownload">Unlock & Download</button>
-                    <button type="button" id="cancel-password-btn" class="btn btn-secondary" style="flex: 1; padding: 0.625rem 1.25rem;" data-i18n="cancelBtnText">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
+
 
     <!-- Floating Tooltip for Activities -->
     <div id="activity-tooltip" class="activity-tooltip hidden" aria-hidden="true">

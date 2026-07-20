@@ -1,5 +1,5 @@
 /**
- * @fileoverview Main application logic for AIM - Adobe Implementation Plane Student Tutorial Platform.
+ * @fileoverview Main application logic for AIM - Adobe Implementation Plan Student Tutorial Platform.
  * Parses Excel files using SheetJS (XLSX) and manages the step routing, filtering,
  * metadata rendering, modal project submissions, and CSV download capabilities.
  */
@@ -18,6 +18,10 @@
  * @property {string} month
  * @property {string} week
  */
+
+// Google Sheets Integration Web App URL (Paste your Google Script webapp executable URL here)
+// Example: "https://script.google.com/macros/s/AKfycbw.../exec"
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzp5SSHU2uC4qIHx8CfamyVcUyHs_oFBL0Gs0UhHueLnkCPsdSQ3jUO36MU1boeRM1lkg/exec";
 
 /**
  * Central application state object.
@@ -43,6 +47,20 @@ const state = {
 
 const translations = {
     en: {
+        welcomeTitle: "Welcome to AIM",
+        welcomeDesc: "AIM is a creative learning space for students in India. Every Week you get fresh activities built on Adobe Express. Design posters, Generate Images, Create videos, build things that are yours. Start simple. Level up every week.",
+        activityOfMonthTag: "Activity of the Month",
+        independenceTitle: "Independence Day Special",
+        independenceDesc: "Celebrate India's Independence Day by creating patriotic posters and videos using Adobe Express for Education!",
+        exploreActivityBtn: "Activity Template",
+        submitMonthlyBtn: "Submit Activity Link",
+        monthlyTutorialsTitle: "Monthly Activity Tutorials",
+        englishTutorial: "English Tutorial",
+        hindiTutorial: "Hindi Tutorial",
+        goToActivityPage: "Go to activity page",
+        englishTutorials: "English Tutorials",
+        hindiTutorials: "Hindi Tutorials",
+        startBtn: "Start",
         readyToExplore: "Let's begin!",
         heroSubtitle: "Choose your grade level and proceed with the activities",
         selectYourGrade: "Select Your Grade",
@@ -69,6 +87,8 @@ const translations = {
         submitProjectSubtitle: "Fill in the details below to submit your project link.",
         fullNameLabel: "Full Name",
         schoolNameLabel: "School Name",
+        gradeLabel: "Grade",
+        activityNameLabel: "Activity Name",
         projectLinkLabel: "Project/Work Link",
         submitBtnText: "Submit Project",
         cancelBtnText: "Cancel",
@@ -86,9 +106,11 @@ const translations = {
         downloadSubmissions: "Download Submissions ({count})",
         studentNamePlaceholder: "e.g. Ashish Dokwal",
         schoolNamePlaceholder: "e.g. Delhi Public School",
+        gradePlaceholder: "e.g. Grade 3",
+        activityNamePlaceholder: "e.g. Summer Vacation Memories",
         projectLinkPlaceholder: "e.g. https://new.express.adobe.com/...",
         passwordInputPlaceholder: "Password",
-        footerText: "© 2026 AIM - Adobe Implementation Plane. Crafted for young explorers.",
+        footerText: "© 2026 AIM - Adobe Implementation Plan. All rights reserved.",
         failedLoadActivities: "Failed to Load Activities",
         failedLoadDesc: "The activities database could not be loaded or is in an invalid format.",
         tryAgain: "Try Again",
@@ -101,7 +123,7 @@ const translations = {
         activityTemplate: "📝 Activity Template",
         tutorialVideo: "🎥 Activity Tutorial video",
         templateUnavailable: "🔒 Template link unavailable",
-        videoUnavailable: "🔒 Tutorial video link unavailable",
+        videoUnavailable: "🔒 Tutorial Link Coming Soon",
         noDescription: "No description available.",
         notSpecified: "Not specified.",
         noInstructions: "No instructions provided.",
@@ -124,6 +146,20 @@ const translations = {
         }
     },
     hi: {
+        welcomeTitle: "AIM में आपका स्वागत है",
+        welcomeDesc: "AIM भारत में छात्रों के लिए एक रचनात्मक शिक्षण स्थल है। हर हफ्ते आपको Adobe Express पर बनी नई गतिविधियाँ मिलती हैं। पोस्टर डिज़ाइन करें, इमेजेस जनरेट करें, वीडियो बनाएँ, और अपनी चीज़ें बनाएँ। सरल से शुरुआत करें और हर हफ्ते आगे बढ़ें।",
+        activityOfMonthTag: "महीने की गतिविधि",
+        independenceTitle: "स्वतंत्रता दिवस विशेष",
+        independenceDesc: "Adobe Express for Education का उपयोग करके देशभक्ति के पोस्टर और वीडियो बनाकर भारत का स्वतंत्रता दिवस मनाएँ!",
+        exploreActivityBtn: "गतिविधि टेम्पलेट",
+        submitMonthlyBtn: "गतिविधि लिंक जमा करें",
+        monthlyTutorialsTitle: "मासिक गतिविधि ट्यूटोरियल",
+        englishTutorial: "अंग्रेज़ी ट्यूटोरियल",
+        hindiTutorial: "हिंदी ट्यूटोरियल",
+        goToActivityPage: "गतिविधि पृष्ठ पर जाएं",
+        englishTutorials: "अंग्रेज़ी ट्यूटोरियल्स",
+        hindiTutorials: "हिंदी ट्यूटोरियल्स",
+        startBtn: "प्रारंभ करें",
         readyToExplore: "आइए शुरू करें!",
         heroSubtitle: "अपनी कक्षा चुनें और गतिविधियों के साथ आगे बढ़ें",
         selectYourGrade: "अपनी कक्षा चुनें",
@@ -150,6 +186,8 @@ const translations = {
         submitProjectSubtitle: "अपना प्रोजेक्ट लिंक जमा करने के लिए नीचे विवरण भरें।",
         fullNameLabel: "पूरा नाम",
         schoolNameLabel: "स्कूल का नाम",
+        gradeLabel: "कक्षा",
+        activityNameLabel: "गतिविधि का नाम",
         projectLinkLabel: "प्रोजेक्ट / कार्य का लिंक",
         submitBtnText: "प्रोजेक्ट जमा करें",
         cancelBtnText: "रद्द करें",
@@ -167,9 +205,11 @@ const translations = {
         downloadSubmissions: "सबमिशन डाउनलोड करें ({count})",
         studentNamePlaceholder: "जैसे: आशीष डोकवाल",
         schoolNamePlaceholder: "जैसे: दिल्ली पब्लिक स्कूल",
+        gradePlaceholder: "जैसे: कक्षा 3",
+        activityNamePlaceholder: "जैसे: गर्मी की छुट्टियों की यादें",
         projectLinkPlaceholder: "जैसे: https://new.express.adobe.com/...",
         passwordInputPlaceholder: "पासवर्ड",
-        footerText: "© 2026 AIM - Adobe Implementation Plane. युवा खोजकर्ताओं के लिए निर्मित।",
+        footerText: "© 2026 AIM - Adobe Implementation Plan. सर्वाधिकार सुरक्षित (All rights reserved).",
         failedLoadActivities: "गतिविधियां लोड करने में विफल",
         failedLoadDesc: "गतिविधि डेटाबेस लोड नहीं किया जा सका या यह अमान्य प्रारूप में है।",
         tryAgain: "पुनः प्रयास करें",
@@ -182,7 +222,7 @@ const translations = {
         activityTemplate: "📝 गतिविधि टेम्पलेट",
         tutorialVideo: "🎥 गतिविधि ट्यूटोरियल वीडियो",
         templateUnavailable: "🔒 टेम्पलेट लिंक अनुपलब्ध",
-        videoUnavailable: "🔒 ट्यूटोरियल वीडियो लिंक अनुपलब्ध",
+        videoUnavailable: "🔒 ट्यूटोरियल लिंक जल्द आ रहा है",
         noDescription: "कोई विवरण उपलब्ध नहीं है।",
         notSpecified: "निर्दिष्ट नहीं है।",
         noInstructions: "कोई निर्देश प्रदान नहीं किया गया है।",
@@ -218,7 +258,6 @@ async function init() {
     
     detectMode();
     setupEventListeners();
-    updateDownloadButtonState();
     await loadDefaultExcel();
 }
 
@@ -261,6 +300,37 @@ function setupEventListeners() {
             e.preventDefault();
             state.tutorialMode = 'choose';
             resetState();
+        });
+    }
+
+    // Dedicated Landing Page Language Toggle Buttons
+    const langToggleEn = document.getElementById('lang-toggle-en');
+    const langToggleHi = document.getElementById('lang-toggle-hi');
+
+    function updateLangToggleUI() {
+        if (!langToggleEn || !langToggleHi) return;
+        if (state.language === 'hi') {
+            langToggleHi.classList.add('active-lang');
+            langToggleEn.classList.remove('active-lang');
+        } else {
+            langToggleEn.classList.add('active-lang');
+            langToggleHi.classList.remove('active-lang');
+        }
+    }
+
+    if (langToggleEn) {
+        langToggleEn.addEventListener('click', () => {
+            state.language = 'en';
+            updateLangToggleUI();
+            translateUIInternal();
+        });
+    }
+
+    if (langToggleHi) {
+        langToggleHi.addEventListener('click', () => {
+            state.language = 'hi';
+            updateLangToggleUI();
+            translateUIInternal();
         });
     }
 
@@ -402,6 +472,15 @@ function setupEventListeners() {
         });
     }
 
+    // Clear validation error when student edits the work link
+    const submitWorkLinkInput = document.getElementById('submit-work-link');
+    if (submitWorkLinkInput) {
+        submitWorkLinkInput.addEventListener('input', () => {
+            submitWorkLinkInput.setCustomValidity('');
+            submitWorkLinkInput.classList.remove('input-error');
+        });
+    }
+
     // Custom Success Modal button triggers
     const successOkBtn = document.getElementById('success-ok-btn');
     if (successOkBtn) {
@@ -419,6 +498,25 @@ function setupEventListeners() {
         });
     }
 
+    // Monthly Activity submit button on Welcome Screen
+    const submitMonthlyActivityBtn = document.getElementById('submit-monthly-activity-btn');
+    if (submitMonthlyActivityBtn) {
+        submitMonthlyActivityBtn.addEventListener('click', () => {
+            state.selectedActivity = { activity_name: "Independence Day Special" };
+            openSubmissionModal();
+            const actInput = document.getElementById('submit-activity-name');
+            if (actInput) actInput.value = "Independence Day Special";
+        });
+    }
+
+    const exploreActivityBtn = document.getElementById('explore-activity-btn');
+    if (exploreActivityBtn) {
+        exploreActivityBtn.addEventListener('click', (e) => {
+            const templateUri = "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:2313db0a-a09f-5f71-8b5f-d07c4cc6df42?category=text&taskID=digital-activity";
+            window.open(templateUri, "_blank", "noopener,noreferrer");
+        });
+    }
+
     // Handle student submission form submit event inside modal
     const submissionForm = document.getElementById('submission-form');
     if (submissionForm) {
@@ -428,45 +526,7 @@ function setupEventListeners() {
         });
     }
 
-    // Download Submissions CSV button (unlocked via Password Modal)
-    const downloadBtn = document.getElementById('download-submissions-btn');
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
-            openPasswordModal();
-        });
-    }
 
-    // Custom Password Modal handlers
-    const passwordForm = document.getElementById('password-form');
-    if (passwordForm) {
-        passwordForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            handlePasswordVerification();
-        });
-    }
-
-    const cancelPasswordBtn = document.getElementById('cancel-password-btn');
-    if (cancelPasswordBtn) {
-        cancelPasswordBtn.addEventListener('click', () => {
-            closePasswordModal();
-        });
-    }
-
-    const closePasswordModalBtn = document.getElementById('close-password-modal-btn');
-    if (closePasswordModalBtn) {
-        closePasswordModalBtn.addEventListener('click', () => {
-            closePasswordModal();
-        });
-    }
-
-    const passwordModal = document.getElementById('password-modal');
-    if (passwordModal) {
-        passwordModal.addEventListener('click', (e) => {
-            if (e.target === passwordModal) {
-                closePasswordModal();
-            }
-        });
-    }
 
     // Grade Search Input listeners
     const gradeSearchInput = document.getElementById('grade-search');
@@ -642,6 +702,7 @@ function parseExcel(arrayBuffer) {
             let activityNameRowIdx = -1;
             let skillsRowIdx = -1;
             let instructionsRowIdx = -1;
+            let bookScreenshotRowIdx = -1;
             let templateLinkRowIdx = -1;
             let videoLinkRowIdx = -1;
             let descriptionRowIdx = -1;
@@ -656,6 +717,8 @@ function parseExcel(arrayBuffer) {
                     skillsRowIdx = r;
                 } else if (label.includes("instruction")) {
                     instructionsRowIdx = r;
+                } else if (label.includes("screenshot") || label.includes("book")) {
+                    bookScreenshotRowIdx = r;
                 } else if (label.includes("activity link") || label.includes("project link") || label.includes("template link")) {
                     templateLinkRowIdx = r;
                 } else if (label.includes("video")) {
@@ -669,6 +732,7 @@ function parseExcel(arrayBuffer) {
             if (activityNameRowIdx === -1) activityNameRowIdx = 5;
             if (skillsRowIdx === -1) skillsRowIdx = 6;
             if (instructionsRowIdx === -1) instructionsRowIdx = 7;
+            if (bookScreenshotRowIdx === -1) bookScreenshotRowIdx = 8;
             if (templateLinkRowIdx === -1) {
                 templateLinkRowIdx = (s_idx > 0) ? 9 : 8;
             }
@@ -718,6 +782,7 @@ function parseExcel(arrayBuffer) {
 
                 const skills = (rows[skillsRowIdx] && rows[skillsRowIdx][c]) ? rows[skillsRowIdx][c].toString().trim() : "";
                 const instructions = (rows[instructionsRowIdx] && rows[instructionsRowIdx][c]) ? rows[instructionsRowIdx][c].toString().trim() : "";
+                const bookScreenshot = (bookScreenshotRowIdx !== -1 && rows[bookScreenshotRowIdx] && rows[bookScreenshotRowIdx][c]) ? rows[bookScreenshotRowIdx][c].toString().trim() : "";
                 const templateLink = (rows[templateLinkRowIdx] && rows[templateLinkRowIdx][c]) ? rows[templateLinkRowIdx][c].toString().trim() : "";
                 const videoLink = (rows[videoLinkRowIdx] && rows[videoLinkRowIdx][c]) ? rows[videoLinkRowIdx][c].toString().trim() : "";
                 const description = (rows[descriptionRowIdx] && rows[descriptionRowIdx][c]) ? rows[descriptionRowIdx][c].toString().trim() : "";
@@ -727,6 +792,7 @@ function parseExcel(arrayBuffer) {
                     activity_name: activityName.trim(),
                     skills: skills,
                     instructions: instructions,
+                    book_screenshot: bookScreenshot,
                     template_link: templateLink,
                     video_link: videoLink,
                     description: description,
@@ -857,6 +923,15 @@ function render() {
             breadcrumbNav.classList.add('hidden');
         } else {
             breadcrumbNav.classList.remove('hidden');
+        }
+    }
+
+    const langToggleContainer = document.getElementById('global-lang-toggle');
+    if (langToggleContainer) {
+        if (state.currentStep === 'welcome') {
+            langToggleContainer.classList.remove('hidden');
+        } else {
+            langToggleContainer.classList.add('hidden');
         }
     }
 
@@ -1179,10 +1254,31 @@ function renderActivityDetail() {
     // Title mapping
     document.getElementById('detail-title').innerText = activity.activity_name;
 
-    // Description, skills, instructions text blocks
-    document.getElementById('detail-description').innerText = activity.description || dict.noDescription;
+    // Skills and instructions text blocks
+    const descElem = document.getElementById('detail-description');
+    if (descElem) {
+        descElem.innerText = activity.description || dict.noDescription;
+    }
     document.getElementById('detail-skills').innerText = activity.skills || dict.notSpecified;
     document.getElementById('detail-instructions').innerText = activity.instructions || dict.noInstructions;
+
+    // Book Screenshot rendering (right below Instructions)
+    const bookScreenshotContainer = document.getElementById('detail-book-screenshot-container');
+    if (bookScreenshotContainer) {
+        const bookScreenshot = activity.book_screenshot ? activity.book_screenshot.trim() : '';
+        if (bookScreenshot && (bookScreenshot.startsWith('http://') || bookScreenshot.startsWith('https://'))) {
+            bookScreenshotContainer.innerHTML = `
+                <h2 class="detail-section-title" style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Book Screenshot</h2>
+                <a href="${bookScreenshot}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1.5px solid #eb1000; color: #eb1000; padding: 0.6rem 1.25rem; border-radius: var(--radius-md); font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(235, 16, 0, 0.08);">
+                    <span style="font-size: 1.1rem;">📖</span> View Book Screenshot
+                </a>
+            `;
+            bookScreenshotContainer.style.display = 'block';
+        } else {
+            bookScreenshotContainer.innerHTML = '';
+            bookScreenshotContainer.style.display = 'none';
+        }
+    }
 
     // CTA section: Activity Template (1) and Video Tutorial (2)
     const ctaContainer = document.getElementById('tutorial-cta-container');
@@ -1240,12 +1336,29 @@ function renderActivityDetail() {
 }
 
 /**
+ * Converts a Google Drive share/view URL into a direct image preview URL.
+ * @param {string} url - Google Drive URL or direct image URL.
+ * @returns {string} Direct image display URL.
+ */
+function getGoogleDriveImageUrl(url) {
+    if (!url) return '';
+    const cleanUrl = url.trim();
+    const match = cleanUrl.match(/\/d\/([a-zA-Z0-9_-]+)/) || cleanUrl.match(/id=([a-zA-Z0-9_-]+)/);
+    if (match && match[1]) {
+        return `https://lh3.googleusercontent.com/d/${match[1]}`;
+    }
+    return cleanUrl;
+}
+
+/**
  * Handles processing of a student work submission.
  * Saves values into LocalStorage state, closes the modal popup, and resets controls.
  * @returns {void}
  */
-function handleStudentSubmission() {
+async function handleStudentSubmission() {
     const nameInput = document.getElementById('submit-student-name');
+    const gradeInput = document.getElementById('submit-student-grade');
+    const activityNameInput = document.getElementById('submit-activity-name');
     const schoolInput = document.getElementById('submit-school-name');
     const linkInput = document.getElementById('submit-work-link');
 
@@ -1254,22 +1367,148 @@ function handleStudentSubmission() {
         return; // Handled by HTML5 input required validation
     }
 
+    // Validate if it is a proper Adobe Express / Adobe link
+    const adobeLinkRegex = /^https?:\/\/(?:[a-zA-Z0-9-]+\.)*(?:express\.adobe\.com|adobe\.com|adobe\.ly|adobeexpress\.com|adobeexpress)(?:\/.*)?$/i;
+    if (!adobeLinkRegex.test(link)) {
+        const errorMsg = state.language === 'hi' 
+            ? "कृपया एक मान्य एडोब एक्सप्रेस या एडोब प्रोजेक्ट लिंक दर्ज करें (जैसे: https://new.express.adobe.com/...)"
+            : "Please enter a valid Adobe Express or Adobe project link (e.g. https://new.express.adobe.com/...)";
+        linkInput.setCustomValidity(errorMsg);
+        linkInput.classList.add('input-error');
+        linkInput.reportValidity();
+        return;
+    }
+
+    // Local Uniqueness check: verify if the link has already been submitted
+    const normLink = link.toLowerCase();
+    const storedSubmissions = JSON.parse(localStorage.getItem('aim_submissions') || '[]');
+    const allLocalSubmissions = [...state.submissions, ...storedSubmissions];
+    const isLocalDuplicate = allLocalSubmissions.some(s => {
+        const existing = (s["Work Link"] || s.workLink || "").trim().toLowerCase();
+        return existing === normLink;
+    });
+
+    if (isLocalDuplicate) {
+        const dupMsg = state.language === 'hi'
+            ? "यह प्रोजेक्ट लिंक पहले ही जमा किया जा चुका है! कृपया एक नया (यूनिक) प्रोजेक्ट लिंक दर्ज करें।"
+            : "This project link has already been submitted! Please enter a unique project link.";
+        linkInput.setCustomValidity(dupMsg);
+        linkInput.classList.add('input-error');
+        linkInput.reportValidity();
+        return;
+    }
+
+    linkInput.setCustomValidity("");
+    linkInput.classList.remove('input-error');
+
     const activity = state.selectedActivity;
     if (!activity) return;
 
+    const studentName = nameInput.value.trim() || "Anonymous";
+    const gradeValue = gradeInput.value.trim() || activity.grade;
+    const activityNameValue = activityNameInput ? activityNameInput.value.trim() : activity.activity_name;
+    const schoolName = schoolInput.value.trim() || "Not Provided";
+
+    // Setup visual loading state on submit button
+    const submitBtn = document.querySelector('#submission-form button[type="submit"]');
+    const cancelBtn = document.getElementById('cancel-submission-btn');
+    let originalBtnText = 'Submit Project';
+    if (submitBtn) {
+        originalBtnText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = state.language === 'hi' ? 'जमा किया जा रहा है...' : 'Submitting...';
+    }
+    if (cancelBtn) {
+        cancelBtn.disabled = true;
+    }
+
+    // Remote Google Sheets Uniqueness Check & Submission
+    if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.trim() !== "") {
+        try {
+            // Check for duplicates in Google Sheets remotely before submitting
+            const checkUrl = `${GOOGLE_SCRIPT_URL}?action=checkDuplicateLink&workLink=${encodeURIComponent(link)}`;
+            const checkResponse = await fetchJSONP(checkUrl);
+            if (checkResponse && checkResponse.isDuplicate) {
+                const sheetDupMsg = state.language === 'hi'
+                    ? "यह प्रोजेक्ट लिंक पहले ही Google Sheets में जमा है! कृपया एक नया प्रोजेक्ट लिंक दर्ज करें।"
+                    : "This project link has already been submitted in Google Sheets! Please enter a unique project link.";
+                linkInput.setCustomValidity(sheetDupMsg);
+                linkInput.classList.add('input-error');
+                linkInput.reportValidity();
+
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                }
+                if (cancelBtn) cancelBtn.disabled = false;
+                return;
+            }
+        } catch (chkErr) {
+            console.warn("Remote duplicate check skipped or failed, proceeding to submit:", chkErr);
+        }
+    }
+
     const newSubmission = {
         Timestamp: new Date().toLocaleString(),
-        Grade: activity.grade,
-        "Activity Name": activity.activity_name,
-        "Student Name": nameInput.value.trim() || "Anonymous",
-        "School Name": schoolInput.value.trim() || "Not Provided",
+        Grade: gradeValue,
+        "Activity Name": activityNameValue,
+        "Student Name": studentName,
+        "School Name": schoolName,
         "Work Link": link
     };
 
+    let apiSuccess = false;
+
+    // Send to Google Sheets if configured
+    if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.trim() !== "") {
+        try {
+            const queryUrl = `${GOOGLE_SCRIPT_URL}?action=submitStudentWork` +
+                `&grade=${encodeURIComponent(gradeValue)}` +
+                `&activityName=${encodeURIComponent(activityNameValue)}` +
+                `&studentName=${encodeURIComponent(studentName)}` +
+                `&schoolName=${encodeURIComponent(schoolName)}` +
+                `&workLink=${encodeURIComponent(link)}`;
+
+            const response = await fetchJSONP(queryUrl);
+            if (response && response.isDuplicate) {
+                const sheetDupMsg = state.language === 'hi'
+                    ? "यह प्रोजेक्ट लिंक पहले ही जमा किया जा चुका है! कृपया एक नया (यूनिक) प्रोजेक्ट लिंक दर्ज करें।"
+                    : "This project link has already been submitted! Please enter a unique project link.";
+                linkInput.setCustomValidity(sheetDupMsg);
+                linkInput.classList.add('input-error');
+                linkInput.reportValidity();
+
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                }
+                if (cancelBtn) cancelBtn.disabled = false;
+                return;
+            }
+
+            if (response && response.success) {
+                apiSuccess = true;
+            } else {
+                console.error("Google Sheets submit failed: ", response);
+            }
+        } catch (apiError) {
+            console.error("Google Sheets submit network error: ", apiError);
+        }
+    }
+
+    // Resilient Fallback to LocalStorage
     state.submissions.push(newSubmission);
     localStorage.setItem('aim_submissions', JSON.stringify(state.submissions));
 
-    updateDownloadButtonState();
+    // Reset button states
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+    }
+    if (cancelBtn) {
+        cancelBtn.disabled = false;
+    }
+
     closeSubmissionModal();
     openSuccessModal();
 }
@@ -1285,8 +1524,17 @@ function openSubmissionModal() {
         
         // Reset and focus
         document.getElementById('submit-student-name').value = '';
+        document.getElementById('submit-student-grade').value = getDisplayGradeName(state.selectedGrade);
+        document.getElementById('submit-activity-name').value = state.selectedActivity ? state.selectedActivity.activity_name : '';
         document.getElementById('submit-school-name').value = '';
-        document.getElementById('submit-work-link').value = '';
+        
+        const linkInput = document.getElementById('submit-work-link');
+        if (linkInput) {
+            linkInput.value = '';
+            linkInput.setCustomValidity('');
+            linkInput.classList.remove('input-error');
+        }
+        
         document.getElementById('submit-student-name').focus();
     }
 }
@@ -1354,101 +1602,8 @@ function closeSuccessModal() {
  * Shows the custom password authentication modal and clears inputs.
  * @returns {void}
  */
-function openPasswordModal() {
-    const modal = document.getElementById('password-modal');
-    if (modal) {
-        modal.classList.remove('hidden');
-        document.getElementById('admin-password-input').value = '';
-        document.getElementById('password-error-message').classList.add('hidden');
-        document.getElementById('admin-password-input').focus();
-    }
-}
-
-/**
- * Dismisses the custom password authentication modal.
- * @returns {void}
- */
-function closePasswordModal() {
-    const modal = document.getElementById('password-modal');
-    if (modal) {
-        modal.classList.add('hidden');
-    }
-}
-
-/**
- * Handles verifying the entered password against admin token '7777'.
- * On success, closes the modal and executes downloadSubmissionsCSV.
- * @returns {void}
- */
-function handlePasswordVerification() {
-    const passwordInput = document.getElementById('admin-password-input');
-    const errMsg = document.getElementById('password-error-message');
-    
-    if (passwordInput.value.trim() === '7777') {
-        closePasswordModal();
-        downloadSubmissionsCSV();
-    } else {
-        if (errMsg) {
-            errMsg.classList.remove('hidden');
-        }
-        passwordInput.focus();
-        passwordInput.select();
-    }
-}
-
-/**
- * Resets student project submission triggers.
- * @returns {void}
- */
 function resetSubmissionUI() {
     closeSubmissionModal();
-}
-
-/**
- * Updates download button text and toggles visibility based on submissions count.
- * @returns {void}
- */
-function updateDownloadButtonState() {
-    const downloadBtn = document.getElementById('download-submissions-btn');
-    if (!downloadBtn) return;
-
-    if (state.submissions && state.submissions.length > 0) {
-        downloadBtn.classList.remove('hidden');
-        const template = translations[state.language || 'en'].downloadSubmissions;
-        downloadBtn.innerHTML = `📥 ${template.replace('{count}', state.submissions.length)}`;
-    } else {
-        downloadBtn.classList.add('hidden');
-    }
-}
-
-/**
- * Compiles stored submissions into CSV payloads and triggers browser save.
- * @returns {void}
- */
-function downloadSubmissionsCSV() {
-    const lang = state.language || 'en';
-    if (!state.submissions || state.submissions.length === 0) {
-        alert(lang === 'en' ? 'No submissions collected yet.' : 'अभी तक कोई सबमिशन एकत्र नहीं हुआ है।');
-        return;
-    }
-
-    if (typeof Papa === 'undefined') {
-        alert(lang === 'en' ? 'PapaParse failed to load. Please check your internet connection.' : 'PapaParse लोड होने में विफल रहा। कृपया अपना इंटरनेट कनेक्शन जांचें।');
-        return;
-    }
-
-    const csvContent = Papa.unparse(state.submissions);
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const blobUrl = URL.createObjectURL(blob);
-
-    const downloadLink = document.createElement('a');
-    downloadLink.setAttribute('href', blobUrl);
-    downloadLink.setAttribute('download', `aim_student_submissions_${new Date().toISOString().split('T')[0]}.csv`);
-    downloadLink.style.visibility = 'hidden';
-
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
 }
 
 /**
@@ -1530,11 +1685,51 @@ function translateUIInternal() {
             el.setAttribute('aria-label', dict[key]);
         }
     });
+}
 
+/**
+ * JSONP Fetch Helper to bypass CORS redirection blocks from Google script webapps.
+ * @param {string} url - Target URL.
+ * @returns {Promise<any>} Response payload.
+ */
+function fetchJSONP(url) {
+    return new Promise((resolve, reject) => {
+        const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
+        const separator = url.includes('?') ? '&' : '?';
+        const scriptUrl = `${url}${separator}prefix=${callbackName}`;
+        
+        const timeoutId = setTimeout(() => {
+            cleanup();
+            reject(new Error('Network request timed out'));
+        }, 10000);
 
-
-    // Refresh dynamic download button text count
-    updateDownloadButtonState();
+        window[callbackName] = (data) => {
+            clearTimeout(timeoutId);
+            resolve(data);
+            cleanup();
+        };
+        
+        const script = document.createElement('script');
+        script.src = scriptUrl;
+        script.id = callbackName;
+        script.async = true;
+        
+        script.onerror = () => {
+            clearTimeout(timeoutId);
+            reject(new Error('Failed to load resource from server'));
+            cleanup();
+        };
+        
+        document.head.appendChild(script);
+        
+        function cleanup() {
+            const element = document.getElementById(callbackName);
+            if (element) {
+                element.remove();
+            }
+            delete window[callbackName];
+        }
+    });
 }
 
 // Kickoff
