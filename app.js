@@ -21,7 +21,7 @@
 
 // Google Sheets Integration Web App URL (Paste your Google Script webapp executable URL here)
 // Example: "https://script.google.com/macros/s/AKfycbw.../exec"
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzp5SSHU2uC4qIHx8CfamyVcUyHs_oFBL0Gs0UhHueLnkCPsdSQ3jUO36MU1boeRM1lkg/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOETqGyMYJ7phV0LN2mD9vQykJqYWfcsReF1hdmKFHRA_HlM74FaGsVMLgNhbVhdi3cQ/exec";
 
 /**
  * Central application state object.
