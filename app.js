@@ -66,7 +66,7 @@ const translations = {
         allFormsOfWorkOption: "All Forms of Work",
         workWithLifeForms: "Work with Life Forms",
         workWithMachinesMaterials: "Work with Machines & Materials",
-        workInHumanServices: "Work in Human Services",
+        workInHumanServices: "Work with Human Services",
         keyActivitiesLabel: "Key Activities",
         keyLearningOutcomesLabel: "Key Learning Outcomes",
         adobeExpressIntegrationLabel: "Adobe Express Integration for Activity Books & Portfolios",
@@ -78,7 +78,7 @@ const translations = {
         kaushalHeroSubtitle: "Choose your grade level from Kaushal Bodh curriculum",
         kaushalActivitiesSubtitle: "Showing Kaushal Bodh projects for {grade}",
         importantNoteHeading: "Earn DCAIS Certificate",
-        importantNoteText: "Earn accredited DCAIS certification upon completion of minimum one activity per month and submit the creative assignments.",
+        importantNoteText: "Earn accredited DCAIS certification upon completion of minimum one activity per month and Submitting the creative assignments.",
         certNotice: "To earn your certificate, please complete at least one activity per month",
         quickSearchTitle: "Quick Activity Search",
         quickSearchDesc: "Search activities across all grades directly by name",
@@ -374,6 +374,7 @@ function setupEventListeners() {
     if (choiceEnglish) {
         choiceEnglish.addEventListener('click', (e) => {
             e.preventDefault();
+            resetInstructionPopupState();
             state.tutorialMode = 'english';
             state.language = 'en';
             state.currentStep = 'grade';
@@ -385,6 +386,7 @@ function setupEventListeners() {
     if (choiceHindi) {
         choiceHindi.addEventListener('click', (e) => {
             e.preventDefault();
+            resetInstructionPopupState();
             state.tutorialMode = 'hindi';
             state.language = 'hi';
             state.currentStep = 'grade';
@@ -396,6 +398,7 @@ function setupEventListeners() {
     if (choiceKaushalBodh) {
         choiceKaushalBodh.addEventListener('click', (e) => {
             e.preventDefault();
+            resetInstructionPopupState();
             state.tutorialMode = 'kaushal-bodh';
             state.currentStep = 'grade';
             render();
@@ -407,6 +410,7 @@ function setupEventListeners() {
     if (backToWelcomeLink) {
         backToWelcomeLink.addEventListener('click', (e) => {
             e.preventDefault();
+            resetInstructionPopupState();
             state.tutorialMode = 'choose';
             state.currentStep = 'welcome';
             render();
@@ -477,7 +481,9 @@ function setupEventListeners() {
     if (showSubmissionFormBtn) {
         showSubmissionFormBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            window.open('https://forms.gle/ZkzcFSFpQQUyxeWC8', '_blank', 'noopener,noreferrer');
+            const isKaushalBodh = state.tutorialMode === 'kaushal-bodh' || (state.selectedActivity && state.selectedActivity.isKaushalBodh);
+            const formUrl = isKaushalBodh ? 'https://forms.gle/Rdp59kNG5EpRcdedA' : 'https://forms.gle/ZkzcFSFpQQUyxeWC8';
+            window.open(formUrl, '_blank', 'noopener,noreferrer');
         });
     }
 
@@ -788,7 +794,7 @@ function getFormOfWorkInfo(formOfWork) {
         };
     } else if (f.includes('human') || f.includes('service')) {
         return {
-            name: "Work in Human Services",
+            name: "Work with Human Services",
             icon: "🤝",
             colorClass: "form-human-services",
             color: "#8b5cf6"
@@ -1179,6 +1185,144 @@ function getSubjectColorClass(subject) {
 }
 
 /**
+ * Clears all stored popup dismissal flags from sessionStorage and cancels active timers
+ * so the AIM Panda Mascot popup appears fresh like a new user arrival when entering any tab/mode.
+ */
+function resetInstructionPopupState() {
+    if (window.popupAutoCloseTimer) {
+        clearTimeout(window.popupAutoCloseTimer);
+        window.popupAutoCloseTimer = null;
+    }
+    try {
+        Object.keys(sessionStorage).forEach(key => {
+            if (key.includes('_popup_closed_')) {
+                sessionStorage.removeItem(key);
+            }
+        });
+    } catch (err) {
+        console.warn('Failed clearing popup sessionStorage keys:', err);
+    }
+}
+
+/**
+ * Renders or updates the instruction popup banner for current step page in both DCAIS and Kaushal Bodh modes.
+ * Displays page-specific instructions in English or Hindi with the AIM Panda Mascot.
+ * @param {string} stepName - 'grade', 'form-of-work', 'activities', or 'detail'
+ */
+function renderDCAISInstructionPopup(stepName) {
+    // Clear existing auto-close timer if active
+    if (window.popupAutoCloseTimer) {
+        clearTimeout(window.popupAutoCloseTimer);
+        window.popupAutoCloseTimer = null;
+    }
+
+    // Remove existing popover wrappers
+    document.querySelectorAll('.dcais-instruction-popover-wrapper').forEach(el => el.remove());
+
+    if (state.currentStep === 'welcome') {
+        resetInstructionPopupState();
+        return;
+    }
+
+    const isKaushalBodh = state.tutorialMode === 'kaushal-bodh';
+    const lang = state.language || 'en';
+    let messageText = '';
+
+    if (stepName === 'grade') {
+        if (isKaushalBodh) {
+            messageText = lang === 'hi'
+                ? 'अपने कौशल बोध गतिविधियों के लिए एडोब एक्सप्रेस डिजिटल परिसंपत्तियों तक पहुंचें। आप अपने कार्य को बेहतर बनाने के लिए इनका उपयोग कर सकते हैं। शुरू करने के लिए अपनी कक्षा चुनें।'
+                : 'Access Adobe Express digital assets for your Kaushal Bodh activities. You can use them to elevate your work. Choose your grade to get started.';
+        } else {
+            messageText = lang === 'hi'
+                ? 'अपनी कक्षा चुनें और अपनी पसंद की गतिविधि का चयन करें! यद्यपि यह योजना केवल सुझाव है, सभी विद्यार्थियों को सलाह दी जाती है कि वे प्रति माह कम से कम एक गतिविधि अवश्य पूरी करें।'
+                : 'Pick your grade and select an activity that interests you! While this plan is suggestive, all students are advised to finish a minimum of one activity per month.';
+        }
+    } else if (stepName === 'form-of-work') {
+        if (isKaushalBodh) {
+            messageText = lang === 'hi'
+                ? 'नीचे प्रोजेक्ट सूची का विस्तार करने के लिए कार्य का प्रकार चुनें। अपनी गतिविधि शुरू करने के लिए किसी प्रोजेक्ट पर क्लिक करें।'
+                : 'Select a form of work to expand the project list below. Click on a project to begin your activity.';
+        }
+    } else if (stepName === 'activities') {
+        if (!isKaushalBodh) {
+            messageText = lang === 'hi'
+                ? "गतिविधि टेम्पलेट देखने के लिए अपनी पसंदीदा गतिविधि के नीचे 'व्यू गतिविधि' (View Activity) बटन पर क्लिक करें!"
+                : "Click on the ‘view activity’ button under your desired activity to explore the activity template!";
+        }
+    } else if (stepName === 'detail') {
+        messageText = lang === 'hi'
+            ? 'नीचे दिए गए गतिविधि टेम्पलेट लिंक पर क्लिक करने के बाद, आपको गतिविधि पूरी करने के लिए एडोब एक्सप्रेस पेज पर निर्देशित किया जाएगा। एक बार जब आप पूरा कर लें, तो कृपया अपनी गतिविधि का शेयर योग्य लिंक बनाएं और दिए गए गूगल फॉर्म के माध्यम से जमा लिंक बटन पर क्लिक करके जमा करें।'
+            : 'After clicking on the activity template link given below, you will be redirected to the Adobe Express page to complete the activity. Once you have finished, please generate a shareable link to your activity and submit it by clicking the submit link button through the Google Form provided.';
+    }
+
+    if (!messageText) return;
+
+    const modeKey = isKaushalBodh ? 'kb' : 'dcais';
+    const storageKey = `${modeKey}_popup_closed_${stepName}`;
+    const isClosed = sessionStorage.getItem(storageKey) === 'true';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'dcais-instruction-popover-wrapper';
+
+    const guideBtnText = lang === 'hi' ? 'दिशा-निर्देश देखें' : 'View Instructions';
+
+    wrapper.innerHTML = `
+        <div class="dcais-instruction-popover ${isClosed ? 'hidden' : ''}" id="popover-${stepName}">
+            <div class="dcais-instruction-popover-content">
+                <button type="button" class="dcais-popover-close-btn" aria-label="Close popup">&times;</button>
+                <div class="popover-mascot-left">
+                    <img src="aim_mascot.png" alt="AIM Panda Mascot" class="popover-mascot-img" />
+                </div>
+                <div class="popover-message-right">
+                    <p class="dcais-popover-body-text">${messageText}</p>
+                </div>
+            </div>
+        </div>
+        ${isClosed ? `
+            <button type="button" class="dcais-popover-trigger-badge" id="trigger-${stepName}">
+                <img src="aim_mascot.png" alt="AIM Panda Mascot" style="width: 24px; height: 24px; object-fit: contain;" />
+                <span>${guideBtnText}</span>
+            </button>
+        ` : ''}
+    `;
+
+    document.body.appendChild(wrapper);
+
+    const closeBtn = wrapper.querySelector('.dcais-popover-close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            if (window.popupAutoCloseTimer) {
+                clearTimeout(window.popupAutoCloseTimer);
+                window.popupAutoCloseTimer = null;
+            }
+            sessionStorage.setItem(storageKey, 'true');
+            renderDCAISInstructionPopup(stepName);
+        });
+    }
+
+    const triggerBtn = wrapper.querySelector(`#trigger-${stepName}`);
+    if (triggerBtn) {
+        triggerBtn.addEventListener('click', () => {
+            if (window.popupAutoCloseTimer) {
+                clearTimeout(window.popupAutoCloseTimer);
+                window.popupAutoCloseTimer = null;
+            }
+            sessionStorage.removeItem(storageKey);
+            renderDCAISInstructionPopup(stepName);
+        });
+    }
+
+    // Set 5-second auto-popdown timer if popup is currently open
+    if (!isClosed) {
+        window.popupAutoCloseTimer = setTimeout(() => {
+            sessionStorage.setItem(storageKey, 'true');
+            renderDCAISInstructionPopup(stepName);
+        }, 5000);
+    }
+}
+
+/**
  * Coordinates current step layout configurations.
  * Handles DOM visibility, filters populating, and keyboard focus changes.
  * @returns {void}
@@ -1238,8 +1382,8 @@ function render() {
         const lang = state.language || 'en';
         document.getElementById('fow-title').innerText = lang === 'hi' ? 'कार्य का प्रकार चुनें' : 'Select Form of Work';
         document.getElementById('fow-subtitle').innerText = lang === 'hi'
-            ? getDisplayGradeName(state.selectedGrade) + ' के लिए कार्य का प्रकार चुनें'
-            : 'Choose a form of work for ' + getDisplayGradeName(state.selectedGrade);
+            ? 'अपनी कक्षा के लिए कार्य का प्रकार चुनें और अपनी गतिविधि के साथ आगे बढ़ने के लिए प्रोजेक्ट का चयन करें। प्रोजेक्ट चुनने के बाद, "ओपन लर्निंग जर्नल" टैब पर क्लिक करें जो आपको आपकी गतिविधि पूरी करने के लिए एडोब एक्सप्रेस पेज पर निर्देशित करेगा।'
+            : 'Choose the form of work for your grade and select the Project to continue with your activity. After Selecting the project, click on "Open Learning Journal " tab which will redirect you to Adobe Express Page to complete your activity.';
         document.getElementById('fow-section-title').innerText = lang === 'hi' ? 'कार्य का प्रकार' : 'Form of Work';
         focusId = 'fow-title';
     } else if (state.currentStep === 'activities') {
@@ -1275,6 +1419,7 @@ function render() {
     }
 
     renderBreadcrumbs();
+    renderDCAISInstructionPopup(state.currentStep);
 
     // Translate all strings in the document DOM
     translateUIInternal();
@@ -1325,11 +1470,12 @@ function renderBreadcrumbs() {
 
     // Level 3: Form of Work / Activities
     if (state.tutorialMode === 'kaushal-bodh' && state.filterSubject && state.filterSubject !== 'All') {
-        const fowName = state.filterSubject;
+        const fowInfo = getFormOfWorkInfo(state.filterSubject);
+        const fowName = fowInfo.name;
         if (state.currentStep === 'activities') {
-            html += `<li><span class="current">${fowName}</span></li>`;
+            html += `<li><span class="current">${fowInfo.icon} ${fowName}</span></li>`;
         } else if (state.currentStep === 'detail') {
-            html += `<li><a href="#" id="breadcrumb-fow">${fowName}</a></li>`;
+            html += `<li><a href="#" id="breadcrumb-fow">${fowInfo.icon} ${fowName}</a></li>`;
         }
     }
 
@@ -1694,9 +1840,9 @@ function renderKaushalTabs() {
             accentClass: 'form-card-machines'
         },
         {
-            key: 'Work in Human Services',
+            key: 'Work with Human Services',
             category: 'human',
-            title: lang === 'hi' ? 'मानव सेवाओं में कार्य' : 'Work in Human Services',
+            title: lang === 'hi' ? 'मानव सेवाओं में कार्य' : 'Work with Human Services',
             subtitle: lang === 'hi' ? 'स्वास्थ्य, समाज और संचार' : 'Health, Society & Service',
             icon: '🤝',
             accentClass: 'form-card-human'
@@ -1840,9 +1986,9 @@ function renderFormOfWorkCards() {
             accentClass: 'indigo'
         },
         {
-            key: 'Work in Human Services',
+            key: 'Work with Human Services',
             category: 'human',
-            title: lang === 'hi' ? 'मानव सेवाओं में कार्य' : 'Work in Human Services',
+            title: lang === 'hi' ? 'मानव सेवाओं में कार्य' : 'Work with Human Services',
             subtitle: lang === 'hi' ? 'स्वास्थ्य, समाज और संचार' : 'Health, Society & Service',
             icon: '🤝',
             accentClass: 'green'
@@ -2039,6 +2185,13 @@ function renderActivityDetail() {
     if (!activity) return;
 
     const dict = translations[state.language || 'en'];
+
+    // Update submission form button URL dynamically
+    const showSubmissionFormBtn = document.getElementById('show-submission-form-btn');
+    if (showSubmissionFormBtn) {
+        const isKaushalBodh = activity.isKaushalBodh || state.tutorialMode === 'kaushal-bodh';
+        showSubmissionFormBtn.href = isKaushalBodh ? 'https://forms.gle/Rdp59kNG5EpRcdedA' : 'https://forms.gle/ZkzcFSFpQQUyxeWC8';
+    }
 
     if (activity.isKaushalBodh) {
         const detailContainer = document.getElementById('step-detail');
