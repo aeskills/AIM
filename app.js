@@ -36,19 +36,21 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOETqGyMYJ7p
  */
 const state = {
     allActivities: [],
+    kaushalBodhActivities: [],
     selectedGrade: null,
     selectedActivity: null,
     currentStep: 'grade',
-    filterSubject: 'All', // Mapped to Month filtering
+    filterSubject: 'All', // Mapped to Month or Form of Work filtering
     submissions: [],
     language: 'en', // 'en' or 'hi'
-    tutorialMode: 'choose' // 'choose' | 'hindi' | 'english'
+    userExplicitLanguage: 'en', // Manually set via language toggle
+    tutorialMode: 'choose' // 'choose' | 'hindi' | 'english' | 'kaushal-bodh'
 };
 
 const translations = {
     en: {
         welcomeTitle: "Welcome to AIM",
-        welcomeDesc: "AIM is a creative learning space for students in India. Every Week you get fresh activities built on Adobe Express. Design posters, Generate Images, Create videos, build things that are yours. Start simple. Level up every week.",
+        welcomeDesc: "AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.",
         activityOfMonthTag: "Activity of the Month",
         independenceTitle: "Independence Day Special",
         independenceDesc: "Celebrate India's Independence Day by creating patriotic posters and videos using Adobe Express for Education!",
@@ -57,9 +59,30 @@ const translations = {
         monthlyTutorialsTitle: "Monthly Activity Tutorials",
         englishTutorial: "English Tutorial",
         hindiTutorial: "Hindi Tutorial",
-        goToActivityPage: "Go to activity page",
-        englishTutorials: "English Tutorials",
-        hindiTutorials: "Hindi Tutorials",
+        englishTutorials: "DCAIS Activities / English",
+        hindiTutorials: "DCAIS Activities / Hindi",
+        kaushalBodhTab: "Kaushal Bodh",
+        formOfWorkLabel: "Form of Work",
+        allFormsOfWorkOption: "All Forms of Work",
+        workWithLifeForms: "Work with Life Forms",
+        workWithMachinesMaterials: "Work with Machines & Materials",
+        workInHumanServices: "Work in Human Services",
+        keyActivitiesLabel: "Key Activities",
+        keyLearningOutcomesLabel: "Key Learning Outcomes",
+        adobeExpressIntegrationLabel: "Adobe Express Integration for Activity Books & Portfolios",
+        adobeExpressActivityLabel: "Adobe Express Activity",
+        finalStudentDeliverableLabel: "Final Student Deliverable",
+        openLearningJournal: "Open Learning Journal",
+        openTemplateLink: "Open Activity Template",
+        learningJournalBtn: "📘 Open Learning Journal Link",
+        kaushalHeroSubtitle: "Choose your grade level from Kaushal Bodh curriculum",
+        kaushalActivitiesSubtitle: "Showing Kaushal Bodh projects for {grade}",
+        importantNoteHeading: "Important Note",
+        importantNoteText: "Earn accredited DCAIS certification upon completion of minimum one activity per month and submit the creative assignments.",
+        certNotice: "To earn your certificate, please complete at least one activity per month",
+        quickSearchTitle: "Quick Activity Search",
+        quickSearchDesc: "Search activities across all grades directly by name",
+        searchActivityByName: "Search activity by name",
         startBtn: "Start",
         readyToExplore: "Let's begin!",
         heroSubtitle: "Choose your grade level and proceed with the activities",
@@ -110,7 +133,7 @@ const translations = {
         activityNamePlaceholder: "e.g. Summer Vacation Memories",
         projectLinkPlaceholder: "e.g. https://new.express.adobe.com/...",
         passwordInputPlaceholder: "Password",
-        footerText: "© 2026 AIM - Adobe Implementation Plan. All rights reserved.",
+        footerText: "© 2026 AIM - Activity Implementation Plan. All rights reserved.",
         failedLoadActivities: "Failed to Load Activities",
         failedLoadDesc: "The activities database could not be loaded or is in an invalid format.",
         tryAgain: "Try Again",
@@ -156,9 +179,30 @@ const translations = {
         monthlyTutorialsTitle: "मासिक गतिविधि ट्यूटोरियल",
         englishTutorial: "अंग्रेज़ी ट्यूटोरियल",
         hindiTutorial: "हिंदी ट्यूटोरियल",
-        goToActivityPage: "गतिविधि पृष्ठ पर जाएं",
-        englishTutorials: "अंग्रेज़ी ट्यूटोरियल्स",
-        hindiTutorials: "हिंदी ट्यूटोरियल्स",
+        englishTutorials: "DCAIS एक्टिविटीज़ / अंग्रेज़ी",
+        hindiTutorials: "DCAIS एक्टिविटीज़ / हिंदी",
+        kaushalBodhTab: "कौशल बोध",
+        formOfWorkLabel: "कार्य का प्रकार (Form of Work)",
+        allFormsOfWorkOption: "सभी कार्य प्रकार",
+        workWithLifeForms: "सजीव रूपों के साथ कार्य (Work with Life Forms)",
+        workWithMachinesMaterials: "मशीनों और सामग्रियों के साथ कार्य (Work with Machines & Materials)",
+        workInHumanServices: "मानव सेवाओं में कार्य (Work in Human Services)",
+        keyActivitiesLabel: "मुख्य गतिविधियाँ (Key Activities)",
+        keyLearningOutcomesLabel: "मुख्य सीखने के परिणाम (Key Learning Outcomes)",
+        adobeExpressIntegrationLabel: "एक्टिविटी बुक्स और पोर्टफोलियो के लिए एडोब एक्सप्रेस एकीकरण",
+        adobeExpressActivityLabel: "एडोब एक्सप्रेस गतिविधि (Adobe Express Activity)",
+        finalStudentDeliverableLabel: "अंतिम छात्र आउटपुट (Final Student Deliverable)",
+        openLearningJournal: "लर्निंग जर्नल खोलें",
+        openTemplateLink: "एक्टिविटी टेम्पलेट खोलें",
+        learningJournalBtn: "📘 लर्निंग जर्नल लिंक खोलें",
+        kaushalHeroSubtitle: "कौशल बोध प्रोजेक्ट्स और लर्निंग जर्नल देखने के लिए अपनी कक्षा चुनें",
+        kaushalActivitiesSubtitle: "{grade} के कौशल बोध प्रोजेक्ट्स",
+        importantNoteHeading: "महत्वपूर्ण नोट",
+        importantNoteText: "मासिक न्यूनतम एक गतिविधि पूरी करने और रचनात्मक कार्य जमा करने पर मान्यता प्राप्त DCAIS प्रमाण पत्र प्राप्त करें।",
+        certNotice: "प्रमाण पत्र प्राप्त करने के लिए, कृपया सुनिश्चित करें कि आप प्रति माह एक गतिविधि अवश्य पूरी करें",
+        quickSearchTitle: "त्वरित गतिविधि खोज",
+        quickSearchDesc: "नाम से सभी कक्षाओं की गतिविधियों को सीधे खोजें",
+        searchActivityByName: "गतिविधि के नाम से खोजें...",
         startBtn: "प्रारंभ करें",
         readyToExplore: "आइए शुरू करें!",
         heroSubtitle: "अपनी कक्षा चुनें और गतिविधियों के साथ आगे बढ़ें",
@@ -209,7 +253,7 @@ const translations = {
         activityNamePlaceholder: "जैसे: गर्मी की छुट्टियों की यादें",
         projectLinkPlaceholder: "जैसे: https://new.express.adobe.com/...",
         passwordInputPlaceholder: "पासवर्ड",
-        footerText: "© 2026 AIM - Adobe Implementation Plan. सर्वाधिकार सुरक्षित (All rights reserved).",
+        footerText: "© 2026 AIM - Activity Implementation Plan. सर्वाधिकार सुरक्षित (All rights reserved).",
         failedLoadActivities: "गतिविधियां लोड करने में विफल",
         failedLoadDesc: "गतिविधि डेटाबेस लोड नहीं किया जा सका या यह अमान्य प्रारूप में है।",
         tryAgain: "पुनः प्रयास करें",
@@ -307,30 +351,19 @@ function setupEventListeners() {
     const langToggleEn = document.getElementById('lang-toggle-en');
     const langToggleHi = document.getElementById('lang-toggle-hi');
 
-    function updateLangToggleUI() {
-        if (!langToggleEn || !langToggleHi) return;
-        if (state.language === 'hi') {
-            langToggleHi.classList.add('active-lang');
-            langToggleEn.classList.remove('active-lang');
-        } else {
-            langToggleEn.classList.add('active-lang');
-            langToggleHi.classList.remove('active-lang');
-        }
-    }
-
     if (langToggleEn) {
         langToggleEn.addEventListener('click', () => {
+            state.userExplicitLanguage = 'en';
             state.language = 'en';
-            updateLangToggleUI();
-            translateUIInternal();
+            render();
         });
     }
 
     if (langToggleHi) {
         langToggleHi.addEventListener('click', () => {
+            state.userExplicitLanguage = 'hi';
             state.language = 'hi';
-            updateLangToggleUI();
-            translateUIInternal();
+            render();
         });
     }
 
@@ -352,6 +385,16 @@ function setupEventListeners() {
             e.preventDefault();
             state.tutorialMode = 'hindi';
             state.language = 'hi';
+            state.currentStep = 'grade';
+            render();
+        });
+    }
+
+    const choiceKaushalBodh = document.getElementById('choice-kaushal-bodh');
+    if (choiceKaushalBodh) {
+        choiceKaushalBodh.addEventListener('click', (e) => {
+            e.preventDefault();
+            state.tutorialMode = 'kaushal-bodh';
             state.currentStep = 'grade';
             render();
         });
@@ -391,7 +434,11 @@ function setupEventListeners() {
         backLink.addEventListener('click', (e) => {
             e.preventDefault();
             state.selectedActivity = null;
-            state.currentStep = 'activities';
+            if (state.tutorialMode === 'kaushal-bodh') {
+                state.currentStep = 'form-of-work';
+            } else {
+                state.currentStep = 'activities';
+            }
             render();
         });
     }
@@ -401,15 +448,34 @@ function setupEventListeners() {
     if (backToGradesLink) {
         backToGradesLink.addEventListener('click', (e) => {
             e.preventDefault();
-            resetState();
+            // In kaushal-bodh, go back to Form of Work step
+            if (state.tutorialMode === 'kaushal-bodh') {
+                state.filterSubject = '';
+                state.currentStep = 'form-of-work';
+                render();
+            } else {
+                resetState();
+            }
         });
     }
 
-    // Submissions popup modal controls
+    // Back to Grade Selection from Form of Work step
+    const backToGradesFromFow = document.getElementById('back-to-grades-from-fow');
+    if (backToGradesFromFow) {
+        backToGradesFromFow.addEventListener('click', (e) => {
+            e.preventDefault();
+            state.filterSubject = '';
+            state.currentStep = 'grade';
+            render();
+        });
+    }
+
+    // Submissions Google Form redirect for activities
     const showSubmissionFormBtn = document.getElementById('show-submission-form-btn');
     if (showSubmissionFormBtn) {
-        showSubmissionFormBtn.addEventListener('click', () => {
-            openConfirmModal();
+        showSubmissionFormBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open('https://forms.gle/ZkzcFSFpQQUyxeWC8', '_blank', 'noopener,noreferrer');
         });
     }
 
@@ -498,14 +564,12 @@ function setupEventListeners() {
         });
     }
 
-    // Monthly Activity submit button on Welcome Screen
+    // Monthly Activity submit button on Welcome Screen (Independence Day Special)
     const submitMonthlyActivityBtn = document.getElementById('submit-monthly-activity-btn');
     if (submitMonthlyActivityBtn) {
-        submitMonthlyActivityBtn.addEventListener('click', () => {
-            state.selectedActivity = { activity_name: "Independence Day Special" };
-            openSubmissionModal();
-            const actInput = document.getElementById('submit-activity-name');
-            if (actInput) actInput.value = "Independence Day Special";
+        submitMonthlyActivityBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open('https://forms.gle/FZjYhFcQ3S8SuLKZA', '_blank', 'noopener,noreferrer');
         });
     }
 
@@ -528,29 +592,30 @@ function setupEventListeners() {
 
 
 
-    // Grade Search Input listeners
-    const gradeSearchInput = document.getElementById('grade-search');
-    const clearSearchBtn = document.getElementById('clear-search-btn');
-    if (gradeSearchInput) {
-        gradeSearchInput.addEventListener('input', (e) => {
-            const query = e.target.value.trim().toLowerCase();
-            if (clearSearchBtn) {
-                if (query.length > 0) {
-                    clearSearchBtn.classList.remove('hidden');
+    // Quick Activity Search Input listeners
+    const quickSearchInput = document.getElementById('quick-activity-search');
+    const clearQuickSearchBtn = document.getElementById('clear-quick-search-btn');
+
+    if (quickSearchInput) {
+        quickSearchInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (clearQuickSearchBtn) {
+                if (val.trim().length > 0) {
+                    clearQuickSearchBtn.classList.remove('hidden');
                 } else {
-                    clearSearchBtn.classList.add('hidden');
+                    clearQuickSearchBtn.classList.add('hidden');
                 }
             }
-            renderGradeSelection();
+            renderQuickSearchResults(val);
         });
     }
 
-    if (clearSearchBtn && gradeSearchInput) {
-        clearSearchBtn.addEventListener('click', () => {
-            gradeSearchInput.value = '';
-            clearSearchBtn.classList.add('hidden');
-            renderGradeSelection();
-            gradeSearchInput.focus();
+    if (clearQuickSearchBtn && quickSearchInput) {
+        clearQuickSearchBtn.addEventListener('click', () => {
+            quickSearchInput.value = '';
+            clearQuickSearchBtn.classList.add('hidden');
+            renderQuickSearchResults('');
+            quickSearchInput.focus();
         });
     }
 
@@ -646,21 +711,220 @@ function positionTooltip(e, tooltip) {
 }
 
 /**
- * Fetches the default Excel curriculum sheet 'Implementation plan.xlsx' from the server.
+ * Parses project title and duration string from Kaushal Bodh excel.
+ */
+function parseProjectNameAndDuration(str) {
+    if (!str) return { name: "Project", duration: "", full: "Project" };
+    
+    let clean = str.replace(/\r\n/g, "\n").trim();
+    if (clean.includes("Duration:")) {
+        const parts = clean.split(/Duration:/i);
+        const name = parts[0].trim().replace(/\n+/g, " ");
+        const duration = parts[1] ? parts[1].trim() : "";
+        return { name, duration, full: `${name} (${duration})` };
+    }
+    
+    const match = clean.match(/^(.*?)\s*\((.*?Hours.*?)\)$/i);
+    if (match) {
+        return { name: match[1].trim(), duration: match[2].trim(), full: clean };
+    }
+    
+    return { name: clean.split('\n')[0].trim(), duration: "", full: clean };
+}
+
+/**
+ * Formats multi-line text with bullets or paragraphs into structured HTML.
+ */
+function formatFormattedText(text) {
+    if (!text) return '';
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    let html = '';
+    let inList = false;
+
+    lines.forEach(line => {
+        if (line.startsWith('•') || line.startsWith('-')) {
+            if (!inList) {
+                html += '<ul class="custom-bullet-list" style="margin: 0.5rem 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem;">';
+                inList = true;
+            }
+            const cleanLine = line.replace(/^[•\-]\s*/, '');
+            html += `<li style="line-height: 1.5; color: var(--color-text-primary); font-size: 0.925rem;">${escapeHTML(cleanLine)}</li>`;
+        } else {
+            if (inList) {
+                html += '</ul>';
+                inList = false;
+            }
+            html += `<p style="margin: 0.4rem 0; line-height: 1.5; color: var(--color-text-primary); font-size: 0.925rem;">${escapeHTML(line)}</p>`;
+        }
+    });
+
+    if (inList) {
+        html += '</ul>';
+    }
+
+    return html;
+}
+
+/**
+ * Returns metadata and CSS theme styling for Kaushal Bodh Form of Work.
+ */
+function getFormOfWorkInfo(formOfWork) {
+    const f = (formOfWork || "").toLowerCase();
+    if (f.includes('life')) {
+        return {
+            name: "Work with Life Forms",
+            icon: "🌿",
+            colorClass: "form-life-forms",
+            color: "#10B981"
+        };
+    } else if (f.includes('machine') || f.includes('material')) {
+        return {
+            name: "Work with Machines & Materials",
+            icon: "⚙️",
+            colorClass: "form-machines-materials",
+            color: "#2563eb"
+        };
+    } else if (f.includes('human') || f.includes('service')) {
+        return {
+            name: "Work in Human Services",
+            icon: "🤝",
+            colorClass: "form-human-services",
+            color: "#8b5cf6"
+        };
+    }
+    return {
+        name: formOfWork || "General",
+        icon: "📋",
+        colorClass: "form-general",
+        color: "#6b7280"
+    };
+}
+
+/**
+ * Renders multiple Template buttons if cell contains multiple template links.
+ */
+function renderTemplateButtons(templateLinkStr) {
+    if (!templateLinkStr) return '';
+    const urls = templateLinkStr.split(/\s+/).map(u => u.trim()).filter(u => u.startsWith('http://') || u.startsWith('https://'));
+    if (urls.length === 0) return '';
+
+    const dict = translations[state.language || 'en'];
+    let html = '';
+
+    urls.forEach((url, i) => {
+        const label = urls.length > 1 ? `${dict.openTemplateLink} (${i + 1})` : dict.openTemplateLink;
+        html += `
+            <a href="${url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary kb-template-btn" style="background: #ffffff; border: 2px solid #eb1000; color: #eb1000; padding: 0.85rem 1.5rem; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-full); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 8px rgba(235, 16, 0, 0.1); transition: all 0.2s ease;">
+                <span>📝</span> ${label} <span style="font-size: 1rem;">↗</span>
+            </a>
+        `;
+    });
+
+    return html;
+}
+
+/**
+ * Parses Kaushal Bodh implementation excel file.
+ */
+function parseKaushalBodhExcel(arrayBuffer) {
+    if (typeof XLSX === 'undefined') return;
+
+    try {
+        const data = new Uint8Array(arrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+        
+        const kbActivities = [];
+
+        for (let s_idx = 0; s_idx < workbook.SheetNames.length; s_idx++) {
+            const rawSheetName = workbook.SheetNames[s_idx];
+            if (!rawSheetName || !rawSheetName.trim()) continue;
+
+            const sheetName = rawSheetName.trim();
+            let gradeName = sheetName;
+            const matchGrade = sheetName.match(/grade\s*(\d+)/i);
+            if (matchGrade) {
+                gradeName = `Grade ${matchGrade[1]}`;
+            }
+
+            const sheet = workbook.Sheets[rawSheetName];
+            const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+            rows.forEach((row, rIdx) => {
+                const formOfWork = (row['Form of Work'] || row['Form Of Work'] || "").toString().trim();
+                const projectNameDuration = (row['Project Name & Duration'] || row['Project Name and Duration'] || "").toString().trim();
+                const keyActivities = (row['Key Activities'] || "").toString().trim();
+                const keyLearningOutcomes = (row['Key Learning Outcomes'] || "").toString().trim();
+                const adobeExpressIntegration = (row['Adobe Express Integration for Activity Books & Portfolios'] || row['Adobe Express Integration'] || "").toString().trim();
+                const adobeExpressActivity = (row['Adobe Express Activity'] || "").toString().trim();
+                const finalStudentDeliverable = (row['Final Student Deliverable'] || "").toString().trim();
+                const templateLink = (row['Template Link'] || "").toString().trim();
+                const learningJournalLink = (row['Learning Journal Link'] || "").toString().trim();
+
+                if (!projectNameDuration && !formOfWork) return;
+
+                const parsed = parseProjectNameAndDuration(projectNameDuration);
+
+                kbActivities.push({
+                    isKaushalBodh: true,
+                    grade: gradeName,
+                    form_of_work: formOfWork,
+                    project_name_duration: parsed.full || projectNameDuration,
+                    activity_name: parsed.name,
+                    duration: parsed.duration,
+                    skills: keyLearningOutcomes,
+                    instructions: keyActivities,
+                    key_activities: keyActivities,
+                    key_learning_outcomes: keyLearningOutcomes,
+                    adobe_express_integration: adobeExpressIntegration,
+                    adobe_express_activity: adobeExpressActivity,
+                    final_student_deliverable: finalStudentDeliverable,
+                    template_link: templateLink,
+                    learning_journal_link: learningJournalLink,
+                    month: formOfWork || "Kaushal Bodh",
+                    week: ""
+                });
+            });
+        }
+
+        state.kaushalBodhActivities = kbActivities;
+    } catch (err) {
+        console.error("Error parsing Kaushal Bodh Excel:", err);
+    }
+}
+
+/**
+ * Fetches the default Excel curriculum sheets from the server.
  * @returns {Promise<void>}
  */
 async function loadDefaultExcel() {
     showLoader();
     try {
-        const fetchUrl = 'Implementation plan.xlsx?v=' + Date.now();
-        const response = await fetch(fetchUrl);
-        if (!response.ok) {
-            throw new Error(`Server returned status: ${response.status}`);
+        const fetchUrl1 = 'Implementation plan.xlsx?v=' + Date.now();
+        const fetchUrl2 = 'final of Kaushal Bodh Implementation Table.xlsx?v=' + Date.now();
+
+        const [res1, res2] = await Promise.allSettled([
+            fetch(fetchUrl1),
+            fetch(fetchUrl2)
+        ]);
+
+        if (res1.status === 'fulfilled' && res1.value.ok) {
+            const buf1 = await res1.value.arrayBuffer();
+            parseExcel(buf1);
+        } else {
+            console.error('Could not load Implementation plan.xlsx');
         }
-        const arrayBuffer = await response.arrayBuffer();
-        parseExcel(arrayBuffer);
+
+        if (res2.status === 'fulfilled' && res2.value.ok) {
+            const buf2 = await res2.value.arrayBuffer();
+            parseKaushalBodhExcel(buf2);
+        } else {
+            console.warn('Could not load final of Kaushal Bodh Implementation Table.xlsx');
+        }
+
+        hideError();
+        hideLoader();
     } catch (error) {
-        showError('Could not auto-load the curriculum excel file. Please make sure Implementation plan.xlsx is in the root folder.');
+        showError('Could not auto-load the curriculum excel files. Please make sure Implementation plan.xlsx is in the root folder.');
     }
 }
 
@@ -823,6 +1087,16 @@ function parseExcel(arrayBuffer) {
  * @returns {string[]} Naturally sorted array of grade strings.
  */
 function extractGrades(activities) {
+    if (state.tutorialMode === 'kaushal-bodh') {
+        const kbSet = new Set((state.kaushalBodhActivities || []).map(a => a.grade).filter(Boolean));
+        let kbGrades = Array.from(kbSet);
+        return kbGrades.sort((a, b) => {
+            const numA = parseInt(a.replace(/\D/g, ''), 10);
+            const numB = parseInt(b.replace(/\D/g, ''), 10);
+            return numA - numB;
+        });
+    }
+
     const gradesSet = new Set(activities.map(a => a.grade).filter(Boolean));
     let gradesArray = Array.from(gradesSet);
 
@@ -910,6 +1184,7 @@ function getSubjectColorClass(subject) {
 function render() {
     document.getElementById('step-welcome').classList.add('hidden');
     document.getElementById('step-grade').classList.add('hidden');
+    document.getElementById('step-form-of-work').classList.add('hidden');
     document.getElementById('step-activities').classList.add('hidden');
     document.getElementById('step-detail').classList.add('hidden');
 
@@ -936,22 +1211,55 @@ function render() {
     }
 
     if (state.currentStep === 'welcome') {
+        state.language = state.userExplicitLanguage || 'en';
         document.getElementById('step-welcome').classList.remove('hidden');
         focusId = '';
     } else if (state.currentStep === 'grade') {
         document.getElementById('step-grade').classList.remove('hidden');
+        
+        // Hide Quick Activity Search in Kaushal Bodh mode
+        const quickSearchSec = document.getElementById('quick-search-section');
+        if (quickSearchSec) {
+            if (state.tutorialMode === 'kaushal-bodh') {
+                quickSearchSec.classList.add('hidden');
+            } else {
+                quickSearchSec.classList.remove('hidden');
+            }
+        }
+
         renderGradeSelection();
         focusId = 'grade-title';
+    } else if (state.currentStep === 'form-of-work') {
+        document.getElementById('step-form-of-work').classList.remove('hidden');
+        renderFormOfWorkCards();
+
+        const lang = state.language || 'en';
+        document.getElementById('fow-title').innerText = lang === 'hi' ? 'कार्य का प्रकार चुनें' : 'Select Form of Work';
+        document.getElementById('fow-subtitle').innerText = lang === 'hi'
+            ? getDisplayGradeName(state.selectedGrade) + ' के लिए कार्य का प्रकार चुनें'
+            : 'Choose a form of work for ' + getDisplayGradeName(state.selectedGrade);
+        document.getElementById('fow-section-title').innerText = lang === 'hi' ? 'कार्य का प्रकार' : 'Form of Work';
+        focusId = 'fow-title';
     } else if (state.currentStep === 'activities') {
         document.getElementById('step-activities').classList.remove('hidden');
 
-        const gradeActivities = state.allActivities.filter(a => a.grade === state.selectedGrade);
-        populateMonthDropdown(gradeActivities);
+        const stdFilterBar = document.getElementById('standard-filter-bar');
+        const kbTabsContainer = document.getElementById('kaushal-tabs-container');
 
-        // Synchronize month selection
-        const subjectFilter = document.getElementById('subject-filter');
-        if (subjectFilter) {
-            subjectFilter.value = state.filterSubject;
+        if (state.tutorialMode === 'kaushal-bodh') {
+            if (stdFilterBar) stdFilterBar.classList.add('hidden');
+            if (kbTabsContainer) kbTabsContainer.classList.add('hidden');
+        } else {
+            if (stdFilterBar) stdFilterBar.classList.remove('hidden');
+            if (kbTabsContainer) kbTabsContainer.classList.add('hidden');
+            
+            const gradeActivities = state.allActivities.filter(a => a.grade === state.selectedGrade);
+            populateMonthDropdown(gradeActivities);
+
+            const subjectFilter = document.getElementById('subject-filter');
+            if (subjectFilter) {
+                subjectFilter.value = state.filterSubject;
+            }
         }
 
         renderFilteredActivities();
@@ -1006,14 +1314,24 @@ function renderBreadcrumbs() {
     // Level 2: Grade Selected
     if (state.selectedGrade) {
         const displayGrade = getDisplayGradeName(state.selectedGrade);
-        if (state.currentStep === 'activities') {
+        if (state.currentStep === 'form-of-work') {
             html += `<li><span class="current">${displayGrade}</span></li>`;
-        } else {
+        } else if (state.currentStep === 'activities' || state.currentStep === 'detail') {
             html += `<li><a href="#" id="breadcrumb-grade">${displayGrade}</a></li>`;
         }
     }
 
-    // Level 3: Activity Detail
+    // Level 3: Form of Work / Activities
+    if (state.tutorialMode === 'kaushal-bodh' && state.filterSubject && state.filterSubject !== 'All') {
+        const fowName = state.filterSubject;
+        if (state.currentStep === 'activities') {
+            html += `<li><span class="current">${fowName}</span></li>`;
+        } else if (state.currentStep === 'detail') {
+            html += `<li><a href="#" id="breadcrumb-fow">${fowName}</a></li>`;
+        }
+    }
+
+    // Level 4: Activity Detail
     if (state.selectedActivity && state.currentStep === 'detail') {
         html += `<li><span class="current">${state.selectedActivity.activity_name}</span></li>`;
     }
@@ -1034,7 +1352,25 @@ function renderBreadcrumbs() {
         gradeBtn.addEventListener('click', (e) => {
             e.preventDefault();
             state.selectedActivity = null;
-            state.currentStep = 'activities';
+            if (state.tutorialMode === 'kaushal-bodh') {
+                state.currentStep = 'form-of-work';
+            } else {
+                state.currentStep = 'activities';
+            }
+            render();
+        });
+    }
+
+    const fowBtn = document.getElementById('breadcrumb-fow');
+    if (fowBtn) {
+        fowBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            state.selectedActivity = null;
+            if (state.tutorialMode === 'kaushal-bodh') {
+                state.currentStep = 'form-of-work';
+            } else {
+                state.currentStep = 'activities';
+            }
             render();
         });
     }
@@ -1048,15 +1384,20 @@ function renderGradeSelection() {
     const gradesGrid = document.getElementById('grades-grid');
     if (!gradesGrid) return;
 
-    const searchInput = document.getElementById('grade-search');
-    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-
-    let grades = extractGrades(state.allActivities);
+    const isKB = state.tutorialMode === 'kaushal-bodh';
+    const activitiesList = isKB ? state.kaushalBodhActivities : state.allActivities;
+    let grades = extractGrades(activitiesList);
     
-    // Filter grades based on query
-    if (query) {
-        grades = grades.filter(grade => grade.toLowerCase().includes(query));
+    // Update subtitle for Kaushal Bodh mode if applicable
+    const heroSubtitleEl = document.getElementById('hero-subtitle');
+    if (heroSubtitleEl) {
+        const dict = translations[state.language || 'en'];
+        heroSubtitleEl.innerText = isKB ? (dict.kaushalHeroSubtitle || dict.heroSubtitle) : dict.heroSubtitle;
     }
+
+    // Render Quick Activity Search results
+    const quickSearchInput = document.getElementById('quick-activity-search');
+    renderQuickSearchResults(quickSearchInput ? quickSearchInput.value : '');
 
     let html = '';
 
@@ -1072,14 +1413,14 @@ function renderGradeSelection() {
     }
 
     grades.forEach(grade => {
-        const count = state.allActivities.filter(a => a.grade === grade).length;
+        const count = activitiesList.filter(a => a.grade === grade).length;
         const template = count === 1 ? translations[state.language || 'en'].activitySingle : translations[state.language || 'en'].activitiesPlural;
         const labelText = template.replace('{count}', count);
 
         const numStr = grade.replace(/\D/g, '');
-        let icon = '🎓'; // Single unique graduation cap icon for all grades
+        let icon = '🎓';
         let accentClass = 'indigo';
-        if (numStr === '5') {
+        if (numStr === '6' || numStr === '5') {
             accentClass = 'pink';
         } else if (numStr === '7') {
             accentClass = 'green';
@@ -1109,11 +1450,103 @@ function renderGradeSelection() {
         card.addEventListener('click', () => {
             const grade = decodeURIComponent(card.getAttribute('data-grade'));
             state.selectedGrade = grade;
-            state.filterSubject = state.language === 'hi' ? 'जुलाई' : 'July';
-            state.currentStep = 'activities';
+            if (state.tutorialMode === 'kaushal-bodh') {
+                state.filterSubject = '';
+                state.currentStep = 'form-of-work';
+            } else {
+                state.filterSubject = 'All';
+                state.currentStep = 'activities';
+            }
             render();
         });
     });
+}
+
+/**
+ * Renders real-time activity search results inside Quick Activity Search on Step 1.
+ * Matches both DCAIS activities and Kaushal Bodh projects.
+ * @param {string} query
+ */
+function renderQuickSearchResults(query = '') {
+    const container = document.getElementById('quick-activity-results');
+    if (!container) return;
+
+    const cleanQuery = (query || '').trim().toLowerCase();
+    const lang = state.language || 'en';
+
+    if (!cleanQuery) {
+        container.innerHTML = `
+            <div style="text-align: center; color: var(--color-text-secondary); padding: 1.5rem 1rem; font-size: 0.875rem;">
+                <span style="font-size: 1.75rem; display: block; margin-bottom: 0.35rem;">🔎</span>
+                <span>${lang === 'hi' ? 'गतिविधि खोजने के लिए नाम दर्ज करें' : 'Type an activity name on the left for instant results!'}</span>
+            </div>
+        `;
+        return;
+    }
+
+    const allCombined = [...state.allActivities, ...state.kaushalBodhActivities];
+    const matches = allCombined.filter(a =>
+        a.activity_name && a.activity_name.toLowerCase().includes(cleanQuery)
+    );
+
+    if (matches.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; color: var(--color-text-secondary); padding: 1.5rem 1rem; font-size: 0.875rem;">
+                <span style="font-size: 1.75rem; display: block; margin-bottom: 0.35rem;">🤔</span>
+                <span>${lang === 'hi' ? 'कोई मेल खाती गतिविधि नहीं मिली' : 'No activities matching "' + escapeHTML(cleanQuery) + '"'}</span>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    matches.slice(0, 15).forEach(act => {
+        const isKB = act.isKaushalBodh;
+        const tagText = isKB ? (act.form_of_work || 'Kaushal Bodh') : (act.month || '');
+
+        html += `
+            <div class="quick-result-item" data-activity-name="${encodeURIComponent(act.activity_name)}" data-activity-grade="${encodeURIComponent(act.grade)}" data-is-kb="${isKB ? 'true' : 'false'}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; box-shadow: var(--shadow-sm);">
+                <div style="display: flex; flex-direction: column; gap: 0.15rem; flex: 1; padding-right: 0.5rem; text-align: left;">
+                    <span style="font-weight: 700; color: var(--color-text-primary); font-size: 0.9rem;">${escapeHTML(act.activity_name)}</span>
+                    <span style="font-size: 0.775rem; color: var(--color-text-secondary);">${escapeHTML(tagText)} ${act.skills ? '• ' + escapeHTML(act.skills.substring(0, 60)) + '...' : ''}</span>
+                </div>
+                <span class="grade-badge" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: var(--radius-full); background: ${isKB ? 'rgba(37, 99, 235, 0.1)' : 'var(--color-subject-1-bg)'}; color: ${isKB ? '#2563eb' : 'var(--color-subject-1)'}; font-weight: 700; white-space: nowrap;">${getDisplayGradeName(act.grade)}</span>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.quick-result-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const actName = decodeURIComponent(item.getAttribute('data-activity-name'));
+            const actGrade = decodeURIComponent(item.getAttribute('data-activity-grade'));
+            const isKB = item.getAttribute('data-is-kb') === 'true';
+
+            const pool = isKB ? state.kaushalBodhActivities : state.allActivities;
+            const selected = pool.find(a => a.grade === actGrade && a.activity_name === actName);
+
+            if (selected) {
+                if (isKB) {
+                    state.tutorialMode = 'kaushal-bodh';
+                }
+                state.selectedGrade = actGrade;
+                state.selectedActivity = selected;
+                state.currentStep = 'detail';
+                render();
+            }
+        });
+    });
+}
+
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 /**
@@ -1123,7 +1556,40 @@ function renderGradeSelection() {
  */
 function populateMonthDropdown(activities) {
     const subjectFilter = document.getElementById('subject-filter');
+    const filterLabelText = document.getElementById('filter-label-text');
+    const wrapper = document.getElementById('subject-filter-wrapper');
     if (!subjectFilter) return;
+
+    const isKB = state.tutorialMode === 'kaushal-bodh';
+    const lang = state.language || 'en';
+    const dict = translations[lang];
+
+    if (isKB) {
+        if (filterLabelText) filterLabelText.innerText = dict.formOfWorkLabel || "Form of Work";
+        if (wrapper) wrapper.style.width = '240px';
+
+        const formsSet = new Set(activities.map(a => a.form_of_work).filter(Boolean));
+        const forms = Array.from(formsSet);
+
+        let html = `<option value="All">${dict.allFormsOfWorkOption || "All Forms of Work"}</option>`;
+        forms.forEach(f => {
+            let label = f;
+            if (lang === 'hi') {
+                if (f.toLowerCase().includes('life')) label = dict.workWithLifeForms || f;
+                else if (f.toLowerCase().includes('machine')) label = dict.workWithMachinesMaterials || f;
+                else if (f.toLowerCase().includes('human')) label = dict.workInHumanServices || f;
+            }
+            html += `<option value="${escapeHTML(f)}">${escapeHTML(label)}</option>`;
+        });
+
+        subjectFilter.innerHTML = html;
+        subjectFilter.value = forms.includes(state.filterSubject) ? state.filterSubject : 'All';
+        state.filterSubject = subjectFilter.value;
+        return;
+    }
+
+    if (filterLabelText) filterLabelText.innerText = dict.monthLabel || "Month";
+    if (wrapper) wrapper.style.width = '180px';
 
     const currentSel = state.filterSubject;
     const months = Array.from(new Set(activities.map(a => a.month).filter(Boolean)));
@@ -1147,8 +1613,6 @@ function populateMonthDropdown(activities) {
         return a.localeCompare(b);
     });
 
-    const lang = state.language || 'en';
-    const dict = translations[lang];
     const allMonthsText = dict.allMonthsOption;
 
     let html = `<option value="All" data-i18n="allMonthsOption">${allMonthsText}</option>`;
@@ -1169,6 +1633,311 @@ function populateMonthDropdown(activities) {
 }
 
 /**
+ * Checks if a form_of_work string matches a given category key.
+ * @param {string} formValue - The form_of_work from the activity data
+ * @param {string} categoryKey - One of 'life', 'machines', 'human'
+ * @returns {boolean}
+ */
+function matchesFormCategory(formValue, categoryKey) {
+    const f = (formValue || '').toLowerCase();
+    if (categoryKey === 'life') return f.includes('life');
+    if (categoryKey === 'machines') return f.includes('machine') || f.includes('material');
+    if (categoryKey === 'human') return f.includes('human') || f.includes('service');
+    return false;
+}
+
+/**
+ * Returns the internal category key ('life', 'machines', 'human') for a filterSubject string.
+ */
+function getFormCategory(filterSubject) {
+    const s = (filterSubject || '').toLowerCase();
+    if (s.includes('life')) return 'life';
+    if (s.includes('machine') || s.includes('material')) return 'machines';
+    if (s.includes('human') || s.includes('service')) return 'human';
+    return 'life'; // default
+}
+
+/**
+ * Renders the 3 Form of Work selection cards for Kaushal Bodh mode.
+ * Matches the grade-card visual pattern from Step 1.
+ */
+function renderKaushalTabs() {
+    const container = document.getElementById('kaushal-tabs-container');
+    if (!container) return;
+
+    const lang = state.language || 'en';
+
+    if (!state.filterSubject || state.filterSubject === 'All') {
+        state.filterSubject = 'Work with Life Forms';
+    }
+
+    const activeCategory = getFormCategory(state.filterSubject);
+    const gradeList = state.kaushalBodhActivities.filter(a => a.grade === state.selectedGrade);
+
+    const formsData = [
+        {
+            key: 'Work with Life Forms',
+            category: 'life',
+            title: lang === 'hi' ? 'सजीव रूपों के साथ कार्य' : 'Work with Life Forms',
+            subtitle: lang === 'hi' ? 'पौधे, जीव विविधता और पर्यावरण' : 'Plants, Animals & Ecology',
+            icon: '🌿',
+            accentClass: 'form-card-life'
+        },
+        {
+            key: 'Work with Machines & Materials',
+            category: 'machines',
+            title: lang === 'hi' ? 'मशीनों और सामग्रियों के साथ कार्य' : 'Work with Machines & Materials',
+            subtitle: lang === 'hi' ? 'उपकरण, निर्माण और तकनीक' : 'Tools, Fabrication & Tech',
+            icon: '⚙️',
+            accentClass: 'form-card-machines'
+        },
+        {
+            key: 'Work in Human Services',
+            category: 'human',
+            title: lang === 'hi' ? 'मानव सेवाओं में कार्य' : 'Work in Human Services',
+            subtitle: lang === 'hi' ? 'स्वास्थ्य, समाज और संचार' : 'Health, Society & Service',
+            icon: '🤝',
+            accentClass: 'form-card-human'
+        }
+    ];
+
+    let html = `
+        <div class="kb-section-box">
+            <div class="kb-section-header">
+                <span class="kb-section-label">${lang === 'hi' ? 'खंड 1' : 'SECTION 1'}</span>
+                <h2 class="kb-section-heading">${lang === 'hi' ? 'कार्य का प्रकार चुनें' : 'Select Form of Work'}</h2>
+                <p class="kb-section-subtext">${lang === 'hi' ? 'नीचे दी गई किसी भी श्रेणी पर क्लिक करके उसके प्रोजेक्ट्स देखें' : 'Click on a category below to view its projects'}</p>
+            </div>
+            <div class="kb-form-row">
+    `;
+
+    formsData.forEach(form => {
+        const isActive = form.category === activeCategory;
+        const count = gradeList.filter(a => matchesFormCategory(a.form_of_work, form.category)).length;
+        const countLabel = count === 1 ? (lang === 'hi' ? '1 प्रोजेक्ट' : '1 project') : (lang === 'hi' ? `${count} प्रोजेक्ट्स` : `${count} projects`);
+
+        let themeColor = '#10b981';
+        let themeBg = 'rgba(16, 185, 129, 0.08)';
+        let themeBorder = 'rgba(16, 185, 129, 0.35)';
+        let themeIconBg = '#ecfdf5';
+        if (form.category === 'machines') {
+            themeColor = '#2563eb';
+            themeBg = 'rgba(37, 99, 235, 0.08)';
+            themeBorder = 'rgba(37, 99, 235, 0.35)';
+            themeIconBg = '#eff6ff';
+        }
+        if (form.category === 'human') {
+            themeColor = '#8b5cf6';
+            themeBg = 'rgba(139, 92, 246, 0.08)';
+            themeBorder = 'rgba(139, 92, 246, 0.35)';
+            themeIconBg = '#f5f3ff';
+        }
+
+        html += `
+            <button type="button" class="kb-form-rect-card ${isActive ? 'kb-rect-active' : ''}" data-form-key="${escapeHTML(form.key)}"
+                style="--kb-theme: ${themeColor}; --kb-theme-bg: ${themeBg}; --kb-theme-border: ${themeBorder}; --kb-theme-icon-bg: ${themeIconBg};">
+                <div class="kb-rect-icon">${form.icon}</div>
+                <div class="kb-rect-body">
+                    <h3 class="kb-rect-title">${escapeHTML(form.title)}</h3>
+                    <p class="kb-rect-subtitle">${escapeHTML(form.subtitle)}</p>
+                </div>
+                <div class="kb-rect-meta">
+                    <span class="kb-rect-count">${countLabel}</span>
+                    <span class="kb-rect-status">${isActive ? '✓' : '→'}</span>
+                </div>
+            </button>
+        `;
+    });
+
+    // Get active form name for sub-section heading
+    const activeForm = formsData.find(f => f.category === activeCategory);
+    const activeTitle = activeForm ? activeForm.title : '';
+
+    html += `
+            </div>
+        </div>
+
+        <div class="kb-projects-header">
+            <h2 class="kb-section-heading">${lang === 'hi' ? 'प्रोजेक्ट्स' : 'Projects'} — ${escapeHTML(activeTitle)}</h2>
+            <p class="kb-section-subtext">${lang === 'hi' ? 'नीचे दिए गए प्रोजेक्ट कार्ड पर क्लिक करें' : 'Click on any project card below for full details'}</p>
+        </div>
+    `;
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.kb-form-rect-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const formKey = card.getAttribute('data-form-key');
+            state.filterSubject = formKey;
+            renderKaushalTabs();
+            renderFilteredActivities();
+        });
+    });
+}
+
+/**
+ * Renders complete Kaushal Bodh Project Card with all Excel Column Details directly inside the box.
+ * Includes Key Activities, Key Learning Outcomes, Adobe Express Integration, Adobe Express Activity, Deliverable,
+ * and ends with the Learning Journal CTA button at the bottom.
+ */
+function renderKaushalBodhCardContent(activity, dict) {
+    const info = getFormOfWorkInfo(activity.form_of_work);
+
+    return `
+        <div class="activity-card card-accent-indigo kb-project-tile" data-activity-name="${encodeURIComponent(activity.activity_name)}" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem; border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm); transition: all 0.2s ease; cursor: pointer;">
+            <div>
+                <!-- Top Header Pill & Duration -->
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem;">
+                    <span class="kb-form-pill ${info.colorClass}">
+                        ${info.icon} ${activity.form_of_work}
+                    </span>
+                    ${activity.duration ? `<span style="font-size: 0.775rem; color: var(--color-text-secondary); font-weight: 600;">⏱️ ${activity.duration}</span>` : ''}
+                </div>
+
+                <!-- Project Title -->
+                <h2 class="activity-name" style="font-size: 1.25rem; font-weight: 800; color: var(--color-text-primary); line-height: 1.35; margin: 0;">
+                    ${escapeHTML(activity.activity_name)}
+                </h2>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Renders the 3 Form of Work cards on the dedicated step-form-of-work page.
+ * Uses the exact same grade-card CSS classes for visual consistency.
+ */
+function renderFormOfWorkCards() {
+    const fowGrid = document.getElementById('fow-grid');
+    if (!fowGrid) return;
+
+    const lang = state.language || 'en';
+    const dict = translations[lang];
+    const gradeList = state.kaushalBodhActivities.filter(a => a.grade === state.selectedGrade);
+
+    // Default selection to 1st Form of Work if not selected
+    if (!state.filterSubject || state.filterSubject === 'All') {
+        state.filterSubject = 'Work with Life Forms';
+    }
+
+    const formsData = [
+        {
+            key: 'Work with Life Forms',
+            category: 'life',
+            title: lang === 'hi' ? 'सजीव रूपों के साथ कार्य' : 'Work with Life Forms',
+            subtitle: lang === 'hi' ? 'पौधे, जीव विविधता और पर्यावरण' : 'Plants, Animals & Ecology',
+            icon: '🌿',
+            accentClass: 'pink'
+        },
+        {
+            key: 'Work with Machines & Materials',
+            category: 'machines',
+            title: lang === 'hi' ? 'मशीनों और सामग्रियों के साथ कार्य' : 'Work with Machines & Materials',
+            subtitle: lang === 'hi' ? 'उपकरण, निर्माण और तकनीक' : 'Tools, Fabrication & Tech',
+            icon: '⚙️',
+            accentClass: 'indigo'
+        },
+        {
+            key: 'Work in Human Services',
+            category: 'human',
+            title: lang === 'hi' ? 'मानव सेवाओं में कार्य' : 'Work in Human Services',
+            subtitle: lang === 'hi' ? 'स्वास्थ्य, समाज और संचार' : 'Health, Society & Service',
+            icon: '🤝',
+            accentClass: 'green'
+        }
+    ];
+
+    // 1. Render Top Form of Work Choice Cards
+    let html = '';
+    formsData.forEach(form => {
+        const count = gradeList.filter(a => matchesFormCategory(a.form_of_work, form.category)).length;
+        const template = count === 1
+            ? (lang === 'hi' ? '1 प्रोजेक्ट' : '1 project')
+            : (lang === 'hi' ? `${count} प्रोजेक्ट्स` : `${count} projects`);
+        const isActive = matchesFormCategory(state.filterSubject, form.category);
+
+        html += `
+            <button class="grade-card card-accent-${form.accentClass} ${isActive ? 'active' : ''}" type="button" data-form-key="${escapeHTML(form.key)}" aria-label="${form.title}, ${template}">
+                <div class="grade-icon-wrapper icon-bg-${form.accentClass}">
+                    <span class="grade-icon-emoji">${form.icon}</span>
+                </div>
+                <h3 class="grade-card-title">${escapeHTML(form.title)}</h3>
+                <p class="grade-card-subtitle">${template}</p>
+                <div class="grade-card-footer">
+                    <span class="explore-grade-text">${isActive ? (lang === 'hi' ? '✓ चयनित' : '✓ SELECTED') : (lang === 'hi' ? 'प्रोजेक्ट्स देखें' : 'EXPLORE PROJECTS')}</span>
+                    <span class="arrow-icon">→</span>
+                </div>
+            </button>
+        `;
+    });
+
+    fowGrid.innerHTML = html;
+
+    // Attach click listeners to Top Form of Work Cards
+    fowGrid.querySelectorAll('.grade-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const formKey = card.getAttribute('data-form-key');
+            state.filterSubject = formKey;
+            renderFormOfWorkCards();
+        });
+    });
+
+    // 2. Render Sub-Breadcrumb Below Border Line
+    const activeCategory = getFormCategory(state.filterSubject);
+    const activeForm = formsData.find(f => f.category === activeCategory) || formsData[0];
+    const subBreadcrumb = document.getElementById('fow-sub-breadcrumb');
+    if (subBreadcrumb) {
+        const homeText = dict.homeBreadcrumb || 'Home';
+        const displayGrade = getDisplayGradeName(state.selectedGrade);
+
+        subBreadcrumb.innerHTML = `
+            <span>${escapeHTML(homeText)}</span>
+            <span style="opacity: 0.5; font-size: 0.8rem;">›</span>
+            <span>${escapeHTML(displayGrade)}</span>
+            <span style="opacity: 0.5; font-size: 0.8rem;">›</span>
+            <span style="color: #eb1000; font-weight: 700;">${activeForm.icon} ${escapeHTML(activeForm.title)}</span>
+        `;
+    }
+
+    // 3. Render Project KPI Cards Grid Below Border Line
+    const fowActivitiesGrid = document.getElementById('fow-activities-grid');
+    if (fowActivitiesGrid) {
+        const matchingProjects = gradeList.filter(a => matchesFormCategory(a.form_of_work, activeCategory));
+
+        if (matchingProjects.length === 0) {
+            fowActivitiesGrid.innerHTML = `
+                <div class="empty-card" style="grid-column: 1 / -1; margin: 1.5rem 0;">
+                    <span class="empty-icon">🔍</span>
+                    <h2>${dict.noActivitiesFound || 'No Projects Found'}</h2>
+                </div>
+            `;
+        } else {
+            let projectsHtml = '';
+            matchingProjects.forEach(activity => {
+                projectsHtml += renderKaushalBodhCardContent(activity, dict);
+            });
+
+            fowActivitiesGrid.innerHTML = projectsHtml;
+
+            // Attach click listener directly to project tiles
+            fowActivitiesGrid.querySelectorAll('.kb-project-tile').forEach(card => {
+                card.addEventListener('click', () => {
+                    const name = decodeURIComponent(card.getAttribute('data-activity-name'));
+                    const selected = state.kaushalBodhActivities.find(
+                        a => a.grade === state.selectedGrade && a.activity_name === name
+                    );
+                    if (selected) {
+                        state.selectedActivity = selected;
+                        state.currentStep = 'detail';
+                        render();
+                    }
+                });
+            });
+        }
+    }
+}
+
+/**
  * Filters and mounts Activity cards on Step 2.
  * Hides duration, difficulty dots, and renders rectangular highlighted description blocks.
  * @returns {void}
@@ -1178,11 +1947,17 @@ function renderFilteredActivities() {
     const emptyView = document.getElementById('empty-activities-view');
     if (!activitiesGrid || !emptyView) return;
 
-    let list = state.allActivities.filter(a => a.grade === state.selectedGrade);
+    const isKB = state.tutorialMode === 'kaushal-bodh';
+    const sourceList = isKB ? state.kaushalBodhActivities : state.allActivities;
+    let list = sourceList.filter(a => a.grade === state.selectedGrade);
 
-    // Filter by month
     if (state.filterSubject !== 'All') {
-        list = list.filter(a => a.month === state.filterSubject);
+        if (isKB) {
+            const cat = getFormCategory(state.filterSubject);
+            list = list.filter(a => matchesFormCategory(a.form_of_work, cat));
+        } else {
+            list = list.filter(a => a.month === state.filterSubject);
+        }
     }
 
     if (list.length === 0) {
@@ -1193,41 +1968,62 @@ function renderFilteredActivities() {
         activitiesGrid.classList.remove('hidden');
 
         let html = '';
-        list.forEach(activity => {
-            const colorClass = getSubjectColorClass(activity.month);
-            const dict = translations[state.language || 'en'];
-            const monthText = dict.monthNames[activity.month] || activity.month || dict.curriculum;
+        const dict = translations[state.language || 'en'];
 
-            html += `
-                <button class="activity-card card-accent-${colorClass}" type="button" data-activity-name="${encodeURIComponent(activity.activity_name)}" data-tooltip-title="${encodeURIComponent(activity.activity_name)}" aria-label="${activity.activity_name}, ${monthText}">
-                    <div class="activity-card-header">
-                        <span class="subject-pill ${colorClass}">${monthText}</span>
-                    </div>
-                    <h2 class="activity-name">${activity.activity_name}</h2>
-                    <div class="activity-card-footer">
-                        <span class="view-activity-text" data-i18n="viewActivity">View Activity</span>
-                        <span class="arrow-icon">→</span>
-                    </div>
-                </button>
-            `;
+        list.forEach(activity => {
+            if (isKB) {
+                html += renderKaushalBodhCardContent(activity, dict);
+            } else {
+                const colorClass = getSubjectColorClass(activity.month);
+                const monthText = dict.monthNames[activity.month] || activity.month || dict.curriculum;
+
+                html += `
+                    <button class="activity-card card-accent-${colorClass}" type="button" data-activity-name="${encodeURIComponent(activity.activity_name)}" data-tooltip-title="${encodeURIComponent(activity.activity_name)}" aria-label="${activity.activity_name}, ${monthText}">
+                        <div class="activity-card-header">
+                            <span class="subject-pill ${colorClass}">${monthText}</span>
+                        </div>
+                        <h2 class="activity-name">${activity.activity_name}</h2>
+                        <div class="activity-card-footer">
+                            <span class="view-activity-text" data-i18n="viewActivity">View Activity</span>
+                            <span class="arrow-icon">→</span>
+                        </div>
+                    </button>
+                `;
+            }
         });
 
         activitiesGrid.innerHTML = html;
 
-        const cards = activitiesGrid.querySelectorAll('.activity-card');
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                const name = decodeURIComponent(card.getAttribute('data-activity-name'));
-                const selected = state.allActivities.find(
-                    a => a.grade === state.selectedGrade && a.activity_name === name
-                );
-                if (selected) {
-                    state.selectedActivity = selected;
-                    state.currentStep = 'detail';
-                    render();
-                }
+        if (isKB) {
+            activitiesGrid.querySelectorAll('.kb-project-tile').forEach(card => {
+                card.addEventListener('click', () => {
+                    const name = decodeURIComponent(card.getAttribute('data-activity-name'));
+                    const selected = state.kaushalBodhActivities.find(
+                        a => a.grade === state.selectedGrade && a.activity_name === name
+                    );
+                    if (selected) {
+                        state.selectedActivity = selected;
+                        state.currentStep = 'detail';
+                        render();
+                    }
+                });
             });
-        });
+        } else {
+            const cards = activitiesGrid.querySelectorAll('.activity-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const name = decodeURIComponent(card.getAttribute('data-activity-name'));
+                    const selected = state.allActivities.find(
+                        a => a.grade === state.selectedGrade && a.activity_name === name
+                    );
+                    if (selected) {
+                        state.selectedActivity = selected;
+                        state.currentStep = 'detail';
+                        render();
+                    }
+                });
+            });
+        }
     }
 }
 
@@ -1241,6 +2037,131 @@ function renderActivityDetail() {
     if (!activity) return;
 
     const dict = translations[state.language || 'en'];
+
+    if (activity.isKaushalBodh) {
+        const detailContainer = document.getElementById('step-detail');
+        if (!detailContainer) return;
+
+        const info = getFormOfWorkInfo(activity.form_of_work);
+        const journalLink = activity.learning_journal_link ? activity.learning_journal_link.trim() : '';
+
+        // Update back link text
+        const backLinkText = document.querySelector('#back-to-activities-link span:not(.arrow)');
+        if (backLinkText) {
+            const lang = state.language || 'en';
+            backLinkText.innerText = lang === 'hi' ? 'कार्य का प्रकार चुनें' : 'Select Form of Work';
+        }
+
+        // Header pills
+        const detailTags = document.getElementById('detail-tags');
+        if (detailTags) {
+            detailTags.innerHTML = `
+                <span class="kb-form-pill ${info.colorClass}">${info.icon} ${activity.form_of_work}</span>
+                <span class="grade-badge">${getDisplayGradeName(activity.grade)}</span>
+                ${activity.duration ? `<span style="font-size: 0.85rem; color: var(--color-text-secondary); font-weight: 600; background: #f1f5f9; padding: 0.3rem 0.75rem; border-radius: var(--radius-full);">⏱️ ${activity.duration}</span>` : ''}
+            `;
+        }
+
+        document.getElementById('detail-title').innerText = activity.activity_name;
+
+        // Custom Layout for Kaushal Bodh Columns
+        const descElem = document.getElementById('detail-description');
+        if (descElem) {
+            descElem.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.25rem;">
+                    <!-- Row 1: Box 1 (Key Activities) & Box 2 (Key Learning Outcomes) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+                        <!-- Box 1: Key Activities (Indigo Theme) -->
+                        <div style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(79, 70, 229, 0.12)); border: 1.5px solid rgba(79, 70, 229, 0.25); border-radius: var(--radius-lg); padding: 1.35rem; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.775rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; color: #4f46e5; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.65rem;">
+                                📌 ${dict.keyActivitiesLabel || "Key Activities"}
+                            </span>
+                            <div style="font-size: 0.95rem; color: var(--color-text-primary); line-height: 1.5;">
+                                ${formatFormattedText(activity.key_activities)}
+                            </div>
+                        </div>
+
+                        <!-- Box 2: Key Learning Outcomes (Emerald Theme) -->
+                        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.12)); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-lg); padding: 1.35rem; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.775rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; color: #059669; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.65rem;">
+                                🎯 ${dict.keyLearningOutcomesLabel || "Key Learning Outcomes"}
+                            </span>
+                            <div style="font-size: 0.95rem; color: var(--color-text-primary); line-height: 1.5;">
+                                ${formatFormattedText(activity.key_learning_outcomes)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Box 3 (Adobe Express Integration) & Box 4 (Adobe Express Activity) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+                        <!-- Box 3: Adobe Express Integration (Purple Theme) -->
+                        <div style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.05), rgba(147, 51, 234, 0.12)); border: 1.5px solid rgba(147, 51, 234, 0.25); border-radius: var(--radius-lg); padding: 1.35rem; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.775rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; color: #7c3aed; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.65rem;">
+                                🎨 ${dict.adobeExpressIntegrationLabel || "Adobe Express Integration for Activity Books & Portfolios"}
+                            </span>
+                            <div style="font-size: 0.95rem; color: var(--color-text-primary); line-height: 1.5;">
+                                ${formatFormattedText(activity.adobe_express_integration)}
+                            </div>
+                        </div>
+
+                        <!-- Box 4: Adobe Express Activity (Red/Coral Theme) -->
+                        <div style="background: linear-gradient(135deg, rgba(235, 16, 0, 0.05), rgba(235, 16, 0, 0.12)); border: 1.5px solid rgba(235, 16, 0, 0.25); border-radius: var(--radius-lg); padding: 1.35rem; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.775rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; color: #eb1000; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.65rem;">
+                                💡 ${dict.adobeExpressActivityLabel || "Adobe Express Activity"}
+                            </span>
+                            <div style="font-size: 1.05rem; font-weight: 700; color: var(--color-text-primary); line-height: 1.4;">
+                                ${escapeHTML(activity.adobe_express_activity)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Box 5 (Final Student Deliverable) Full Width -->
+                    <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(59, 130, 246, 0.12)); border: 1.5px solid rgba(59, 130, 246, 0.25); border-radius: var(--radius-lg); padding: 1.35rem;">
+                        <span style="font-size: 0.775rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; color: #2563eb; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.65rem;">
+                            📦 ${dict.finalStudentDeliverableLabel || "Final Student Deliverable"}
+                        </span>
+                        <div style="font-size: 1.05rem; font-weight: 700; color: var(--color-text-primary); line-height: 1.4;">
+                            ${escapeHTML(activity.final_student_deliverable)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Hide default skills/instructions section & book screenshot container for Kaushal Bodh
+        const skillsInstSection = document.getElementById('detail-skills-instructions-section');
+        if (skillsInstSection) skillsInstSection.style.display = 'none';
+        const bookScreenshotContainer = document.getElementById('detail-book-screenshot-container');
+        if (bookScreenshotContainer) bookScreenshotContainer.style.display = 'none';
+
+        // CTA Container for Learning Journal Link
+        const ctaContainer = document.getElementById('tutorial-cta-container');
+        if (ctaContainer) {
+            let ctaHtml = `
+                <div style="width: 100%; padding: 1.5rem; background: radial-gradient(circle at top left, #eff6ff, #dbeafe); border-radius: var(--radius-xl); border: 2px solid #3b82f6; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: #1d4ed8; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.03em;">
+                        <span style="font-size: 1.5rem;">📘</span> Learning Journal Link
+                    </div>
+                    <p style="margin: 0; font-size: 0.95rem; color: #1e3a8a; max-width: 600px; line-height: 1.5;">
+                        Open your dedicated Adobe Express Remix link for this project's Learning Journal to start documenting your work!
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%;">
+                        ${journalLink ? `
+                            <a href="${journalLink}" target="_blank" rel="noopener noreferrer" class="btn btn-primary kb-journal-btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; padding: 0.85rem 1.75rem; font-size: 1.05rem; font-weight: 800; border-radius: var(--radius-full); box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35); text-decoration: none; color: white; display: inline-flex; align-items: center; gap: 0.6rem;">
+                                <span>📘</span> ${dict.learningJournalBtn || "Open Learning Journal Link"} <span style="font-size: 1.1rem;">↗</span>
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            ctaContainer.innerHTML = ctaHtml;
+        }
+        return;
+    }
+
+    // Ensure standard containers are visible for normal DCAIS activities
+    const skillsInstSection = document.getElementById('detail-skills-instructions-section');
+    if (skillsInstSection) skillsInstSection.style.display = 'block';
 
     // Header pills
     const detailTags = document.getElementById('detail-tags');
@@ -1655,17 +2576,38 @@ function hideError() {
 }
 
 /**
+ * Updates active class styling on header language toggle buttons.
+ * @returns {void}
+ */
+function updateLangToggleUI() {
+    const langToggleEn = document.getElementById('lang-toggle-en');
+    const langToggleHi = document.getElementById('lang-toggle-hi');
+    if (!langToggleEn || !langToggleHi) return;
+
+    if (state.language === 'hi') {
+        langToggleHi.classList.add('active-lang');
+        langToggleEn.classList.remove('active-lang');
+    } else {
+        langToggleEn.classList.add('active-lang');
+        langToggleHi.classList.remove('active-lang');
+    }
+}
+
+/**
  * Translates static and metadata elements in the DOM based on active state.language.
  * @returns {void}
  */
 function translateUIInternal() {
     const lang = state.language || 'en';
-    const dict = translations[lang];
+    const dict = translations[lang] || translations.en;
+
+    // Synchronize language toggle UI buttons
+    updateLangToggleUI();
 
     // Translate all standard data-i18n elements
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (dict[key]) {
+        if (dict && dict[key]) {
             el.innerText = dict[key];
         }
     });
@@ -1673,7 +2615,7 @@ function translateUIInternal() {
     // Translate placeholder attributes
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
-        if (dict[key]) {
+        if (dict && dict[key]) {
             el.setAttribute('placeholder', dict[key]);
         }
     });
@@ -1681,7 +2623,7 @@ function translateUIInternal() {
     // Translate aria-label attributes
     document.querySelectorAll('[data-i18n-aria]').forEach(el => {
         const key = el.getAttribute('data-i18n-aria');
-        if (dict[key]) {
+        if (dict && dict[key]) {
             el.setAttribute('aria-label', dict[key]);
         }
     });

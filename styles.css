@@ -701,6 +701,28 @@ a:hover {
     box-shadow: var(--shadow-md);
 }
 
+.grade-card.active {
+    border-color: var(--color-primary);
+    background-color: var(--color-surface-elevated);
+    box-shadow: 0 8px 24px rgba(235, 16, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.grade-card.active.card-accent-pink {
+    border-top-color: var(--color-subject-5);
+}
+.grade-card.active.card-accent-green {
+    border-top-color: var(--color-subject-2);
+}
+.grade-card.active.card-accent-indigo {
+    border-top-color: var(--color-subject-1);
+}
+
+.grade-card.active .grade-card-footer {
+    color: var(--color-primary);
+    border-top-color: rgba(235, 16, 0, 0.15);
+}
+
 .grade-card:focus-visible {
     border-color: var(--color-primary);
     transform: translateY(-4px);
@@ -1080,7 +1102,8 @@ a:hover {
    STEP 3: ACTIVITY DETAIL SCREEN
    ========================================================================== */
 .detail-container {
-    max-width: 760px;
+    max-width: 1100px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -1977,3 +2000,399 @@ a:hover {
         pointer-events: none !important;
     }
 }
+
+/* Quick Activity Search & Responsive Layout Adjustments */
+.quick-result-item:hover {
+    border-color: var(--color-primary) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(235, 16, 0, 0.12) !important;
+}
+
+/* Tablet & Mobile Responsiveness (<= 992px & <= 768px) */
+@media (max-width: 992px) {
+    .welcome-header-wrapper {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        min-height: auto !important;
+        gap: 1.25rem !important;
+    }
+    .welcome-header-wrapper > div:first-child {
+        text-align: center !important;
+    }
+    .welcome-header-wrapper .hero-title,
+    .welcome-header-wrapper .hero-subtitle {
+        text-align: center !important;
+    }
+    .important-note-card {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .quick-search-wrapper {
+        flex-direction: column !important;
+        padding: 1.25rem !important;
+        gap: 1.25rem !important;
+    }
+    .quick-search-wrapper > div:first-child {
+        border-right: none !important;
+        border-bottom: 1px solid var(--color-border) !important;
+        padding-right: 0 !important;
+        padding-bottom: 1rem !important;
+    }
+    .quick-search-wrapper > div:last-child {
+        max-height: 260px !important;
+    }
+    .filter-bar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    .filter-cert-notice {
+        width: 100% !important;
+    }
+    .welcome-choice-card {
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .important-note-card {
+        padding: 0.75rem 0.9rem !important;
+    }
+}
+
+/* ==========================================================================
+   KAUSHAL BODH STYLING & COMPONENTS
+   ========================================================================== */
+.kb-form-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.825rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.form-life-forms {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.form-machines-materials {
+    background-color: rgba(37, 99, 235, 0.12);
+    color: #1d4ed8;
+    border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.form-human-services {
+    background-color: rgba(139, 92, 246, 0.12);
+    color: #6d28d9;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.form-general {
+    background-color: rgba(107, 114, 128, 0.12);
+    color: #4b5563;
+    border: 1px solid rgba(107, 114, 128, 0.25);
+}
+
+.kb-section-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.kb-section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.kb-journal-btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.kb-journal-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45) !important;
+}
+
+.kb-template-btn {
+    transition: all 0.2s ease !important;
+}
+
+.kb-template-btn:hover {
+    background: rgba(235, 16, 0, 0.06) !important;
+    transform: translateY(-2px) !important;
+}
+
+.kb-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+    gap: 0.5rem;
+}
+
+.kb-journal-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #2563eb;
+    color: white !important;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    transition: all 0.2s ease;
+}
+
+.kb-journal-card-link:hover {
+    background: #1d4ed8;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   KAUSHAL BODH — SECTION LAYOUT & FORM OF WORK RECTANGULAR CARDS
+   ========================================================================== */
+.kaushal-tabs-container {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+/* --- Section Box (visible container for Form of Work) --- */
+.kb-section-box {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem 1.5rem 1.25rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Projects sub-section header --- */
+.kb-projects-header {
+    margin-bottom: 1.25rem;
+}
+
+.kb-section-header {
+    margin-bottom: 1.25rem;
+}
+
+.kb-section-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #eb1000;
+    background: rgba(235, 16, 0, 0.08);
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+    margin-bottom: 0.5rem;
+}
+
+.kb-section-heading {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    margin: 0.35rem 0 0.2rem 0;
+}
+
+.kb-section-subtext {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* --- Rectangular Form of Work Cards Row --- */
+.kb-form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    width: 100%;
+}
+
+.kb-form-rect-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.kb-form-rect-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--kb-theme-border, var(--color-border-hover));
+}
+
+.kb-form-rect-card.kb-rect-active {
+    background: var(--kb-theme-bg);
+    border-color: var(--kb-theme);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--kb-theme) 20%, transparent);
+}
+
+/* Icon */
+.kb-rect-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--kb-theme-icon-bg, #f1f5f9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.kb-rect-active .kb-rect-icon {
+    background: var(--kb-theme);
+    filter: saturate(1.2);
+}
+
+/* Body */
+.kb-rect-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.kb-rect-title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.1rem 0;
+    line-height: 1.3;
+}
+
+.kb-rect-active .kb-rect-title {
+    color: var(--kb-theme);
+}
+
+.kb-rect-subtitle {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+/* Meta (right side) */
+.kb-rect-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.kb-rect-count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: #f1f5f9;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+}
+
+.kb-rect-active .kb-rect-count {
+    background: var(--kb-theme-icon-bg);
+    color: var(--kb-theme);
+}
+
+.kb-rect-status {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text-tertiary);
+    transition: all 0.2s ease;
+}
+
+.kb-rect-active .kb-rect-status {
+    color: var(--kb-theme);
+    font-size: 1.2rem;
+}
+
+/* Comprehensive Responsive adjustments for Mobile & Tablet */
+@media (max-width: 992px) {
+    .fow-grid, #fow-grid, .grade-grid, #grade-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+        gap: 1.25rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .fow-grid, #fow-grid, .grade-grid, #grade-grid,
+    .activities-grid, #fow-activities-grid, #activities-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .detail-container {
+        padding: 0 0.5rem !important;
+        max-width: 100% !important;
+    }
+
+    .detail-panel {
+        padding: 1.35rem 1rem !important;
+        border-radius: var(--radius-lg) !important;
+    }
+
+    .detail-main-title {
+        font-size: 1.45rem !important;
+    }
+
+    .step-section {
+        padding-top: 1rem !important;
+        padding-bottom: 2rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .kb-form-rect-card {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    .kb-rect-meta {
+        width: 100%;
+        justify-content: flex-end;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+    .detail-panel {
+        padding: 1.15rem 0.85rem !important;
+    }
+    .detail-main-title {
+        font-size: 1.3rem !important;
+    }
+    .kb-journal-btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
