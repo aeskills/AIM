@@ -67,20 +67,20 @@
                 <!-- Main Container Wrapper (Max Width 1280px) -->
                 <div style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 1.5rem 1.5rem 3rem; display: flex; flex-direction: column; gap: 1.5rem;">
                     
-                    <!-- Top Header Row: Welcome to AIM (Left) & Important Note (Right) -->
+                    <!-- Top Header Row: Welcome to AIM (Left 64%) & Important Note (Right 32%) -->
                     <div class="welcome-header-wrapper" style="width: 100%; display: flex; flex-direction: row; align-items: stretch; justify-content: space-between; gap: 2rem; min-height: 120px; flex-wrap: wrap;">
-                        <!-- Left: Welcome Title & Description -->
-                        <div style="flex: 1 1 500px; text-align: left; display: flex; flex-direction: column; justify-content: center; gap: 0.35rem;">
+                        <!-- Left (64%): Welcome Title & Description -->
+                        <div style="flex: 1 1 64%; min-width: 300px; text-align: left; display: flex; flex-direction: column; justify-content: center; gap: 0.35rem;">
                             <h1 class="hero-title" style="margin: 0; font-size: 2.25rem; text-align: left; line-height: 1.2;" data-i18n="welcomeTitle">Welcome to AIM</h1>
                             <p class="hero-subtitle" style="margin: 0; color: rgba(255,255,255,0.95); line-height: 1.45; font-size: 0.925rem; text-align: left;" data-i18n="welcomeDesc">AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.</p>
                         </div>
 
-                        <!-- Right: Important Note Callout Banner -->
-                        <div class="important-note-card" style="flex: 0 1 360px; min-width: 280px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: var(--radius-lg); padding: 0.85rem 1.1rem; border-left: 4px solid #eb1000; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12); text-align: left; display: flex; align-items: center; box-sizing: border-box;">
+                        <!-- Right (32%): Important Note Callout Banner (Aligned with Kaushal Bodh Tile) -->
+                        <div class="important-note-card" style="flex: 0 0 32%; min-width: 280px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: var(--radius-lg); padding: 0.85rem 1.1rem; border-left: 4px solid #eb1000; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12); text-align: left; display: flex; align-items: center; box-sizing: border-box;">
                             <div style="display: flex; align-items: flex-start; gap: 0.6rem;">
-                                <span style="font-size: 1.25rem; line-height: 1;">📜</span>
+                                <span style="font-size: 1.25rem; line-height: 1;">⭐</span>
                                 <div>
-                                    <strong style="display: block; font-size: 0.8rem; color: #eb1000; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem;" data-i18n="importantNoteHeading">IMPORTANT NOTE</strong>
+                                    <strong style="display: block; font-size: 0.8rem; color: #eb1000; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem;" data-i18n="importantNoteHeading">Earn DCAIS CERTIFICATE</strong>
                                     <p style="font-size: 0.8rem; color: var(--color-text-secondary); line-height: 1.4; margin: 0; font-weight: 500;" data-i18n="importantNoteText">Earn accredited DCAIS certification upon completion of minimum one activity per month and submit the creative assignments.</p>
                                 </div>
                             </div>
@@ -139,14 +139,14 @@
                         <div style="flex: 0 0 32%; min-width: 280px; display: flex; flex-direction: column; gap: 0.85rem; justify-content: flex-start; align-items: center;">
                             <h3 class="go-to-activity-heading" style="color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.75); font-size: 1.4rem; font-weight: 800; margin: 0 0 0.15rem 0; text-align: center; letter-spacing: -0.01em;" data-i18n="goToActivityPage">Go to activity page</h3>
                             
-                            <!-- 1st Tab: Kaushal Bodh -->
+                            <!-- 1st Tab: Kaushal Bodh Activities -->
                             <a href="#" class="welcome-choice-card card-accent-yellow" id="choice-kaushal-bodh" style="width: 100%; max-width: 360px; text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 0.85rem 1.15rem; border: 1px solid var(--color-border); border-top: 3px solid #f59e0b; border-radius: var(--radius-lg); background-color: var(--color-surface); transition: var(--transition-normal); gap: 0.4rem; box-shadow: var(--shadow-sm);">
                                 <div class="welcome-icon-wrapper" style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(245, 158, 11, 0.12); color: #d97706; display: flex; justify-content: center; align-items: center; margin-bottom: 0;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                     </svg>
                                 </div>
-                                <h3 style="font-size: 0.95rem; margin: 0; color: var(--color-text-primary); text-align: center; font-weight: 700;" data-i18n="kaushalBodhTab">Kaushal Bodh</h3>
+                                <h3 style="font-size: 0.95rem; margin: 0; color: var(--color-text-primary); text-align: center; font-weight: 700;" data-i18n="kaushalBodhTab">Kaushal Bodh Activities</h3>
                                 <span class="btn btn-primary" style="width: 100%; margin-top: 0.15rem; padding: 0.5rem; background-color: #f59e0b; border-color: #f59e0b; font-size: 0.85rem;" data-i18n="startBtn">Start</span>
                             </a>
 
@@ -343,6 +343,7 @@
                         <h2 class="detail-section-title" data-i18n="submitYourWork">Submit Your Work</h2>
                         <div id="submission-initial-view">
                             <p class="submission-prompt" data-i18n="submitWorkPrompt">Completed this activity? Paste your project link to submit your work!</p>
+                            <p class="submission-disclaimer" style="margin-top: 0.75rem; margin-bottom: 1rem; font-size: 0.8rem; color: var(--color-text-secondary); line-height: 1.45; border-top: 1px dashed var(--color-border); padding-top: 0.75rem;" data-i18n="submissionDisclaimer">Disclaimer: The submission of student name and school details is completely voluntary. These fields are exclusively utilized for the issuance of personalized certificates.</p>
                             <a href="https://forms.gle/ZkzcFSFpQQUyxeWC8" target="_blank" rel="noopener noreferrer" id="show-submission-form-btn" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="submitProjectBtn">Submit Project Link</a>
                         </div>
                     </section>

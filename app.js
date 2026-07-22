@@ -61,7 +61,7 @@ const translations = {
         hindiTutorial: "Hindi Tutorial",
         englishTutorials: "DCAIS Activities / English",
         hindiTutorials: "DCAIS Activities / Hindi",
-        kaushalBodhTab: "Kaushal Bodh",
+        kaushalBodhTab: "Kaushal Bodh Activities",
         formOfWorkLabel: "Form of Work",
         allFormsOfWorkOption: "All Forms of Work",
         workWithLifeForms: "Work with Life Forms",
@@ -74,10 +74,10 @@ const translations = {
         finalStudentDeliverableLabel: "Final Student Deliverable",
         openLearningJournal: "Open Learning Journal",
         openTemplateLink: "Open Activity Template",
-        learningJournalBtn: "📘 Open Learning Journal Link",
+        learningJournalBtn: "Open Learning Journal Link",
         kaushalHeroSubtitle: "Choose your grade level from Kaushal Bodh curriculum",
         kaushalActivitiesSubtitle: "Showing Kaushal Bodh projects for {grade}",
-        importantNoteHeading: "Important Note",
+        importantNoteHeading: "Earn DCAIS Certificate",
         importantNoteText: "Earn accredited DCAIS certification upon completion of minimum one activity per month and submit the creative assignments.",
         certNotice: "To earn your certificate, please complete at least one activity per month",
         quickSearchTitle: "Quick Activity Search",
@@ -105,6 +105,7 @@ const translations = {
         instructionsTitle: "Instructions",
         submitYourWork: "Submit Your Work",
         submitWorkPrompt: "Completed this activity? Paste your project link to submit your work!",
+        submissionDisclaimer: "Disclaimer: The submission of student name and school details is completely voluntary. These fields are exclusively utilized for the issuance of personalized certificates.",
         submitProjectBtn: "Submit Project Link",
         submitProjectTitle: "Submit Your Project",
         submitProjectSubtitle: "Fill in the details below to submit your project link.",
@@ -181,7 +182,7 @@ const translations = {
         hindiTutorial: "हिंदी ट्यूटोरियल",
         englishTutorials: "DCAIS एक्टिविटीज़ / अंग्रेज़ी",
         hindiTutorials: "DCAIS एक्टिविटीज़ / हिंदी",
-        kaushalBodhTab: "कौशल बोध",
+        kaushalBodhTab: "कौशल बोध गतिविधियाँ",
         formOfWorkLabel: "कार्य का प्रकार (Form of Work)",
         allFormsOfWorkOption: "सभी कार्य प्रकार",
         workWithLifeForms: "सजीव रूपों के साथ कार्य (Work with Life Forms)",
@@ -194,10 +195,10 @@ const translations = {
         finalStudentDeliverableLabel: "अंतिम छात्र आउटपुट (Final Student Deliverable)",
         openLearningJournal: "लर्निंग जर्नल खोलें",
         openTemplateLink: "एक्टिविटी टेम्पलेट खोलें",
-        learningJournalBtn: "📘 लर्निंग जर्नल लिंक खोलें",
+        learningJournalBtn: "लर्निंग जर्नल लिंक खोलें",
         kaushalHeroSubtitle: "कौशल बोध प्रोजेक्ट्स और लर्निंग जर्नल देखने के लिए अपनी कक्षा चुनें",
         kaushalActivitiesSubtitle: "{grade} के कौशल बोध प्रोजेक्ट्स",
-        importantNoteHeading: "महत्वपूर्ण नोट",
+        importantNoteHeading: "DCAIS प्रमाण पत्र",
         importantNoteText: "मासिक न्यूनतम एक गतिविधि पूरी करने और रचनात्मक कार्य जमा करने पर मान्यता प्राप्त DCAIS प्रमाण पत्र प्राप्त करें।",
         certNotice: "प्रमाण पत्र प्राप्त करने के लिए, कृपया सुनिश्चित करें कि आप प्रति माह एक गतिविधि अवश्य पूरी करें",
         quickSearchTitle: "त्वरित गतिविधि खोज",
@@ -225,6 +226,7 @@ const translations = {
         instructionsTitle: "निर्देश",
         submitYourWork: "अपना काम जमा करें",
         submitWorkPrompt: "क्या आपने यह गतिविधि पूरी कर ली है? अपना प्रोजेक्ट जमा करने के लिए लिंक पेस्ट करें!",
+        submissionDisclaimer: "अस्वीकरण: छात्र का नाम और स्कूल विवरण प्रस्तुत करना पूरी तरह से स्वैच्छिक है। इन फ़ील्ड्स का उपयोग विशेष रूप से व्यक्तिगत प्रमाण पत्र जारी करने के लिए किया जाता है।",
         submitProjectBtn: "प्रोजेक्ट लिंक जमा करें",
         submitProjectTitle: "अपना प्रोजेक्ट जमा करें",
         submitProjectSubtitle: "अपना प्रोजेक्ट लिंक जमा करने के लिए नीचे विवरण भरें।",
@@ -2067,6 +2069,7 @@ function renderActivityDetail() {
         // Custom Layout for Kaushal Bodh Columns
         const descElem = document.getElementById('detail-description');
         if (descElem) {
+            descElem.style.display = 'block';
             descElem.innerHTML = `
                 <div style="display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.25rem;">
                     <!-- Row 1: Box 1 (Key Activities) & Box 2 (Key Learning Outcomes) -->
@@ -2175,10 +2178,17 @@ function renderActivityDetail() {
     // Title mapping
     document.getElementById('detail-title').innerText = activity.activity_name;
 
-    // Skills and instructions text blocks
+    // Description text block (completely hide if no description)
     const descElem = document.getElementById('detail-description');
     if (descElem) {
-        descElem.innerText = activity.description || dict.noDescription;
+        const descText = (activity.description || '').trim();
+        if (descText) {
+            descElem.innerText = descText;
+            descElem.style.display = 'block';
+        } else {
+            descElem.innerText = '';
+            descElem.style.display = 'none';
+        }
     }
     document.getElementById('detail-skills').innerText = activity.skills || dict.notSpecified;
     document.getElementById('detail-instructions').innerText = activity.instructions || dict.noInstructions;
