@@ -166,7 +166,20 @@ const translations = {
             "December": "December",
             "January": "January",
             "February": "February",
-            "March": "March"
+            "March": "March",
+            "जुलाई": "July",
+            "अगस्त": "August",
+            "सितम्बर": "September",
+            "सितंबर": "September",
+            "अक्टूबर": "October",
+            "नवंबर": "November",
+            "दिसंबर": "December",
+            "जनवरी": "January",
+            "फरवरी": "February",
+            "मार्च": "March",
+            "अप्रैल": "April",
+            "मई": "May",
+            "जून": "June"
         }
     },
     hi: {
@@ -287,7 +300,20 @@ const translations = {
             "December": "दिसंबर",
             "January": "जनवरी",
             "February": "फरवरी",
-            "March": "मार्च"
+            "March": "मार्च",
+            "जुलाई": "जुलाई",
+            "अगस्त": "अगस्त",
+            "सितम्बर": "सितंबर",
+            "सितंबर": "सितंबर",
+            "अक्टूबर": "अक्टूबर",
+            "नवंबर": "नवंबर",
+            "दिसंबर": "दिसंबर",
+            "जनवरी": "जनवरी",
+            "फरवरी": "फरवरी",
+            "मार्च": "मार्च",
+            "अप्रैल": "अप्रैल",
+            "मई": "मई",
+            "जून": "जून"
         }
     }
 };
@@ -832,6 +858,30 @@ function renderTemplateButtons(templateLinkStr) {
 }
 
 /**
+ * Normalizes raw English or Hindi month strings to a standardized month key.
+ * @param {string} mStr - Month name string.
+ * @returns {string} Standardized month name (e.g. "July").
+ */
+function normalizeMonth(mStr) {
+    if (!mStr) return "July";
+    const s = mStr.trim();
+    const lower = s.toLowerCase();
+    if (lower.includes("july") || lower.includes("जुलाई")) return "July";
+    if (lower.includes("august") || lower.includes("अगस्त")) return "August";
+    if (lower.includes("september") || lower.includes("सितंबर") || lower.includes("सितम्बर")) return "September";
+    if (lower.includes("october") || lower.includes("अक्टूबर")) return "October";
+    if (lower.includes("november") || lower.includes("नवंबर") || lower.includes("नवम्बर")) return "November";
+    if (lower.includes("december") || lower.includes("दिसंबर") || lower.includes("दिसम्बर")) return "December";
+    if (lower.includes("january") || lower.includes("जनवरी")) return "January";
+    if (lower.includes("february") || lower.includes("फरवरी")) return "February";
+    if (lower.includes("march") || lower.includes("मार्च")) return "March";
+    if (lower.includes("april") || lower.includes("अप्रैल")) return "April";
+    if (lower.includes("may") || lower.includes("मई")) return "May";
+    if (lower.includes("june") || lower.includes("जून")) return "June";
+    return s;
+}
+
+/**
  * Parses Kaushal Bodh implementation excel file.
  */
 function parseKaushalBodhExcel(arrayBuffer) {
@@ -983,11 +1033,11 @@ function parseExcel(arrayBuffer) {
                 const label = rows[r] && rows[r][0] ? rows[r][0].toString().trim().toLowerCase() : "";
                 if (!label) continue;
 
-                if (label.includes("activity name")) {
+                if (label.includes("activity name") || label.includes("गतिविधि का नाम") || label === "गतिविधि") {
                     activityNameRowIdx = r;
-                } else if (label.includes("skill")) {
+                } else if (label.includes("skill") || label.includes("कौशल")) {
                     skillsRowIdx = r;
-                } else if (label.includes("instruction")) {
+                } else if (label.includes("instruction") || label.includes("निर्देश")) {
                     instructionsRowIdx = r;
                 } else if (label.includes("screenshot") || label.includes("book")) {
                     bookScreenshotRowIdx = r;
