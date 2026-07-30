@@ -957,7 +957,7 @@ function parseKaushalBodhExcel(arrayBuffer) {
 async function loadDefaultExcel() {
     showLoader();
     try {
-        const fetchUrl1 = 'Implementation plan.xlsx?v=' + Date.now();
+        const fetchUrl1 = 'Adobe Express_Implementation plan.xlsx?v=' + Date.now();
         const fetchUrl2 = 'final of Kaushal Bodh Implementation Table.xlsx?v=' + Date.now();
 
         const [res1, res2] = await Promise.allSettled([
@@ -969,7 +969,7 @@ async function loadDefaultExcel() {
             const buf1 = await res1.value.arrayBuffer();
             parseExcel(buf1);
         } else {
-            console.error('Could not load Implementation plan.xlsx');
+            console.error('Could not load Adobe Express_Implementation plan.xlsx');
         }
 
         if (res2.status === 'fulfilled' && res2.value.ok) {
@@ -982,13 +982,19 @@ async function loadDefaultExcel() {
         hideError();
         hideLoader();
     } catch (error) {
-        showError('Could not auto-load the curriculum excel files. Please make sure Implementation plan.xlsx is in the root folder.');
+        showError('Could not auto-load the curriculum excel files. Please make sure Adobe Express_Implementation plan.xlsx is in the root folder.');
     }
 }
 
 /**
  * Parses Excel workbook contents using SheetJS (XLSX), extracts columns,
  * fills merged values, maps row entries, and builds the state object.
+ * Supports the new "Adobe Express_Implementation plan.xlsx" format with:
+ *   - 9 sheets: Grade 6/7/8 (Hindi), Grade 3/4/5/6/7/8 (English)
+ *   - Grades 3-5: 32 activities (July-February), no Book Screenshot row
+ *   - Grades 6-8: 18 activities (July-December), with Book Screenshot row
+ *   - Hindi sheets: labels in Hindi (गतिविधि का नाम, मुख्य कौशल, etc.)
+ *   - No Video Link or Description rows in any sheet
  * @param {ArrayBuffer} arrayBuffer - Raw XLSX array buffer.
  * @returns {void}
  */
@@ -1010,7 +1016,6 @@ function parseExcel(arrayBuffer) {
             const cleanGradeName = sheetName.trim().replace(/\s+/g, ' ');
 
             // If the sheet name is empty, skip it.
-            // This filters out the duplicate sheet at index 1 and keeps only Grades 5, 7, 8
             if (!cleanGradeName || cleanGradeName === "") {
                 continue;
             }
@@ -1021,6 +1026,7 @@ function parseExcel(arrayBuffer) {
             const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null });
             
             // Dynamically locate rows based on the labels in Column A (index 0)
+            // Supports both English and Hindi labels from the new Excel file
             let activityNameRowIdx = -1;
             let skillsRowIdx = -1;
             let instructionsRowIdx = -1;
@@ -1029,7 +1035,7 @@ function parseExcel(arrayBuffer) {
             let videoLinkRowIdx = -1;
             let descriptionRowIdx = -1;
 
-            for (let r = 0; r < rows.length; r++) {
+            for (let r = 0; r < Math.min(rows.length, 20); r++) {
                 const label = rows[r] && rows[r][0] ? rows[r][0].toString().trim().toLowerCase() : "";
                 if (!label) continue;
 
@@ -1039,63 +1045,65 @@ function parseExcel(arrayBuffer) {
                     skillsRowIdx = r;
                 } else if (label.includes("instruction") || label.includes("निर्देश")) {
                     instructionsRowIdx = r;
-                } else if (label.includes("screenshot") || label.includes("book")) {
+                } else if (label.includes("screenshot") || label.includes("book") || label.includes("स्क्रीनशॉट") || label.includes("पुस्तक")) {
                     bookScreenshotRowIdx = r;
-                } else if (label.includes("activity link") || label.includes("project link") || label.includes("template link")) {
+                } else if (label.includes("activity link") || label.includes("project link") || label.includes("template link") || label.includes("गतिविधि का लिंक")) {
                     templateLinkRowIdx = r;
-                } else if (label.includes("video")) {
+                } else if (label.includes("video") || label.includes("वीडियो")) {
                     videoLinkRowIdx = r;
-                } else if (label.includes("description")) {
+                } else if (label.includes("description") || label.includes("विवरण")) {
                     descriptionRowIdx = r;
                 }
             }
 
-            // Fallbacks to previous default offsets if label is not explicitly found
+            // Fallbacks to default offsets if label is not explicitly found
             if (activityNameRowIdx === -1) activityNameRowIdx = 5;
             if (skillsRowIdx === -1) skillsRowIdx = 6;
             if (instructionsRowIdx === -1) instructionsRowIdx = 7;
-            if (bookScreenshotRowIdx === -1) bookScreenshotRowIdx = 8;
+            // bookScreenshotRowIdx remains -1 if not found (Grades 3-5 don't have it)
             if (templateLinkRowIdx === -1) {
-                templateLinkRowIdx = (s_idx > 0) ? 9 : 8;
+                // For sheets with Book Screenshot, Activity Link is at row 9; otherwise row 8
+                templateLinkRowIdx = (bookScreenshotRowIdx !== -1) ? 9 : 8;
             }
-            if (videoLinkRowIdx === -1) {
-                videoLinkRowIdx = (s_idx > 0) ? 11 : 10;
-            }
-            if (descriptionRowIdx === -1) {
-                descriptionRowIdx = (s_idx > 0) ? 12 : 11;
-            }
+            // videoLinkRowIdx and descriptionRowIdx stay -1 if not found (new format doesn't have them)
 
             const numCols = rows[activityNameRowIdx] ? rows[activityNameRowIdx].length : 0;
             
-            let currentMonth = "";
-            let currentWeek = "";
+            // Build month mapping from Row 2 (months row) by filling forward merged cells
+            // Row 2 has months at specific columns with gaps where cells are merged
+            const monthRow = rows[2] || [];
+            const monthMap = {}; // colIndex -> month name
+            let lastMonth = "";
+            for (let c = 1; c < numCols; c++) {
+                const val = monthRow[c] ? monthRow[c].toString().trim() : null;
+                if (val && val !== "" &&
+                    !val.toUpperCase().startsWith("GRADE") &&
+                    !val.toUpperCase().startsWith("कक्षा")) {
+                    lastMonth = val;
+                }
+                if (lastMonth) {
+                    monthMap[c] = lastMonth;
+                }
+            }
+
+            // Build week mapping from Row 4 (weeks row)
+            const weekRow = rows[4] || [];
 
             for (let c = 1; c < numCols; c++) {
                 const activityName = rows[activityNameRowIdx] ? rows[activityNameRowIdx][c] : null;
                 // Exclude empty and header label cells
-                if (!activityName || activityName.trim() === "" || activityName.trim() === "Activity Name") {
+                if (!activityName || activityName.toString().trim() === "" || 
+                    activityName.toString().trim() === "Activity Name" ||
+                    activityName.toString().trim() === "गतिविधि का नाम") {
                     continue;
                 }
 
-                // Month header (Search rows 3, 4, 5 / index 2, 3, 4) - Fill down merged cell value
-                let monthVal = null;
-                for (let rIdx of [2, 3, 4]) {
-                    const val = (rows[rIdx] && rows[rIdx][c]) ? rows[rIdx][c].toString().trim() : null;
-                    if (val && val !== "" && 
-                        !val.toUpperCase().startsWith("GRADE") && 
-                        !val.toUpperCase().startsWith("कक्षा") && 
-                        !val.toUpperCase().startsWith("WEEK") && 
-                        !val.toUpperCase().startsWith("सप्ताह")) {
-                        monthVal = val;
-                        break;
-                    }
-                }
-                if (monthVal) {
-                    currentMonth = monthVal;
-                }
+                // Get month from the pre-built month map
+                const currentMonth = monthMap[c] || "July";
 
-                // Week header (Row index 4) - Fill down cell value
-                const weekVal = (rows[4] && rows[4][c]) ? rows[4][c].toString().trim() : null;
+                // Get week from Row 4, fallback to calculated week
+                let currentWeek = "";
+                const weekVal = weekRow[c] ? weekRow[c].toString().trim() : null;
                 if (weekVal && weekVal !== "") {
                     currentWeek = weekVal;
                 } else {
@@ -1106,19 +1114,19 @@ function parseExcel(arrayBuffer) {
                 const instructions = (rows[instructionsRowIdx] && rows[instructionsRowIdx][c]) ? rows[instructionsRowIdx][c].toString().trim() : "";
                 const bookScreenshot = (bookScreenshotRowIdx !== -1 && rows[bookScreenshotRowIdx] && rows[bookScreenshotRowIdx][c]) ? rows[bookScreenshotRowIdx][c].toString().trim() : "";
                 const templateLink = (rows[templateLinkRowIdx] && rows[templateLinkRowIdx][c]) ? rows[templateLinkRowIdx][c].toString().trim() : "";
-                const videoLink = (rows[videoLinkRowIdx] && rows[videoLinkRowIdx][c]) ? rows[videoLinkRowIdx][c].toString().trim() : "";
-                const description = (rows[descriptionRowIdx] && rows[descriptionRowIdx][c]) ? rows[descriptionRowIdx][c].toString().trim() : "";
+                const videoLink = (videoLinkRowIdx !== -1 && rows[videoLinkRowIdx] && rows[videoLinkRowIdx][c]) ? rows[videoLinkRowIdx][c].toString().trim() : "";
+                const description = (descriptionRowIdx !== -1 && rows[descriptionRowIdx] && rows[descriptionRowIdx][c]) ? rows[descriptionRowIdx][c].toString().trim() : "";
 
                 parsedActivities.push({
-                    grade: cleanGradeName, // Grade 5, Grade 7, Grade 8
-                    activity_name: activityName.trim(),
+                    grade: cleanGradeName,
+                    activity_name: activityName.toString().trim(),
                     skills: skills,
                     instructions: instructions,
                     book_screenshot: bookScreenshot,
                     template_link: templateLink,
                     video_link: videoLink,
                     description: description,
-                    month: currentMonth || "April",
+                    month: currentMonth,
                     week: currentWeek
                 });
             }
