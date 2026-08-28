@@ -603,7 +603,8 @@ function setupEventListeners() {
     if (submitMonthlyActivityBtn) {
         submitMonthlyActivityBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            window.open('https://docs.google.com/forms/d/e/1FAIpQLSdOHEztPIP8PeeQxkpifks4C79OB-uQV438y48zu7so-JnI1Q/viewform', '_blank', 'noopener,noreferrer');
+            const targetUrl = submitMonthlyActivityBtn.href || 'https://docs.google.com/forms/d/e/1FAIpQLSdOHEztPIP8PeeQxkpifks4C79OB-uQV438y48zu7so-JnI1Q/viewform';
+            window.open(targetUrl, '_blank', 'noopener,noreferrer');
         });
     }
 
