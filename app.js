@@ -603,7 +603,7 @@ function setupEventListeners() {
     if (submitMonthlyActivityBtn) {
         submitMonthlyActivityBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            window.open('https://forms.gle/FZjYhFcQ3S8SuLKZA', '_blank', 'noopener,noreferrer');
+            window.open('https://docs.google.com/forms/d/e/1FAIpQLSdOHEztPIP8PeeQxkpifks4C79OB-uQV438y48zu7so-JnI1Q/viewform', '_blank', 'noopener,noreferrer');
         });
     }
 
