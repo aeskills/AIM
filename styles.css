@@ -77,7 +77,12 @@ body {
     font-size: 1rem;
     line-height: 1.6;
     color: var(--color-text-primary);
-    background-color: #0f172a;
+    background-color: #ffffff;
+    background-image: 
+        radial-gradient(circle at 10% 15%, rgba(235, 16, 0, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 90% 65%, rgba(235, 16, 0, 0.04) 0%, transparent 45%),
+        radial-gradient(circle at 50% 35%, rgba(255, 240, 240, 0.6) 0%, transparent 60%);
+    background-attachment: fixed;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -86,23 +91,7 @@ body {
 }
 
 body::before {
-    content: '';
-    position: fixed;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
-    background-image: 
-        linear-gradient(to bottom, rgba(15, 23, 42, 0.42), rgba(15, 23, 42, 0.38)),
-        url('student_classroom_bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: blur(14px) brightness(0.92);
-    -webkit-filter: blur(14px) brightness(0.92);
-    transform: scale(1.05);
-    z-index: -2;
-    pointer-events: none;
+    display: none;
 }
 
 h1, h2, h3, h4 {
@@ -1816,7 +1805,7 @@ a:hover {
     z-index: 10000 !important;
 }
 
-/* Page Titles, Section Titles & Hero text against blurred classroom bg */
+/* Page Titles, Section Titles & Hero text against white reddish bright bg */
 .hero-title, 
 .hero-subtitle, 
 .page-title, 
@@ -1830,7 +1819,7 @@ a:hover {
 #activities-title,
 #activities-subtitle,
 .step-header .section-title {
-    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.95) !important;
+    text-shadow: none !important;
 }
 
 .hero-title, 
@@ -1841,7 +1830,7 @@ a:hover {
 .section-title,
 #activities-title,
 .step-header .section-title {
-    color: #ffffff !important;
+    color: var(--color-text-primary) !important;
     font-weight: 800 !important;
     letter-spacing: -0.01em !important;
 }
@@ -1851,7 +1840,7 @@ a:hover {
 .step-subtitle, 
 .hero-section p,
 #activities-subtitle {
-    color: #f8fafc !important;
+    color: var(--color-text-secondary) !important;
     font-weight: 500 !important;
 }
 
@@ -1917,22 +1906,20 @@ a:hover {
     display: inline-flex !important;
     align-items: center !important;
     gap: 0.5rem !important;
-    background: rgba(15, 23, 42, 0.68) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    color: #ffffff !important;
+    background: #ffffff !important;
+    color: var(--color-text-primary) !important;
     padding: 0.5rem 1.15rem !important;
     border-radius: 9999px !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28) !important;
+    border: 1.5px solid var(--color-border) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
     font-weight: 700 !important;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: none !important;
 }
 
 .back-link:hover {
-    background: rgba(235, 16, 0, 0.92) !important;
+    background: #eb1000 !important;
     color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.7) !important;
+    border-color: #eb1000 !important;
 }
 
 /* Modals */
@@ -2431,8 +2418,25 @@ a:hover {
     left: 24px;
     z-index: 9999;
     width: auto;
+    max-width: calc(100vw - 48px);
     margin: 0;
     pointer-events: none;
+}
+
+/* 12rem (192px) bottom padding buffer ensures page cards stop well above the floating popover when scrolled */
+.step-section {
+    padding-bottom: 12rem !important;
+}
+
+@media (max-width: 768px) {
+    .dcais-instruction-popover-wrapper {
+        bottom: 14px;
+        left: 14px;
+        max-width: calc(100vw - 28px);
+    }
+    .step-section {
+        padding-bottom: 13rem !important;
+    }
 }
 
 .dcais-instruction-popover,
@@ -2442,8 +2446,8 @@ a:hover {
 
 .dcais-instruction-popover {
     position: relative;
-    max-width: 480px;
-    width: calc(100vw - 48px);
+    max-width: 330px;
+    width: 100%;
     margin: 0;
     z-index: 10000;
     animation: popover-slide-up 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -2452,7 +2456,7 @@ a:hover {
 @keyframes popover-slide-up {
     from {
         opacity: 0;
-        transform: translateY(20px) scale(0.95);
+        transform: translateY(16px) scale(0.96);
     }
     to {
         opacity: 1;
@@ -2462,16 +2466,43 @@ a:hover {
 
 .dcais-instruction-popover-content {
     position: relative;
-    background: #ffffff !important;
-    border: 2.5px solid #1e293b;
-    border-radius: 18px;
-    padding: 0.85rem 1.15rem 0.85rem 0.85rem;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
-    text-align: left;
+    background: rgba(255, 255, 255, 0.72) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+    border-radius: 20px;
+    padding: 0.85rem 1rem 0.85rem 0.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(235, 16, 0, 0.04);
     display: flex;
     align-items: center;
     gap: 0.85rem;
     overflow: hidden;
+}
+
+.dcais-popover-close-btn {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.55rem;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: #64748b !important;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.dcais-popover-close-btn:hover {
+    color: #ffffff !important;
+    background-color: #eb1000;
+    transform: scale(1.1);
 }
 
 .popover-mascot-left {
@@ -2479,22 +2510,32 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 105px;
-    position: relative;
+    align-self: stretch;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0;
+    margin: 0;
 }
 
 .popover-mascot-img {
-    width: 130px;
-    height: 130px;
+    width: 90px;
+    height: 100px;
     object-fit: contain;
     display: block;
-    filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.18));
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.16));
+    animation: mascot-gentle-bob 3.2s ease-in-out infinite;
     transition: transform 0.3s ease;
-    transform: scale(1.32);
 }
 
 .popover-mascot-img:hover {
-    transform: scale(1.38) rotate(3deg);
+    transform: scale(1.08) rotate(3deg);
+}
+
+@keyframes mascot-gentle-bob {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-4px) rotate(2deg); }
 }
 
 .popover-message-right {
@@ -2502,109 +2543,92 @@ a:hover {
     padding-right: 0.75rem;
 }
 
-/* Speech Bubble Tail pointing down at bottom corner */
-.dcais-instruction-popover-content::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    right: 28px;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 15px solid #1e293b;
-}
-
-.dcais-instruction-popover-content::before {
-    content: '';
-    position: absolute;
-    bottom: -11px;
-    right: 29px;
-    width: 0;
-    height: 0;
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
-    border-top: 13px solid #ffffff;
-    z-index: 2;
-}
-
-.dcais-popover-close-btn {
-    position: absolute;
-    top: 0.45rem;
-    right: 0.55rem;
-    background: transparent;
-    border: none;
-    font-size: 1.25rem;
-    line-height: 1;
-    color: #475569 !important;
-    cursor: pointer;
-    padding: 0.15rem 0.35rem;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-    z-index: 5;
-}
-
-.dcais-popover-close-btn:hover {
-    color: #ef4444 !important;
-    background-color: rgba(239, 68, 68, 0.1);
-}
-
-.dcais-popover-header {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-bottom: 0.35rem;
-}
-
-.dcais-popover-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: #f1f5f9;
-    padding: 0.2rem 0.6rem;
-    border-radius: 14px;
-    border: 1px solid #cbd5e1;
-}
-
-.popover-badge-title {
-    font-weight: 800;
-    font-size: 0.75rem;
-    color: #0f172a !important;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
 .dcais-popover-body-text {
     margin: 0;
-    font-size: 0.885rem !important;
-    color: #0f172a !important;
+    font-size: 0.84rem !important;
+    color: #1c1d1f !important;
     line-height: 1.45;
     font-weight: 600 !important;
     text-shadow: none !important;
     font-family: var(--font-body);
 }
-
+/* Minimized Floating Mascot Trigger Badge (Single-Line Capsule Pill Box) */
 .dcais-popover-trigger-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: #ffffff;
-    border: 2.5px solid #1e293b;
-    padding: 0.4rem 0.9rem;
-    border-radius: 16px;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.6rem !important;
+    white-space: nowrap !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1.5px solid rgba(235, 16, 0, 0.25) !important;
+    padding: 0.4rem 1rem 0.4rem 0.5rem !important;
+    border-radius: 9999px !important;
     cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #0f172a;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
-    margin: 0.5rem 0;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(235, 16, 0, 0.15) !important;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: popover-trigger-fade-in 0.3s ease;
+    line-height: 1 !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+@keyframes popover-trigger-fade-in {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .dcais-popover-trigger-badge:hover {
-    background: #f8fafc;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    background: #ffffff !important;
+    border-color: #eb1000 !important;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 28px rgba(235, 16, 0, 0.25) !important;
+}
+
+.trigger-mascot-icon {
+    width: 28px !important;
+    height: 28px !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.trigger-mascot-img {
+    width: 28px !important;
+    height: 28px !important;
+    object-fit: contain !important;
+    display: block !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+    animation: mascot-gentle-bob 3.2s ease-in-out infinite;
+}
+
+.trigger-text {
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    color: #1e293b !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+}
+
+.trigger-pulse-dot {
+    width: 8px !important;
+    height: 8px !important;
+    background-color: #eb1000 !important;
+    border-radius: 50% !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 0 0 0 rgba(235, 16, 0, 0.4);
+    animation: badge-pulse-ring 1.8s infinite;
 }
 
 .mascot-character-wrapper {

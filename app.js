@@ -39,7 +39,7 @@ const state = {
     kaushalBodhActivities: [],
     selectedGrade: null,
     selectedActivity: null,
-    currentStep: 'grade',
+    currentStep: 'welcome',
     filterSubject: 'All', // Mapped to Month or Form of Work filtering
     submissions: [],
     language: 'en', // 'en' or 'hi'
@@ -52,8 +52,9 @@ const translations = {
         welcomeTitle: "Welcome to AIM",
         welcomeDesc: "AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.",
         activityOfMonthTag: "Activity of the Month",
-        independenceTitle: "Independence Day Special",
-        independenceDesc: "Celebrate India's Independence Day by creating patriotic posters and videos using Adobe Express for Education!",
+        activityOfMonthTitle: "Activity of the Month",
+        independenceTitle: "Activity of the Month",
+        independenceDesc: "Celebrate Teacher’s day by creating posters and videos using Adobe Express for Education",
         exploreActivityBtn: "Activity Template",
         submitMonthlyBtn: "Submit Activity Link",
         monthlyTutorialsTitle: "Monthly Activity Tutorials",
@@ -186,8 +187,9 @@ const translations = {
         welcomeTitle: "AIM में आपका स्वागत है",
         welcomeDesc: "AIM भारत में छात्रों के लिए एक रचनात्मक शिक्षण स्थल है। हर हफ्ते आपको Adobe Express पर बनी नई गतिविधियाँ मिलती हैं। पोस्टर डिज़ाइन करें, इमेजेस जनरेट करें, वीडियो बनाएँ, और अपनी चीज़ें बनाएँ। सरल से शुरुआत करें और हर हफ्ते आगे बढ़ें।",
         activityOfMonthTag: "महीने की गतिविधि",
-        independenceTitle: "स्वतंत्रता दिवस विशेष",
-        independenceDesc: "Adobe Express for Education का उपयोग करके देशभक्ति के पोस्टर और वीडियो बनाकर भारत का स्वतंत्रता दिवस मनाएँ!",
+        activityOfMonthTitle: "महीने की गतिविधि",
+        independenceTitle: "महीने की गतिविधि",
+        independenceDesc: "Adobe Express for Education का उपयोग करके पोस्टर और वीडियो बनाकर शिक्षक दिवस मनाएँ!",
         exploreActivityBtn: "गतिविधि टेम्पलेट",
         submitMonthlyBtn: "गतिविधि लिंक जमा करें",
         monthlyTutorialsTitle: "मासिक गतिविधि ट्यूटोरियल",
@@ -611,7 +613,8 @@ function setupEventListeners() {
     const exploreActivityBtn = document.getElementById('explore-activity-btn');
     if (exploreActivityBtn) {
         exploreActivityBtn.addEventListener('click', (e) => {
-            const templateUri = "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:2313db0a-a09f-5f71-8b5f-d07c4cc6df42?category=text&taskID=digital-activity";
+            e.preventDefault();
+            const templateUri = exploreActivityBtn.href || "https://express.adobe.com/design/template/urn:aaid:sc:VA6C2:d60097e3-7f0f-5614-a7b7-4a89ae8640af?category=text&entryPoint=template&taskID=instagram-portrait-post";
             window.open(templateUri, "_blank", "noopener,noreferrer");
         });
     }
@@ -1275,8 +1278,8 @@ function renderDCAISInstructionPopup(stepName) {
         window.popupAutoCloseTimer = null;
     }
 
-    // Remove existing popover wrappers
-    document.querySelectorAll('.dcais-instruction-popover-wrapper').forEach(el => el.remove());
+    // Remove existing popover wrappers and inline banners
+    document.querySelectorAll('.dcais-instruction-popover-wrapper, .dcais-inline-instruction-banner').forEach(el => el.remove());
 
     if (state.currentStep === 'welcome') {
         resetInstructionPopupState();
@@ -1320,16 +1323,15 @@ function renderDCAISInstructionPopup(stepName) {
     const modeKey = isKaushalBodh ? 'kb' : 'dcais';
     const storageKey = `${modeKey}_popup_closed_${stepName}`;
     const isClosed = sessionStorage.getItem(storageKey) === 'true';
+    const guideBtnText = lang === 'hi' ? 'दिशा-निर्देश' : 'Instructions';
 
     const wrapper = document.createElement('div');
     wrapper.className = 'dcais-instruction-popover-wrapper';
 
-    const guideBtnText = lang === 'hi' ? 'दिशा-निर्देश देखें' : 'View Instructions';
-
     wrapper.innerHTML = `
         <div class="dcais-instruction-popover ${isClosed ? 'hidden' : ''}" id="popover-${stepName}">
             <div class="dcais-instruction-popover-content">
-                <button type="button" class="dcais-popover-close-btn" aria-label="Close popup">&times;</button>
+                <button type="button" class="dcais-popover-close-btn" aria-label="Close instructions">&times;</button>
                 <div class="popover-mascot-left">
                     <img src="aim_mascot.png" alt="AIM Panda Mascot" class="popover-mascot-img" />
                 </div>
@@ -1339,9 +1341,12 @@ function renderDCAISInstructionPopup(stepName) {
             </div>
         </div>
         ${isClosed ? `
-            <button type="button" class="dcais-popover-trigger-badge" id="trigger-${stepName}">
-                <img src="aim_mascot.png" alt="AIM Panda Mascot" style="width: 24px; height: 24px; object-fit: contain;" />
-                <span>${guideBtnText}</span>
+            <button type="button" class="dcais-popover-trigger-badge" id="trigger-${stepName}" aria-label="Show instructions">
+                <div class="trigger-mascot-icon">
+                    <img src="aim_mascot.png" alt="AIM Panda Mascot" class="trigger-mascot-img" />
+                </div>
+                <span class="trigger-text">${guideBtnText}</span>
+                <span class="trigger-pulse-dot"></span>
             </button>
         ` : ''}
     `;
@@ -1372,12 +1377,12 @@ function renderDCAISInstructionPopup(stepName) {
         });
     }
 
-    // Set 5-second auto-popdown timer if popup is currently open
+    // Set 6-second auto-collapse timer if popup is open
     if (!isClosed) {
         window.popupAutoCloseTimer = setTimeout(() => {
             sessionStorage.setItem(storageKey, 'true');
             renderDCAISInstructionPopup(stepName);
-        }, 5000);
+        }, 6000);
     }
 }
 

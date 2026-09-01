@@ -9,11 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=1.7">
+    <link rel="stylesheet" href="styles.css?v=1.8">
     <!-- Local libraries for offline-first resilience -->
     <script src="xlsx.full.min.js" defer></script>
     <script src="papaparse.min.js" defer></script>
-    <script src="app.js?v=1.7" defer></script>
+    <script src="app.js?v=1.8" defer></script>
 </head>
 <body>
     <!-- Global Background Removed -->
@@ -72,7 +72,7 @@
                         <!-- Left (64%): Welcome Title & Description -->
                         <div style="flex: 1 1 64%; min-width: 300px; text-align: left; display: flex; flex-direction: column; justify-content: center; gap: 0.35rem;">
                             <h1 class="hero-title" style="margin: 0; font-size: 2.25rem; text-align: left; line-height: 1.2;" data-i18n="welcomeTitle">Welcome to AIM</h1>
-                            <p class="hero-subtitle" style="margin: 0; color: rgba(255,255,255,0.95); line-height: 1.45; font-size: 0.925rem; text-align: left;" data-i18n="welcomeDesc">AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.</p>
+                            <p class="hero-subtitle" style="margin: 0; color: var(--color-text-secondary); line-height: 1.45; font-size: 0.925rem; text-align: left;" data-i18n="welcomeDesc">AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.</p>
                         </div>
 
                         <!-- Right (32%): Important Note Callout Banner (Aligned with Kaushal Bodh Tile) -->
@@ -90,55 +90,27 @@
                     <!-- Main Grid Row: Left 68% vs Right 32% -->
                     <div style="width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; gap: 2rem; align-items: flex-start; margin-top: 0.5rem;">
                         
-                        <!-- Left Column (68%) - Independence Day Activity & Tutorials -->
+                        <!-- Left Column (68%) - Teacher's Day Activity -->
                         <div style="flex: 1 1 64%; min-width: 300px; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 1.5rem;">
-                            <!-- Content Card (Tricolor) -->
-                            <div style="background: radial-gradient(circle at top left, #ffe8d6 0%, transparent 60%), radial-gradient(circle at bottom right, #d4f0d4 0%, transparent 60%), #ffffff; padding: 1.75rem 2rem; border-radius: var(--radius-xl); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); text-align: center; position: relative; z-index: 10; width: 100%; overflow: hidden; margin-top: 0; box-sizing: border-box;">
+                            <!-- Content Card (Activity of the Month) -->
+                            <div style="background: #ffffff; padding: 1.75rem 2rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--color-border); text-align: center; position: relative; z-index: 10; width: 100%; overflow: hidden; margin-top: 0; box-sizing: border-box;">
                                 <!-- Red Ribbon -->
                                 <div style="position: absolute; top: 1.5rem; right: -2.5rem; background-color: #eb1000; color: white; padding: 0.25rem 3rem; font-size: 0.75rem; font-weight: 800; transform: rotate(45deg); box-shadow: 0 2px 8px rgba(235, 16, 0, 0.4); letter-spacing: 0.05em; text-transform: uppercase; z-index: 20;">Highlight</div>
                                 
-                                <div style="font-size: 2rem; margin-bottom: 0.25rem; line-height: 1;">🇮🇳</div>
-                                <div style="display: inline-block; padding: 0.2rem 0.6rem; background-color: rgba(235, 16, 0, 0.08); color: var(--color-primary); border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;" data-i18n="activityOfMonthTag">Activity of the Month</div>
-                                <h2 style="font-size: 1.5rem; color: var(--color-text-primary); margin-bottom: 0.25rem; font-family: var(--font-heading); font-weight: 800;" data-i18n="independenceTitle">Independence Day Special</h2>
-                                <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.4;" data-i18n="independenceDesc">Celebrate India's Independence Day by creating patriotic posters and videos using Adobe Express for Education!</p>
+                                <div style="font-size: 2.2rem; margin-bottom: 0.35rem; line-height: 1;">👩‍🏫</div>
+                                <h2 style="font-size: 1.75rem; color: var(--color-text-primary); margin-bottom: 0.35rem; font-family: var(--font-heading); font-weight: 800;" data-i18n="activityOfMonthTitle">Activity of the Month</h2>
+                                <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 1.15rem; line-height: 1.45;" data-i18n="independenceDesc">Celebrate Teacher’s day by creating posters and videos using Adobe Express for Education</p>
                                 <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
-                                    <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:2313db0a-a09f-5f71-8b5f-d07c4cc6df42?category=text&taskID=digital-activity" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn" style="background-color: #ff9933; border: none; box-shadow: 0 4px 12px rgba(255, 153, 51, 0.4); color: white; padding: 0.6rem 1.2rem; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="exploreActivityBtn">Activity Template</a>
+                                    <a href="https://express.adobe.com/design/template/urn:aaid:sc:VA6C2:d60097e3-7f0f-5614-a7b7-4a89ae8640af?category=text&entryPoint=template&taskID=instagram-portrait-post" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn" style="background-color: #eb1000; border: none; box-shadow: 0 4px 12px rgba(235, 16, 0, 0.35); color: white; padding: 0.6rem 1.2rem; font-size: 0.95rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="exploreActivityBtn">Activity Template</a>
                                     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdOHEztPIP8PeeQxkpifks4C79OB-uQV438y48zu7so-JnI1Q/viewform" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="submit-monthly-activity-btn" style="border-color: #eb1000; color: #eb1000; background-color: #ffffff; padding: 0.6rem 1.2rem; font-size: 0.95rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="submitMonthlyBtn">Submit Activity Link</a>
                                 </div>
                                 <p class="submission-disclaimer" style="margin-top: 1rem; margin-bottom: 0; font-size: 0.775rem; color: var(--color-text-secondary); line-height: 1.45; border-top: 1px dashed rgba(0, 0, 0, 0.12); padding-top: 0.65rem;" data-i18n="submissionDisclaimer">Disclaimer: The submission of student name and school details is completely voluntary. These fields are exclusively utilized for the issuance of personalized certificates.</p>
-                            </div>
-
-                            <!-- Monthly Activity Tutorials (Tricolor Section) -->
-                            <div style="background: radial-gradient(circle at top left, #ffe8d6 0%, transparent 60%), radial-gradient(circle at bottom right, #d4f0d4 0%, transparent 60%), #fcfcf9; padding: 1.5rem 2rem; border-radius: var(--radius-lg); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); width: 100%; position: relative; z-index: 10; box-sizing: border-box;">
-                                <h3 style="color: var(--color-text-primary); text-align: center; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: 0.02em;" data-i18n="monthlyTutorialsTitle">Monthly Activity Tutorials</h3>
-                                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                                    <!-- English Tutorial Card -->
-                                    <a href="https://www.youtube.com/watch?v=aUQLlw86Mdg" target="_blank" rel="noopener noreferrer" id="welcome-english-tutorial-card" style="flex: 1; min-width: 220px; background-color: #ffffff; border-radius: var(--radius-md); padding: 0.85rem; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-                                        <div style="width: 100%; aspect-ratio: 16/9; border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 0.75rem; position: relative; background-color: #f1f5f9;">
-                                            <img src="https://img.youtube.com/vi/aUQLlw86Mdg/hqdefault.jpg" alt="English Tutorial Video Thumbnail" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
-                                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; border-radius: 50%; background: rgba(235, 16, 0, 0.9); display: flex; justify-content: center; align-items: center; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.35);">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                            </div>
-                                        </div>
-                                        <span style="color: var(--color-text-primary); font-weight: 700; font-size: 0.95rem;" data-i18n="englishTutorial">English Tutorial</span>
-                                    </a>
-                                    <!-- Hindi Tutorial Card -->
-                                    <a href="https://www.youtube.com/watch?v=vOV5Fm-0Buk" target="_blank" rel="noopener noreferrer" id="welcome-hindi-tutorial-card" style="flex: 1; min-width: 220px; background-color: #ffffff; border-radius: var(--radius-md); padding: 0.85rem; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-                                        <div style="width: 100%; aspect-ratio: 16/9; border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 0.75rem; position: relative; background-color: #f1f5f9;">
-                                            <img src="https://img.youtube.com/vi/vOV5Fm-0Buk/hqdefault.jpg" alt="Hindi Tutorial Video Thumbnail" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
-                                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; border-radius: 50%; background: rgba(235, 16, 0, 0.9); display: flex; justify-content: center; align-items: center; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.35);">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                            </div>
-                                        </div>
-                                        <span style="color: var(--color-text-primary); font-weight: 700; font-size: 0.95rem;" data-i18n="hindiTutorial">Hindi Tutorial</span>
-                                    </a>
-                                </div>
                             </div>
                         </div>
 
                         <!-- Right Column (32%) - Language Tabs -->
                         <div style="flex: 0 0 32%; min-width: 280px; display: flex; flex-direction: column; gap: 0.85rem; justify-content: flex-start; align-items: center;">
-                            <h3 class="go-to-activity-heading" style="color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.75); font-size: 1.4rem; font-weight: 800; margin: 0 0 0.15rem 0; text-align: center; letter-spacing: -0.01em;" data-i18n="goToActivityPage">Go to activity page</h3>
+                            <h3 class="go-to-activity-heading" style="color: var(--color-text-primary); text-shadow: none; font-size: 1.4rem; font-weight: 800; margin: 0 0 0.15rem 0; text-align: center; letter-spacing: -0.01em;" data-i18n="goToActivityPage">Go to activity page</h3>
                             
                             <!-- 1st Tab: Kaushal Bodh Activities -->
                             <a href="#" class="welcome-choice-card card-accent-yellow" id="choice-kaushal-bodh" style="width: 100%; max-width: 360px; text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 0.85rem 1.15rem; border: 1px solid var(--color-border); border-top: 3px solid #f59e0b; border-radius: var(--radius-lg); background-color: var(--color-surface); transition: var(--transition-normal); gap: 0.4rem; box-shadow: var(--shadow-sm);">
