@@ -2651,4 +2651,36 @@ a:hover {
     transform: scale(1.08) rotate(3deg);
 }
 
+/* ==========================================================================
+   TEACHER'S DAY TUTORIAL VIDEO CARD STYLES
+   ========================================================================== */
+.tutorial-video-hover-card {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.tutorial-video-hover-card:hover {
+    transform: translateY(-5px) scale(1.01) !important;
+    box-shadow: 0 12px 30px rgba(235, 16, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    border-color: #eb1000 !important;
+}
+
+.tutorial-video-hover-card img {
+    transition: transform 0.35s ease !important;
+}
+
+.tutorial-video-hover-card:hover img {
+    transform: scale(1.05) !important;
+}
+
+.play-button-overlay {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.tutorial-video-hover-card:hover .play-button-overlay {
+    transform: translate(-50%, -50%) scale(1.15) !important;
+    background: #eb1000 !important;
+    box-shadow: 0 6px 20px rgba(235, 16, 0, 0.6) !important;
+}
+
+
 
