@@ -52,14 +52,12 @@ const translations = {
         welcomeTitle: "Welcome to AIM",
         welcomeDesc: "AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.",
         activityOfMonthTag: "Activity of the Month",
-        activityOfMonthTitle: "Teacher's Day Special",
-        independenceTitle: "Teacher's Day Special",
-        independenceDesc: "Celebrate Teacher’s Day with Adobe Express! Express your gratitude by making personalized greeting templates, appreciation posters, and videos for your teachers.",
+        activityOfMonthTitle: "My Favourite Sport, My Inspiration!",
+        independenceTitle: "My Favourite Sport, My Inspiration!",
+        independenceDesc: "Ready to Play? Dive into your favourite sports and discover the incredible sportspersons who inspire you!",
         exploreActivityBtn: "Activity Template",
         submitMonthlyBtn: "Submit Activity Link",
         monthlyTutorialsTitle: "Monthly Activity Tutorials",
-        teachersDayTutorialTitle: "Teacher's Day Tutorial Video",
-        watchTeachersDayTutorial: "▶ Watch Teacher's Day Tutorial Video",
         englishTutorial: "English Tutorial",
         hindiTutorial: "Hindi Tutorial",
         englishTutorials: "DCAIS Activities / English",
@@ -189,14 +187,12 @@ const translations = {
         welcomeTitle: "AIM में आपका स्वागत है",
         welcomeDesc: "AIM भारत में छात्रों के लिए एक रचनात्मक शिक्षण स्थल है। हर हफ्ते आपको Adobe Express पर बनी नई गतिविधियाँ मिलती हैं। पोस्टर डिज़ाइन करें, इमेजेस जनरेट करें, वीडियो बनाएँ, और अपनी चीज़ें बनाएँ। सरल से शुरुआत करें और हर हफ्ते आगे बढ़ें।",
         activityOfMonthTag: "महीने की गतिविधि",
-        activityOfMonthTitle: "शिक्षक दिवस विशेष",
-        independenceTitle: "शिक्षक दिवस विशेष",
-        independenceDesc: "Adobe Express for Education का उपयोग करके अपने शिक्षकों के लिए ग्रीटिंग कार्ड, पोस्टर और वीडियो बनाकर शिक्षक दिवस मनाएँ!",
+        activityOfMonthTitle: "मेरा पसंदीदा खेल, मेरी प्रेरणा!",
+        independenceTitle: "मेरा पसंदीदा खेल, मेरी प्रेरणा!",
+        independenceDesc: "खेलने के लिए तैयार हैं? अपने पसंदीदा खेलों में शामिल हों और उन शानदार खिलाड़ियों को जानें जो आपको प्रेरित करते हैं!",
         exploreActivityBtn: "गतिविधि टेम्पलेट",
         submitMonthlyBtn: "गतिविधि लिंक जमा करें",
         monthlyTutorialsTitle: "मासिक गतिविधि ट्यूटोरियल",
-        teachersDayTutorialTitle: "शिक्षक दिवस गतिविधि ट्यूटोरियल वीडियो",
-        watchTeachersDayTutorial: "▶ शिक्षक दिवस ट्यूटोरियल वीडियो देखें",
         englishTutorial: "अंग्रेज़ी ट्यूटोरियल",
         hindiTutorial: "हिंदी ट्यूटोरियल",
         englishTutorials: "DCAIS एक्टिविटीज़ / अंग्रेज़ी",
@@ -604,12 +600,12 @@ function setupEventListeners() {
         });
     }
 
-    // Monthly Activity submit button on Welcome Screen (Independence Day Special)
+    // Monthly Activity submit button on Welcome Screen
     const submitMonthlyActivityBtn = document.getElementById('submit-monthly-activity-btn');
     if (submitMonthlyActivityBtn) {
         submitMonthlyActivityBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const targetUrl = submitMonthlyActivityBtn.href || 'https://docs.google.com/forms/d/e/1FAIpQLSdOHEztPIP8PeeQxkpifks4C79OB-uQV438y48zu7so-JnI1Q/viewform';
+            const targetUrl = submitMonthlyActivityBtn.href || 'https://docs.google.com/forms/d/e/1FAIpQLScu7n1TAs4qke7E8vrL-iyzpVzewa9ChQkpMB9wpOyv2cpbAQ/viewform';
             window.open(targetUrl, '_blank', 'noopener,noreferrer');
         });
     }
@@ -618,7 +614,7 @@ function setupEventListeners() {
     if (exploreActivityBtn) {
         exploreActivityBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const templateUri = exploreActivityBtn.href || "https://express.adobe.com/design/template/urn:aaid:sc:VA6C2:d60097e3-7f0f-5614-a7b7-4a89ae8640af?category=text&entryPoint=template&taskID=instagram-portrait-post";
+            const templateUri = exploreActivityBtn.href || "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:87e5a21a-1964-5201-977b-86984fb1c0ce?category=text&entryPoint=template&taskID=instagram-story";
             window.open(templateUri, "_blank", "noopener,noreferrer");
         });
     }
