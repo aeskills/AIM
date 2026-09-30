@@ -52,9 +52,9 @@ const translations = {
         welcomeTitle: "Welcome to AIM",
         welcomeDesc: "AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.",
         activityOfMonthTag: "Activity of the Month",
-        activityOfMonthTitle: "My Favourite Sport, My Inspiration!",
-        independenceTitle: "My Favourite Sport, My Inspiration!",
-        independenceDesc: "Ready to Play? Dive into your favourite sports and discover the incredible sportspersons who inspire you!",
+        activityOfMonthTitle: "Gandhi Jayanti",
+        independenceTitle: "Gandhi Jayanti",
+        independenceDesc: "<strong style=\"color: var(--color-text-primary); font-size: 0.92rem;\">Let Peace Begin With Us</strong><br>Happy Gandhi Jayanti!<br>This Gandhi Jayanti, let’s honour Mahatma Gandhi’s message of peace and non-violence by making a simple promise to ourselves.<br><em style=\"color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;\">Choose kindness. Speak with respect. Respond with peace.</em>",
         exploreActivityBtn: "Activity Template",
         submitMonthlyBtn: "Submit Activity Link",
         monthlyTutorialsTitle: "Monthly Activity Tutorials",
@@ -99,7 +99,8 @@ const translations = {
         emptyActivitiesDesc: "Try clearing your filters or choosing another grade level to see what is available.",
         resetFilters: "Reset Filters",
         backToHome: "Back to Home",
-        backToWelcome: "Back to Language Selection",
+        backToWelcome: "Back to Home",
+        backToGrades: "Back to Grade Selection",
         backToActivities: "Back to activities",
         descriptionTitle: "Description",
         skillsTitle: "Skills in Focus",
@@ -187,9 +188,9 @@ const translations = {
         welcomeTitle: "AIM में आपका स्वागत है",
         welcomeDesc: "AIM भारत में छात्रों के लिए एक रचनात्मक शिक्षण स्थल है। हर हफ्ते आपको Adobe Express पर बनी नई गतिविधियाँ मिलती हैं। पोस्टर डिज़ाइन करें, इमेजेस जनरेट करें, वीडियो बनाएँ, और अपनी चीज़ें बनाएँ। सरल से शुरुआत करें और हर हफ्ते आगे बढ़ें।",
         activityOfMonthTag: "महीने की गतिविधि",
-        activityOfMonthTitle: "मेरा पसंदीदा खेल, मेरी प्रेरणा!",
-        independenceTitle: "मेरा पसंदीदा खेल, मेरी प्रेरणा!",
-        independenceDesc: "खेलने के लिए तैयार हैं? अपने पसंदीदा खेलों में शामिल हों और उन शानदार खिलाड़ियों को जानें जो आपको प्रेरित करते हैं!",
+        activityOfMonthTitle: "गांधी जयंती",
+        independenceTitle: "गांधी जयंती",
+        independenceDesc: "<strong style=\"color: var(--color-text-primary); font-size: 0.92rem;\">शांति की शुरुआत हमसे हो</strong><br>गांधी जयंती की हार्दिक शुभकामनाएँ!<br>इस गांधी जयंती पर, आइए हम स्वयं से एक सरल वादा करके महात्मा गांधी के शांति और अहिंसा के संदेश का सम्मान करें।<br><em style=\"color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;\">दयालुता चुनें। सम्मान के साथ बोलें। शांति से उत्तर दें।</em>",
         exploreActivityBtn: "गतिविधि टेम्पलेट",
         submitMonthlyBtn: "गतिविधि लिंक जमा करें",
         monthlyTutorialsTitle: "मासिक गतिविधि ट्यूटोरियल",
@@ -234,7 +235,8 @@ const translations = {
         emptyActivitiesDesc: "उपलब्ध गतिविधियों को देखने के लिए फ़िल्टर बदलें या कोई अन्य कक्षा चुनें।",
         resetFilters: "फ़िल्टर रीसेट करें",
         backToHome: "मुख्य पृष्ठ पर जाएं",
-        backToWelcome: "भाषा चयन पर वापस जाएं",
+        backToWelcome: "होम पेज पर वापस जाएं",
+        backToGrades: "कक्षा चयन पर वापस जाएं",
         backToActivities: "गतिविधियों पर वापस जाएं",
         descriptionTitle: "विवरण",
         skillsTitle: "मुख्य कौशल",
@@ -322,7 +324,7 @@ const translations = {
 
 /**
  * Initializes the application. Loads submissions from LocalStorage,
- * binds events, and fetches the default curriculum spreadsheet.
+ * binds events, immediately renders the homepage, and fetches the default curriculum spreadsheet.
  * @returns {Promise<void>}
  */
 async function init() {
@@ -332,18 +334,70 @@ async function init() {
     
     detectMode();
     setupEventListeners();
+    // Render Homepage (step-welcome) IMMEDIATELY so visitors never see an inner step
+    render();
+    
     await loadDefaultExcel();
 }
 
 /**
+ * Reliably navigates to the AIM Welcome Homepage from anywhere in the application.
+ * Cleans selections, resets tutorial mode, updates history, and renders.
+ * @returns {void}
+ */
+function navigateToHome() {
+    resetInstructionPopupState();
+    state.tutorialMode = 'choose';
+    state.selectedGrade = null;
+    state.selectedActivity = null;
+    state.filterSubject = 'All';
+    state.currentStep = 'welcome';
+    if (typeof history !== 'undefined' && history.pushState) {
+        history.pushState({ step: 'welcome' }, '', window.location.pathname);
+    }
+    render();
+}
+
+/**
+ * Pushes state to the browser history stack for backward/forward navigation.
+ * @param {string} step - The target step.
+ * @returns {void}
+ */
+function pushNavigationState(step) {
+    if (typeof history !== 'undefined' && history.pushState) {
+        const payload = {
+            step: step,
+            tutorialMode: state.tutorialMode,
+            language: state.language,
+            selectedGrade: state.selectedGrade,
+            filterSubject: state.filterSubject,
+            activityName: state.selectedActivity ? state.selectedActivity.activity_name : null
+        };
+        history.pushState(payload, '', window.location.pathname);
+    }
+}
+
+/**
  * Detects whether we are in Hindi or English subfolder, hash, or choose welcome path.
+ * Guarantees that opening the site always starts on the Homepage.
  * @returns {void}
  */
 function detectMode() {
     state.tutorialMode = 'choose';
     state.currentStep = 'welcome';
+    state.selectedGrade = null;
+    state.selectedActivity = null;
+    state.filterSubject = 'All';
+
+    // Clear any leftover hash cleanly from URL without page jump or history pollution
     if (window.location.hash) {
-        window.location.hash = '';
+        try {
+            history.replaceState({ step: 'welcome' }, '', window.location.pathname);
+        } catch (e) {
+            window.location.hash = '';
+        }
+    } else if (typeof history !== 'undefined' && history.replaceState) {
+        history.replaceState({ step: 'welcome' }, '', window.location.pathname);
     }
 }
 
@@ -372,8 +426,7 @@ function setupEventListeners() {
     if (logoLink) {
         logoLink.addEventListener('click', (e) => {
             e.preventDefault();
-            state.tutorialMode = 'choose';
-            resetState();
+            navigateToHome();
         });
     }
 
@@ -405,7 +458,10 @@ function setupEventListeners() {
             resetInstructionPopupState();
             state.tutorialMode = 'english';
             state.language = 'en';
+            state.selectedGrade = null;
+            state.selectedActivity = null;
             state.currentStep = 'grade';
+            pushNavigationState('grade');
             render();
         });
     }
@@ -417,7 +473,10 @@ function setupEventListeners() {
             resetInstructionPopupState();
             state.tutorialMode = 'hindi';
             state.language = 'hi';
+            state.selectedGrade = null;
+            state.selectedActivity = null;
             state.currentStep = 'grade';
+            pushNavigationState('grade');
             render();
         });
     }
@@ -428,7 +487,10 @@ function setupEventListeners() {
             e.preventDefault();
             resetInstructionPopupState();
             state.tutorialMode = 'kaushal-bodh';
+            state.selectedGrade = null;
+            state.selectedActivity = null;
             state.currentStep = 'grade';
+            pushNavigationState('grade');
             render();
         });
     }
@@ -438,10 +500,7 @@ function setupEventListeners() {
     if (backToWelcomeLink) {
         backToWelcomeLink.addEventListener('click', (e) => {
             e.preventDefault();
-            resetInstructionPopupState();
-            state.tutorialMode = 'choose';
-            state.currentStep = 'welcome';
-            render();
+            navigateToHome();
         });
     }
 
@@ -473,6 +532,7 @@ function setupEventListeners() {
             } else {
                 state.currentStep = 'activities';
             }
+            pushNavigationState(state.currentStep);
             render();
         });
     }
@@ -486,9 +546,14 @@ function setupEventListeners() {
             if (state.tutorialMode === 'kaushal-bodh') {
                 state.filterSubject = '';
                 state.currentStep = 'form-of-work';
+                pushNavigationState('form-of-work');
                 render();
             } else {
-                resetState();
+                state.selectedActivity = null;
+                state.filterSubject = 'All';
+                state.currentStep = 'grade';
+                pushNavigationState('grade');
+                render();
             }
         });
     }
@@ -499,7 +564,9 @@ function setupEventListeners() {
         backToGradesFromFow.addEventListener('click', (e) => {
             e.preventDefault();
             state.filterSubject = '';
+            state.selectedGrade = null;
             state.currentStep = 'grade';
+            pushNavigationState('grade');
             render();
         });
     }
@@ -614,7 +681,7 @@ function setupEventListeners() {
     if (exploreActivityBtn) {
         exploreActivityBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const templateUri = exploreActivityBtn.href || "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:87e5a21a-1964-5201-977b-86984fb1c0ce?category=text&entryPoint=template&taskID=instagram-story";
+            const templateUri = exploreActivityBtn.href || "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:a10b68e9-5194-50e3-ae9c-78c325399858?category=text&entryPoint=template&taskID=instagram-portrait-post";
             window.open(templateUri, "_blank", "noopener,noreferrer");
         });
     }
@@ -627,8 +694,6 @@ function setupEventListeners() {
             handleStudentSubmission();
         });
     }
-
-
 
     // Quick Activity Search Input listeners
     const quickSearchInput = document.getElementById('quick-activity-search');
@@ -657,12 +722,39 @@ function setupEventListeners() {
         });
     }
 
+    // Listen for browser back/forward buttons (HTML5 History API)
+    window.addEventListener('popstate', (e) => {
+        const pop = e.state;
+        if (!pop || pop.step === 'welcome') {
+            state.tutorialMode = 'choose';
+            state.selectedGrade = null;
+            state.selectedActivity = null;
+            state.filterSubject = 'All';
+            state.currentStep = 'welcome';
+            render();
+            return;
+        }
 
+        state.tutorialMode = pop.tutorialMode || state.tutorialMode;
+        state.language = pop.language || state.language;
+        state.selectedGrade = pop.selectedGrade || null;
+        state.filterSubject = pop.filterSubject || 'All';
 
-    // Listen for hash changes to support back/forward browser navigation
-    window.addEventListener('hashchange', () => {
-        if (window.location.hash) {
-            window.location.hash = '';
+        if (pop.step === 'detail' && pop.activityName) {
+            const pool = (state.allActivities || []).concat(state.kaushalBodhActivities || []);
+            state.selectedActivity = pool.find(a => a.activity_name === pop.activityName) || null;
+        } else {
+            state.selectedActivity = null;
+        }
+
+        state.currentStep = pop.step;
+        render();
+    });
+
+    // Handle back/forward cache (bfcache) restore
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            navigateToHome();
         }
     });
 
@@ -1514,38 +1606,50 @@ function renderBreadcrumbs() {
 
     let html = '';
 
-    // Level 1: Home
-    const homeText = translations[state.language || 'en'].homeBreadcrumb;
-    if (state.currentStep === 'grade') {
-        html += `<li><span class="current">${homeText}</span></li>`;
+    // Level 1: Home (Always navigates back to AIM Welcome Homepage)
+    const homeText = (translations[state.language || 'en'] && translations[state.language || 'en'].homeBreadcrumb) || 'Home';
+    html += `<li><a href="#" id="breadcrumb-home" title="${escapeHTML(homeText)}">🏠 ${escapeHTML(homeText)}</a></li>`;
+
+    // Level 2: Section / Mode
+    let modeLabel = '';
+    if (state.tutorialMode === 'kaushal-bodh') {
+        modeLabel = (translations[state.language || 'en'] && translations[state.language || 'en'].kaushalBodhTab) || 'Kaushal Bodh';
+    } else if (state.tutorialMode === 'hindi') {
+        modeLabel = (translations[state.language || 'en'] && translations[state.language || 'en'].hindiTutorials) || 'DCAIS Hindi';
     } else {
-        html += `<li><a href="#" id="breadcrumb-home">${homeText}</a></li>`;
+        modeLabel = (translations[state.language || 'en'] && translations[state.language || 'en'].englishTutorials) || 'DCAIS English';
     }
 
-    // Level 2: Grade Selected
+    if (state.currentStep === 'grade') {
+        html += `<li><span class="current">${escapeHTML(modeLabel)}</span></li>`;
+    } else {
+        html += `<li><a href="#" id="breadcrumb-mode">${escapeHTML(modeLabel)}</a></li>`;
+    }
+
+    // Level 3: Grade Selected
     if (state.selectedGrade) {
         const displayGrade = getDisplayGradeName(state.selectedGrade);
         if (state.currentStep === 'form-of-work') {
-            html += `<li><span class="current">${displayGrade}</span></li>`;
+            html += `<li><span class="current">${escapeHTML(displayGrade)}</span></li>`;
         } else if (state.currentStep === 'activities' || state.currentStep === 'detail') {
-            html += `<li><a href="#" id="breadcrumb-grade">${displayGrade}</a></li>`;
+            html += `<li><a href="#" id="breadcrumb-grade">${escapeHTML(displayGrade)}</a></li>`;
         }
     }
 
-    // Level 3: Form of Work / Activities
+    // Level 4: Form of Work / Activities
     if (state.tutorialMode === 'kaushal-bodh' && state.filterSubject && state.filterSubject !== 'All') {
         const fowInfo = getFormOfWorkInfo(state.filterSubject);
         const fowName = fowInfo.name;
         if (state.currentStep === 'activities') {
-            html += `<li><span class="current">${fowInfo.icon} ${fowName}</span></li>`;
+            html += `<li><span class="current">${fowInfo.icon} ${escapeHTML(fowName)}</span></li>`;
         } else if (state.currentStep === 'detail') {
-            html += `<li><a href="#" id="breadcrumb-fow">${fowInfo.icon} ${fowName}</a></li>`;
+            html += `<li><a href="#" id="breadcrumb-fow">${fowInfo.icon} ${escapeHTML(fowName)}</a></li>`;
         }
     }
 
-    // Level 4: Activity Detail
+    // Level 5: Activity Detail
     if (state.selectedActivity && state.currentStep === 'detail') {
-        html += `<li><span class="current">${state.selectedActivity.activity_name}</span></li>`;
+        html += `<li><span class="current">${escapeHTML(state.selectedActivity.activity_name)}</span></li>`;
     }
 
     breadcrumbsList.innerHTML = html;
@@ -1555,7 +1659,21 @@ function renderBreadcrumbs() {
     if (homeBtn) {
         homeBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            resetState();
+            navigateToHome();
+        });
+    }
+
+    const modeBtn = document.getElementById('breadcrumb-mode');
+    if (modeBtn) {
+        modeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetInstructionPopupState();
+            state.selectedGrade = null;
+            state.selectedActivity = null;
+            state.filterSubject = 'All';
+            state.currentStep = 'grade';
+            pushNavigationState('grade');
+            render();
         });
     }
 
@@ -1563,12 +1681,14 @@ function renderBreadcrumbs() {
     if (gradeBtn) {
         gradeBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            resetInstructionPopupState();
             state.selectedActivity = null;
             if (state.tutorialMode === 'kaushal-bodh') {
                 state.currentStep = 'form-of-work';
             } else {
                 state.currentStep = 'activities';
             }
+            pushNavigationState(state.currentStep);
             render();
         });
     }
@@ -1577,12 +1697,14 @@ function renderBreadcrumbs() {
     if (fowBtn) {
         fowBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            resetInstructionPopupState();
             state.selectedActivity = null;
             if (state.tutorialMode === 'kaushal-bodh') {
                 state.currentStep = 'form-of-work';
             } else {
                 state.currentStep = 'activities';
             }
+            pushNavigationState(state.currentStep);
             render();
         });
     }
@@ -1669,6 +1791,7 @@ function renderGradeSelection() {
                 state.filterSubject = 'All';
                 state.currentStep = 'activities';
             }
+            pushNavigationState(state.currentStep);
             render();
         });
     });
@@ -1745,6 +1868,7 @@ function renderQuickSearchResults(query = '') {
                 state.selectedGrade = actGrade;
                 state.selectedActivity = selected;
                 state.currentStep = 'detail';
+                pushNavigationState('detail');
                 render();
             }
         });
@@ -2141,6 +2265,7 @@ function renderFormOfWorkCards() {
                     if (selected) {
                         state.selectedActivity = selected;
                         state.currentStep = 'detail';
+                        pushNavigationState('detail');
                         render();
                     }
                 });
@@ -2216,6 +2341,7 @@ function renderFilteredActivities() {
                     if (selected) {
                         state.selectedActivity = selected;
                         state.currentStep = 'detail';
+                        pushNavigationState('detail');
                         render();
                     }
                 });
@@ -2231,6 +2357,7 @@ function renderFilteredActivities() {
                     if (selected) {
                         state.selectedActivity = selected;
                         state.currentStep = 'detail';
+                        pushNavigationState('detail');
                         render();
                     }
                 });
@@ -2761,9 +2888,11 @@ function resetSubmissionUI() {
 function showLoader() {
     document.getElementById('loader-view').classList.remove('hidden');
     document.getElementById('error-view').classList.add('hidden');
-    document.getElementById('step-grade').classList.add('hidden');
-    document.getElementById('step-activities').classList.add('hidden');
-    document.getElementById('step-detail').classList.add('hidden');
+    if (state.currentStep !== 'welcome') {
+        document.getElementById('step-grade').classList.add('hidden');
+        document.getElementById('step-activities').classList.add('hidden');
+        document.getElementById('step-detail').classList.add('hidden');
+    }
 }
 
 /**
@@ -2835,7 +2964,11 @@ function translateUIInternal() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict && dict[key]) {
-            el.innerText = dict[key];
+            if (el.getAttribute('data-i18n-html') === 'true') {
+                el.innerHTML = dict[key];
+            } else {
+                el.innerText = dict[key];
+            }
         }
     });
 

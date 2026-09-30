@@ -9,11 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=2.6">
+    <link rel="stylesheet" href="styles.css?v=2.8">
     <!-- Local libraries for offline-first resilience -->
     <script src="xlsx.full.min.js" defer></script>
     <script src="papaparse.min.js" defer></script>
-    <script src="app.js?v=2.6" defer></script>
+    <script src="app.js?v=2.8" defer></script>
 </head>
 <body>
     <!-- Global Background Removed -->
@@ -61,7 +61,7 @@
         </div>
 
         <!-- Step 0: Welcome / Language Selection Screen -->
-        <section id="step-welcome" class="step-section hidden">
+        <section id="step-welcome" class="step-section">
             <div style="display: flex; flex-direction: column; min-height: calc(100vh - 64px); margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); margin-top: -1.5rem; margin-bottom: -2rem;">
                 
                 <!-- Main Container Wrapper (Max Width 1280px) -->
@@ -88,17 +88,17 @@
                     </div>
 
                     <!-- Main Grid Row: Left 68% vs Right 32% -->
-                    <div style="width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; margin-top: 0.25rem;">
+                    <div style="width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; align-items: stretch; margin-top: 0.25rem;">
                         
                         <!-- Left Column (68%) - Activity of the Month Card -->
                         <div style="flex: 1 1 65%; min-width: 320px; display: flex; flex-direction: column;">
                             
-                            <!-- Content Card: Activity of the Month (My Favourite Sport, My Inspiration!) -->
-                            <div style="background: #ffffff; border-radius: var(--radius-xl); box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid var(--color-border); border-top: 4px solid #eb1000; z-index: 10; width: 100%; overflow: hidden; box-sizing: border-box; display: flex; flex-direction: column;">
+                            <!-- Content Card: Activity of the Month (Gandhi Jayanti) -->
+                            <div style="background: #ffffff; border-radius: var(--radius-xl); box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid var(--color-border); border-top: 4px solid #eb1000; z-index: 10; width: 100%; overflow: hidden; box-sizing: border-box; display: flex; flex-direction: column; height: 100%;">
                                 
-                                <!-- Top Visual Banner with Sports Illustration -->
-                                <div style="width: 100%; height: 135px; position: relative; overflow: hidden; background-color: #fef8f0;">
-                                    <img src="sports_activity_bg.jpg" alt="My Favourite Sport, My Inspiration! Activity Banner" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;" />
+                                <!-- Top Visual Banner with Gandhi Jayanti Illustration -->
+                                <div style="width: 100%; height: 175px; position: relative; overflow: hidden; background-color: #fef8f0;">
+                                    <img src="gandhi_jayanti_bg.jpg?v=2" alt="Gandhi Jayanti Activity Banner" style="width: 100%; height: 100%; object-fit: cover; object-position: left center; display: block;" />
                                     <!-- Badge Pill Tag Overlay -->
                                     <div style="position: absolute; top: 0.65rem; right: 0.75rem; background: linear-gradient(135deg, #eb1000, #c40d00); color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25); display: inline-flex; align-items: center; gap: 0.3rem;" data-i18n="activityOfMonthTag">
                                         <span>⭐</span> Activity of the Month
@@ -106,13 +106,20 @@
                                 </div>
 
                                 <!-- Bottom Content & Action Buttons -->
-                                <div style="padding: 0.85rem 1.25rem 0.85rem; text-align: center; display: flex; flex-direction: column; align-items: center;">
-                                    <h2 style="font-size: 1.3rem; color: var(--color-text-primary); margin: 0 0 0.3rem 0; font-family: var(--font-heading); font-weight: 800; line-height: 1.25;" data-i18n="activityOfMonthTitle">My Favourite Sport, My Inspiration!</h2>
-                                    <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0 0 0.8rem 0; line-height: 1.4; max-width: 560px;" data-i18n="independenceDesc">Ready to Play? Dive into your favourite sports and discover the incredible sportspersons who inspire you!</p>
+                                <div style="padding: 0.85rem 1.25rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; flex: 1;">
+                                    <div>
+                                        <h2 style="font-size: 1.35rem; color: var(--color-text-primary); margin: 0 0 0.35rem 0; font-family: var(--font-heading); font-weight: 800; line-height: 1.25;" data-i18n="activityOfMonthTitle">Gandhi Jayanti</h2>
+                                        <div class="aotm-description" style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 0 0 0.85rem 0; line-height: 1.5; max-width: 580px;" data-i18n="independenceDesc" data-i18n-html="true">
+                                            <strong style="color: var(--color-text-primary); font-size: 0.92rem;">Let Peace Begin With Us</strong><br>
+                                            Happy Gandhi Jayanti!<br>
+                                            This Gandhi Jayanti, let’s honour Mahatma Gandhi’s message of peace and non-violence by making a simple promise to ourselves.<br>
+                                            <em style="color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;">Choose kindness. Speak with respect. Respond with peace.</em>
+                                        </div>
+                                    </div>
                                     
                                     <div style="width: 100%;">
                                         <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.45rem;">
-                                            <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:87e5a21a-1964-5201-977b-86984fb1c0ce?category=text&entryPoint=template&taskID=instagram-story" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn" style="background-color: #eb1000; border: none; box-shadow: 0 4px 12px rgba(235, 16, 0, 0.35); color: white; padding: 0.5rem 1.15rem; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="exploreActivityBtn">Activity Template</a>
+                                            <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:a10b68e9-5194-50e3-ae9c-78c325399858?category=text&entryPoint=template&taskID=instagram-portrait-post" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn" style="background-color: #eb1000; border: none; box-shadow: 0 4px 12px rgba(235, 16, 0, 0.35); color: white; padding: 0.5rem 1.15rem; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="exploreActivityBtn">Activity Template</a>
                                             <a href="https://docs.google.com/forms/d/e/1FAIpQLScu7n1TAs4qke7E8vrL-iyzpVzewa9ChQkpMB9wpOyv2cpbAQ/viewform" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="submit-monthly-activity-btn" style="border-color: #eb1000; color: #eb1000; background-color: #ffffff; padding: 0.5rem 1.15rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="submitMonthlyBtn">Submit Activity Link</a>
                                         </div>
                                         <p class="submission-disclaimer" style="margin: 0; font-size: 0.7rem; color: var(--color-text-secondary); line-height: 1.35; border-top: 1px dashed rgba(0, 0, 0, 0.12); padding-top: 0.35rem;" data-i18n="submissionDisclaimer">Disclaimer: Submission of details is voluntary and exclusively used for personalized certificates.</p>
@@ -166,10 +173,10 @@
         </section>
 
         <!-- Step 1: Grade Selection Screen -->
-        <section id="step-grade" class="step-section">
+        <section id="step-grade" class="step-section hidden">
             <div class="back-link-wrapper">
                 <a href="#" id="back-to-welcome-link" class="back-link">
-                    <span class="arrow" aria-hidden="true">←</span> <span data-i18n="backToWelcome">Back to Language Selection</span>
+                    <span class="arrow" aria-hidden="true">←</span> <span data-i18n="backToWelcome">Back to Home</span>
                 </a>
             </div>
             <div class="hero-section" style="padding-bottom: 1.5rem;">
@@ -246,7 +253,7 @@
         <section id="step-activities" class="step-section hidden">
             <div class="back-link-wrapper">
                 <a href="#" id="back-to-grades-link" class="back-link">
-                    <span class="arrow" aria-hidden="true">←</span> <span data-i18n="backToHome">Back to Home</span>
+                    <span class="arrow" aria-hidden="true">←</span> <span data-i18n="backToGrades">Back to Grade Selection</span>
                 </a>
             </div>
             <div class="step-header">
