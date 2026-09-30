@@ -328,6 +328,12 @@ const translations = {
  * @returns {Promise<void>}
  */
 async function init() {
+    // Disable automatic browser scroll restoration on reload
+    if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     // Wipe all existing submissions unconditionally for a clean slate
     localStorage.setItem('aim_submissions', JSON.stringify([]));
     state.submissions = [];
@@ -355,6 +361,7 @@ function navigateToHome() {
     if (typeof history !== 'undefined' && history.pushState) {
         history.pushState({ step: 'welcome' }, '', window.location.pathname);
     }
+    window.scrollTo(0, 0);
     render();
 }
 
@@ -399,6 +406,8 @@ function detectMode() {
     } else if (typeof history !== 'undefined' && history.replaceState) {
         history.replaceState({ step: 'welcome' }, '', window.location.pathname);
     }
+
+    window.scrollTo(0, 0);
 }
 
 /**
@@ -1580,12 +1589,12 @@ function render() {
     // Translate all strings in the document DOM
     translateUIInternal();
 
-    // Fire focus updates for screen readers
+    // Fire focus updates for screen readers without scrolling the viewport
     if (focusId) {
         const focusEl = document.getElementById(focusId);
         if (focusEl) {
             setTimeout(() => {
-                focusEl.focus();
+                focusEl.focus({ preventScroll: true });
             }, 50);
         }
     }
@@ -2886,12 +2895,14 @@ function resetSubmissionUI() {
  * @returns {void}
  */
 function showLoader() {
-    document.getElementById('loader-view').classList.remove('hidden');
     document.getElementById('error-view').classList.add('hidden');
     if (state.currentStep !== 'welcome') {
+        document.getElementById('loader-view').classList.remove('hidden');
         document.getElementById('step-grade').classList.add('hidden');
         document.getElementById('step-activities').classList.add('hidden');
         document.getElementById('step-detail').classList.add('hidden');
+    } else {
+        document.getElementById('loader-view').classList.add('hidden');
     }
 }
 
