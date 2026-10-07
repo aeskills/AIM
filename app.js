@@ -52,9 +52,9 @@ const translations = {
         welcomeTitle: "Welcome to AIM",
         welcomeDesc: "AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.",
         activityOfMonthTag: "Activity of the Month",
-        activityOfMonthTitle: "Gandhi Jayanti",
-        independenceTitle: "Gandhi Jayanti",
-        independenceDesc: "<strong style=\"color: var(--color-text-primary); font-size: 0.92rem;\">Let Peace Begin With Us</strong><br>Happy Gandhi Jayanti!<br>This Gandhi Jayanti, let’s honour Mahatma Gandhi’s message of peace and non-violence by making a simple promise to ourselves.<br><em style=\"color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;\">Choose kindness. Speak with respect. Respond with peace.</em>",
+        activityOfMonthTitle: "Diverse in Culture. United in Spirit.",
+        independenceTitle: "Diverse in Culture. United in Spirit.",
+        independenceDesc: "Festivals remind us that our greatest strength lies in the unity we find in our diversity. This festive season, let’s celebrate our differences, share joy, and come together to create a more inclusive and harmonious community.<br><em style=\"color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;\">Respect every difference. Share genuine joy. Celebrate our unity.</em>",
         exploreActivityBtn: "Activity Template",
         submitMonthlyBtn: "Submit Activity Link",
         monthlyTutorialsTitle: "Monthly Activity Tutorials",
@@ -188,9 +188,9 @@ const translations = {
         welcomeTitle: "AIM में आपका स्वागत है",
         welcomeDesc: "AIM भारत में छात्रों के लिए एक रचनात्मक शिक्षण स्थल है। हर हफ्ते आपको Adobe Express पर बनी नई गतिविधियाँ मिलती हैं। पोस्टर डिज़ाइन करें, इमेजेस जनरेट करें, वीडियो बनाएँ, और अपनी चीज़ें बनाएँ। सरल से शुरुआत करें और हर हफ्ते आगे बढ़ें।",
         activityOfMonthTag: "महीने की गतिविधि",
-        activityOfMonthTitle: "गांधी जयंती",
-        independenceTitle: "गांधी जयंती",
-        independenceDesc: "<strong style=\"color: var(--color-text-primary); font-size: 0.92rem;\">शांति की शुरुआत हमसे हो</strong><br>गांधी जयंती की हार्दिक शुभकामनाएँ!<br>इस गांधी जयंती पर, आइए हम स्वयं से एक सरल वादा करके महात्मा गांधी के शांति और अहिंसा के संदेश का सम्मान करें।<br><em style=\"color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;\">दयालुता चुनें। सम्मान के साथ बोलें। शांति से उत्तर दें।</em>",
+        activityOfMonthTitle: "संस्कृति में विविधता, भावना में एकता",
+        independenceTitle: "संस्कृति में विविधता, भावना में एकता",
+        independenceDesc: "त्यौहार हमें याद दिलाते हैं कि हमारी सबसे बड़ी ताकत उस एकता में है जो हमें अपनी विविधता में मिलती है। इस त्योहारी मौसम में, आइए हम अपनी विविधताओं का उत्सव मनाएँ, खुशियाँ बाँटें और एक अधिक समावेशी व सौहार्दपूर्ण समुदाय बनाने के लिए एकजुट हों।<br><em style=\"color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;\">हर अंतर का सम्मान करें। सच्ची खुशियाँ बाँटें। अपनी एकता का उत्सव मनाएँ।</em>",
         exploreActivityBtn: "गतिविधि टेम्पलेट",
         submitMonthlyBtn: "गतिविधि लिंक जमा करें",
         monthlyTutorialsTitle: "मासिक गतिविधि ट्यूटोरियल",
@@ -690,7 +690,7 @@ function setupEventListeners() {
     if (exploreActivityBtn) {
         exploreActivityBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const templateUri = exploreActivityBtn.href || "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:a10b68e9-5194-50e3-ae9c-78c325399858?category=text&entryPoint=template&taskID=instagram-portrait-post";
+            const templateUri = exploreActivityBtn.href || "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:0da26552-f748-5727-aca2-6840eeadd2ca?category=text&entryPoint=template&taskID=whatsapp-status";
             window.open(templateUri, "_blank", "noopener,noreferrer");
         });
     }
