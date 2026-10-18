@@ -1964,6 +1964,61 @@ a:hover {
     box-shadow: 0 2px 10px rgba(235, 16, 0, 0.4) !important;
 }
 
+/* Activity of the Month Language Switcher Pills */
+.aotm-lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #f1f5f9;
+    padding: 0.2rem 0.3rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(203, 213, 225, 0.85);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0.35rem;
+}
+
+.aotm-pill-btn {
+    padding: 0.22rem 0.85rem;
+    border-radius: 9999px;
+    border: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aotm-pill-btn:hover {
+    color: #0f172a;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.aotm-pill-btn.active {
+    background: #ffffff;
+    color: #eb1000;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.aotm-description {
+    line-height: 1.38 !important;
+    min-height: 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.aotm-description p {
+    margin: 0 0 0.25rem 0 !important;
+}
+
+
+
 @media (max-width: 480px) {
     .logo-text-solid {
         display: none !important;

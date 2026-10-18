@@ -44,7 +44,33 @@ const state = {
     submissions: [],
     language: 'en', // 'en' or 'hi'
     userExplicitLanguage: 'en', // Manually set via language toggle
-    tutorialMode: 'choose' // 'choose' | 'hindi' | 'english' | 'kaushal-bodh'
+    tutorialMode: 'choose', // 'choose' | 'hindi' | 'english' | 'kaushal-bodh'
+    aotmLanguage: 'en'
+};
+
+const MONTHLY_ACTIVITIES = {
+    en: {
+        title: "Bring Your Childhood Memories to Life with Adobe Express! ✨",
+        desc: "<p style=\"margin: 0 0 0.25rem 0; line-height: 1.38;\">Think of a magical childhood memory that still makes you smile—celebrating Diwali with family, playing with friends, or summer holidays at grandparents’ home. Write about what happened, what made the moment special, how you felt, and why you will always remember it. Then watch the tutorial to transform your memory into a beautiful visual.</p><div style=\"color: #eb1000; font-weight: 700; font-size: 0.82rem;\">Imagine. Create. Express your story!</div>",
+        templateUrl: "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:fcf64e48-8456-5141-9d68-55b0d404d468?category=text&entryPoint=template&taskID=poster",
+        videoUrl: "https://youtu.be/eRA7DjSb5gs",
+        videoId: "eRA7DjSb5gs",
+        videoTitle: "Children's Day Activity Tutorial Video",
+        videoSubtitle: "Learn how to use Adobe Express step-by-step",
+        btnText: "Activity Template",
+        watchBtnText: "▶ Watch Video"
+    },
+    hi: {
+        title: "बारिश के दिनों में कागज़ की नाव बनाना और खेलना! ☔🛶",
+        desc: "<p style=\"margin: 0 0 0.25rem 0; line-height: 1.38;\">याद कीजिए बचपन के उन प्यारे दिनों को, जब बारिश में कागज़ की नाव बनाकर दोस्तों के साथ पानी में तैराते थे। कागज़ की नाव बनाना, उसे पानी में बढ़ते देखना, दोस्तों संग हँसना बचपन को खास बना देता था। अपनी याद को शब्दों में लिखिए और Adobe Express से इसे सुंदर चित्र में बदलें!</p><div style=\"color: #eb1000; font-weight: 700; font-size: 0.82rem;\">सोचिए, याद कीजिए और अपनी बचपन की कहानी को रचनात्मक रूप से जीवंत बनाइए! 🎨🌧️</div>",
+        templateUrl: "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:3fda717c-85e0-57ed-8cab-bf340edd76d9?category=text&entryPoint=template&taskID=poster",
+        videoUrl: "https://youtu.be/M1s8vTaJLrY",
+        videoId: "M1s8vTaJLrY",
+        videoTitle: "कागज़ की नाव गतिविधि ट्यूटोरियल वीडियो",
+        videoSubtitle: "देखें कि Adobe Express पर अपनी यादों को कैसे डिज़ाइन करें",
+        btnText: "गतिविधि टेम्पलेट",
+        watchBtnText: "▶ वीडियो देखें"
+    }
 };
 
 const translations = {
@@ -52,10 +78,17 @@ const translations = {
         welcomeTitle: "Welcome to AIM",
         welcomeDesc: "AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.",
         activityOfMonthTag: "Activity of the Month",
-        activityOfMonthTitle: "Diverse in Culture. United in Spirit.",
-        independenceTitle: "Diverse in Culture. United in Spirit.",
-        independenceDesc: "Festivals remind us that our greatest strength lies in the unity we find in our diversity. This festive season, let’s celebrate our differences, share joy, and come together to create a more inclusive and harmonious community.<br><em style=\"color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;\">Respect every difference. Share genuine joy. Celebrate our unity.</em>",
+        activityOfMonthTitle: "Bring Your Childhood Memories to Life with Adobe Express! ✨",
+        independenceTitle: "Bring Your Childhood Memories to Life with Adobe Express! ✨",
+        independenceDesc: "<p style=\"margin: 0 0 0.25rem 0; line-height: 1.38;\">Think of a magical childhood memory that still makes you smile—celebrating Diwali with family, playing with friends, or summer holidays at grandparents’ home. Write about what happened, what made the moment special, how you felt, and why you will always remember it. Then watch the tutorial to transform your memory into a beautiful visual.</p><div style=\"color: #eb1000; font-weight: 700; font-size: 0.82rem;\">Imagine. Create. Express your story!</div>",
+        englishTab: "English",
+        hindiTab: "Hindi",
         exploreActivityBtn: "Activity Template",
+        tutorialVideoBtn: "🎥 Tutorial Video",
+        tutorialVideoLabel: "Tutorial Video",
+        aotmTutorialTitle: "Children's Day Activity Tutorial Video",
+        aotmTutorialSubtitle: "Learn how to use Adobe Express step-by-step",
+        watchVideoBtn: "▶ Watch Video",
         submitMonthlyBtn: "Submit Activity Link",
         monthlyTutorialsTitle: "Monthly Activity Tutorials",
         englishTutorial: "English Tutorial",
@@ -188,10 +221,17 @@ const translations = {
         welcomeTitle: "AIM में आपका स्वागत है",
         welcomeDesc: "AIM भारत में छात्रों के लिए एक रचनात्मक शिक्षण स्थल है। हर हफ्ते आपको Adobe Express पर बनी नई गतिविधियाँ मिलती हैं। पोस्टर डिज़ाइन करें, इमेजेस जनरेट करें, वीडियो बनाएँ, और अपनी चीज़ें बनाएँ। सरल से शुरुआत करें और हर हफ्ते आगे बढ़ें।",
         activityOfMonthTag: "महीने की गतिविधि",
-        activityOfMonthTitle: "संस्कृति में विविधता, भावना में एकता",
-        independenceTitle: "संस्कृति में विविधता, भावना में एकता",
-        independenceDesc: "त्यौहार हमें याद दिलाते हैं कि हमारी सबसे बड़ी ताकत उस एकता में है जो हमें अपनी विविधता में मिलती है। इस त्योहारी मौसम में, आइए हम अपनी विविधताओं का उत्सव मनाएँ, खुशियाँ बाँटें और एक अधिक समावेशी व सौहार्दपूर्ण समुदाय बनाने के लिए एकजुट हों।<br><em style=\"color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;\">हर अंतर का सम्मान करें। सच्ची खुशियाँ बाँटें। अपनी एकता का उत्सव मनाएँ।</em>",
+        activityOfMonthTitle: "बारिश के दिनों में कागज़ की नाव बनाना और खेलना! ☔🛶",
+        independenceTitle: "बारिश के दिनों में कागज़ की नाव बनाना और खेलना! ☔🛶",
+        independenceDesc: "<p style=\"margin: 0 0 0.25rem 0; line-height: 1.38;\">याद कीजिए बचपन के उन प्यारे दिनों को, जब बारिश में कागज़ की नाव बनाकर दोस्तों के साथ पानी में तैराते थे। कागज़ की नाव बनाना, उसे पानी में बढ़ते देखना, दोस्तों संग हँसना बचपन को खास बना देता था। अपनी याद को शब्दों में लिखिए और Adobe Express से इसे सुंदर चित्र में बदलें!</p><div style=\"color: #eb1000; font-weight: 700; font-size: 0.82rem;\">सोचिए, याद कीजिए और अपनी बचपन की कहानी को रचनात्मक रूप से जीवंत बनाइए! 🎨🌧️</div>",
+        englishTab: "English",
+        hindiTab: "Hindi",
         exploreActivityBtn: "गतिविधि टेम्पलेट",
+        tutorialVideoBtn: "🎥 ट्यूटोरियल वीडियो",
+        tutorialVideoLabel: "ट्यूटोरियल वीडियो",
+        aotmTutorialTitle: "कागज़ की नाव गतिविधि ट्यूटोरियल वीडियो",
+        aotmTutorialSubtitle: "देखें कि Adobe Express पर अपनी यादों को कैसे डिज़ाइन करें",
+        watchVideoBtn: "▶ वीडियो देखें",
         submitMonthlyBtn: "गतिविधि लिंक जमा करें",
         monthlyTutorialsTitle: "मासिक गतिविधि ट्यूटोरियल",
         englishTutorial: "अंग्रेज़ी ट्यूटोरियल",
@@ -447,6 +487,7 @@ function setupEventListeners() {
         langToggleEn.addEventListener('click', () => {
             state.userExplicitLanguage = 'en';
             state.language = 'en';
+            state.aotmLanguage = 'en';
             render();
         });
     }
@@ -455,6 +496,7 @@ function setupEventListeners() {
         langToggleHi.addEventListener('click', () => {
             state.userExplicitLanguage = 'hi';
             state.language = 'hi';
+            state.aotmLanguage = 'hi';
             render();
         });
     }
@@ -690,8 +732,36 @@ function setupEventListeners() {
     if (exploreActivityBtn) {
         exploreActivityBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const templateUri = exploreActivityBtn.href || "https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:0da26552-f748-5727-aca2-6840eeadd2ca?category=text&entryPoint=template&taskID=whatsapp-status";
+            const currentLang = state.aotmLanguage || state.language || 'en';
+            const defaultUrl = (MONTHLY_ACTIVITIES[currentLang] && MONTHLY_ACTIVITIES[currentLang].templateUrl) || MONTHLY_ACTIVITIES.en.templateUrl;
+            const templateUri = exploreActivityBtn.href || defaultUrl;
             window.open(templateUri, "_blank", "noopener,noreferrer");
+        });
+    }
+
+    // Activity of the Month language tab buttons
+    const aotmBtnEn = document.getElementById('aotm-btn-en');
+    const aotmBtnHi = document.getElementById('aotm-btn-hi');
+    if (aotmBtnEn) {
+        aotmBtnEn.addEventListener('click', () => {
+            updateAotmDisplay('en');
+        });
+    }
+    if (aotmBtnHi) {
+        aotmBtnHi.addEventListener('click', () => {
+            updateAotmDisplay('hi');
+        });
+    }
+
+    // Tutorial Video card click handler on Welcome Screen
+    const aotmTutorialCardLink = document.getElementById('aotm-tutorial-card-link');
+    if (aotmTutorialCardLink) {
+        aotmTutorialCardLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentLang = state.aotmLanguage || state.language || 'en';
+            const defaultUrl = (MONTHLY_ACTIVITIES[currentLang] && MONTHLY_ACTIVITIES[currentLang].videoUrl) || MONTHLY_ACTIVITIES.en.videoUrl;
+            const targetUri = aotmTutorialCardLink.href || defaultUrl;
+            window.open(targetUri, "_blank", "noopener,noreferrer");
         });
     }
 
@@ -2998,6 +3068,79 @@ function translateUIInternal() {
             el.setAttribute('aria-label', dict[key]);
         }
     });
+
+    // Synchronize Activity of the Month card (English vs Hindi)
+    const aotmLang = state.aotmLanguage || state.language || 'en';
+    updateAotmDisplay(aotmLang);
+}
+
+/**
+ * Updates the Activity of the Month card content and template link based on selected language ('en' | 'hi').
+ * @param {'en'|'hi'} lang - Language code.
+ */
+function updateAotmDisplay(lang) {
+    const targetLang = (lang === 'hi') ? 'hi' : 'en';
+    state.aotmLanguage = targetLang;
+    const aotmData = MONTHLY_ACTIVITIES[targetLang] || MONTHLY_ACTIVITIES.en;
+
+    const titleEl = document.getElementById('aotm-title');
+    if (titleEl) {
+        titleEl.textContent = aotmData.title;
+    }
+
+    const descEl = document.getElementById('aotm-desc');
+    if (descEl) {
+        descEl.innerHTML = aotmData.desc;
+    }
+
+    const templateBtn = document.getElementById('explore-activity-btn');
+    if (templateBtn) {
+        templateBtn.href = aotmData.templateUrl;
+        templateBtn.textContent = aotmData.btnText;
+    }
+
+    // Tutorial Video Preview Card
+    const tutorialCardLink = document.getElementById('aotm-tutorial-card-link');
+    if (tutorialCardLink) {
+        tutorialCardLink.href = aotmData.videoUrl;
+    }
+
+    const tutorialThumb = document.getElementById('aotm-tutorial-thumb');
+    if (tutorialThumb) {
+        tutorialThumb.src = `https://img.youtube.com/vi/${aotmData.videoId}/hqdefault.jpg`;
+        tutorialThumb.alt = aotmData.videoTitle;
+    }
+
+    const tutorialTitle = document.getElementById('aotm-tutorial-title');
+    if (tutorialTitle) {
+        tutorialTitle.textContent = aotmData.videoTitle;
+    }
+
+    const tutorialSub = document.getElementById('aotm-tutorial-subtitle');
+    if (tutorialSub) {
+        tutorialSub.textContent = aotmData.videoSubtitle;
+    }
+
+    const watchBtn = document.getElementById('aotm-tutorial-watch-btn');
+    if (watchBtn) {
+        watchBtn.textContent = aotmData.watchBtnText;
+    }
+
+    const btnEn = document.getElementById('aotm-btn-en');
+    const btnHi = document.getElementById('aotm-btn-hi');
+    if (btnEn && btnHi) {
+        if (targetLang === 'hi') {
+            btnEn.classList.remove('active');
+            btnEn.setAttribute('aria-selected', 'false');
+            btnHi.classList.add('active');
+            btnHi.setAttribute('aria-selected', 'true');
+        } else {
+            btnHi.classList.remove('active');
+            btnHi.setAttribute('aria-selected', 'false');
+            btnEn.classList.add('active');
+            btnEn.setAttribute('aria-selected', 'true');
+        }
+    }
 }
 
 /**

@@ -93,34 +93,69 @@
                         <!-- Left Column (68%) - Activity of the Month Card -->
                         <div style="flex: 1 1 65%; min-width: 320px; display: flex; flex-direction: column;">
                             
-                            <!-- Content Card: Activity of the Month (Diverse in Culture. United in Spirit.) -->
+                            <!-- Content Card: Activity of the Month (Children's Day) -->
                             <div style="background: #ffffff; border-radius: var(--radius-xl); box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid var(--color-border); border-top: 4px solid #eb1000; z-index: 10; width: 100%; overflow: hidden; box-sizing: border-box; display: flex; flex-direction: column; height: 100%;">
                                 
-                                <!-- Top Visual Banner with Diverse in Culture Illustration -->
-                                <div style="width: 100%; height: 175px; position: relative; overflow: hidden; background-color: #fef8f0;">
-                                    <img src="festive_unity_bg.jpg?v=1" alt="Diverse in Culture. United in Spirit. Activity Banner" style="width: 100%; height: 100%; object-fit: cover; object-position: center 55%; display: block;" />
+                                <!-- Top Visual Banner with Children's Day Illustration -->
+                                <div style="width: 100%; height: 135px; position: relative; overflow: hidden; background-color: #e0f2fe;">
+                                    <img src="childrens_day_bg.jpg?v=5" alt="Children's Day Activity Banner" style="width: 100%; height: 100%; object-fit: cover; object-position: center 58%; display: block;" />
                                     <!-- Badge Pill Tag Overlay -->
-                                    <div style="position: absolute; top: 0.65rem; right: 0.75rem; background: linear-gradient(135deg, #eb1000, #c40d00); color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25); display: inline-flex; align-items: center; gap: 0.3rem;" data-i18n="activityOfMonthTag">
+                                    <div style="position: absolute; top: 0.55rem; right: 0.75rem; background: linear-gradient(135deg, #eb1000, #c40d00); color: white; padding: 0.22rem 0.7rem; border-radius: var(--radius-full); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25); display: inline-flex; align-items: center; gap: 0.3rem;" data-i18n="activityOfMonthTag">
                                         <span>⭐</span> Activity of the Month
                                     </div>
                                 </div>
 
                                 <!-- Bottom Content & Action Buttons -->
-                                <div style="padding: 0.85rem 1.25rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; flex: 1;">
-                                    <div>
-                                        <h2 style="font-size: 1.35rem; color: var(--color-text-primary); margin: 0 0 0.35rem 0; font-family: var(--font-heading); font-weight: 800; line-height: 1.25;" data-i18n="activityOfMonthTitle">Diverse in Culture. United in Spirit.</h2>
-                                        <div class="aotm-description" style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 0 0 0.85rem 0; line-height: 1.5; max-width: 580px;" data-i18n="independenceDesc" data-i18n-html="true">
-                                            Festivals remind us that our greatest strength lies in the unity we find in our diversity. This festive season, let’s celebrate our differences, share joy, and come together to create a more inclusive and harmonious community.<br>
-                                            <em style="color: #eb1000; font-weight: 700; display: inline-block; margin-top: 0.35rem; font-style: normal;">Respect every difference. Share genuine joy. Celebrate our unity.</em>
+                                <div style="padding: 0.65rem 1.15rem 0.75rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; flex: 1;">
+                                    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                                        <!-- Language Toggle Pills: simply English and Hindi -->
+                                        <div class="aotm-lang-toggle" id="aotm-lang-toggle" role="tablist" aria-label="Activity Language Selection" style="margin-bottom: 0.35rem;">
+                                            <button type="button" id="aotm-btn-en" class="aotm-pill-btn active" role="tab" aria-selected="true" data-i18n="englishTab">English</button>
+                                            <button type="button" id="aotm-btn-hi" class="aotm-pill-btn" role="tab" aria-selected="false" data-i18n="hindiTab">Hindi</button>
+                                        </div>
+
+                                        <h2 id="aotm-title" style="font-size: 1.15rem; color: var(--color-text-primary); margin: 0 0 0.25rem 0; font-family: var(--font-heading); font-weight: 800; line-height: 1.25;" data-i18n="activityOfMonthTitle">Bring Your Childhood Memories to Life with Adobe Express! ✨</h2>
+                                        <div id="aotm-desc" class="aotm-description" style="font-size: 0.815rem; color: var(--color-text-secondary); margin: 0 0 0.4rem 0; line-height: 1.38; max-width: 580px; min-height: 96px; display: flex; flex-direction: column; justify-content: center;" data-i18n="independenceDesc" data-i18n-html="true">
+                                            <p style="margin: 0 0 0.25rem 0; line-height: 1.38;">Think of a magical childhood memory that still makes you smile—celebrating Diwali with family, playing with friends, or summer holidays at grandparents’ home. Write about what happened, what made the moment special, how you felt, and why you will always remember it. Then watch the tutorial to transform your memory into a beautiful visual.</p>
+                                            <div style="color: #eb1000; font-weight: 700; font-size: 0.82rem;">Imagine. Create. Express your story!</div>
                                         </div>
                                     </div>
                                     
                                     <div style="width: 100%;">
-                                        <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.45rem;">
-                                            <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:0da26552-f748-5727-aca2-6840eeadd2ca?category=text&entryPoint=template&taskID=whatsapp-status" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn" style="background-color: #eb1000; border: none; box-shadow: 0 4px 12px rgba(235, 16, 0, 0.35); color: white; padding: 0.5rem 1.15rem; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="exploreActivityBtn">Activity Template</a>
-                                            <a href="https://docs.google.com/forms/d/e/1FAIpQLScu7n1TAs4qke7E8vrL-iyzpVzewa9ChQkpMB9wpOyv2cpbAQ/viewform" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="submit-monthly-activity-btn" style="border-color: #eb1000; color: #eb1000; background-color: #ffffff; padding: 0.5rem 1.15rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="submitMonthlyBtn">Submit Activity Link</a>
+                                        <!-- Action Buttons: Activity Template and Submit Activity Link only -->
+                                        <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.4rem;">
+                                            <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:fcf64e48-8456-5141-9d68-55b0d404d468?category=text&entryPoint=template&taskID=poster" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn" style="background-color: #eb1000; border: none; box-shadow: 0 4px 12px rgba(235, 16, 0, 0.35); color: white; padding: 0.45rem 1.25rem; font-size: 0.825rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="exploreActivityBtn">Activity Template</a>
+                                            <a href="https://docs.google.com/forms/d/e/1FAIpQLScu7n1TAs4qke7E8vrL-iyzpVzewa9ChQkpMB9wpOyv2cpbAQ/viewform" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="submit-monthly-activity-btn" style="border-color: #eb1000; color: #eb1000; background-color: #ffffff; padding: 0.45rem 1.25rem; font-size: 0.825rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" data-i18n="submitMonthlyBtn">Submit Activity Link</a>
                                         </div>
-                                        <p class="submission-disclaimer" style="margin: 0; font-size: 0.7rem; color: var(--color-text-secondary); line-height: 1.35; border-top: 1px dashed rgba(0, 0, 0, 0.12); padding-top: 0.35rem;" data-i18n="submissionDisclaimer">Disclaimer: Submission of details is voluntary and exclusively used for personalized certificates.</p>
+
+                                        <!-- Tutorial Video Box (Inside Activity Container) -->
+                                        <div style="width: 100%; background: #f8fafc; border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 0.4rem 0.65rem; box-sizing: border-box; margin-bottom: 0.35rem;">
+                                            <a href="https://youtu.be/eRA7DjSb5gs" target="_blank" rel="noopener noreferrer" id="aotm-tutorial-card-link" class="tutorial-video-hover-card" style="width: 100%; text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 0.85rem; box-sizing: border-box;">
+                                                
+                                                <!-- Left: YouTube Thumbnail -->
+                                                <div style="flex: 0 0 115px; width: 115px; aspect-ratio: 16/9; border-radius: var(--radius-md); overflow: hidden; position: relative; background-color: #000000; flex-shrink: 0;">
+                                                    <img id="aotm-tutorial-thumb" src="https://img.youtube.com/vi/eRA7DjSb5gs/hqdefault.jpg" alt="Children's Day Activity Tutorial Video Thumbnail" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                                                    <div class="play-button-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 28px; height: 28px; border-radius: 50%; background: rgba(235, 16, 0, 0.92); display: flex; justify-content: center; align-items: center; color: white; box-shadow: 0 2px 8px rgba(235, 16, 0, 0.5);">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-left: 2px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Middle: Text -->
+                                                <div style="flex: 1; text-align: left; min-width: 0;">
+                                                    <div style="display: flex; align-items: center; gap: 0.3rem; margin-bottom: 0.05rem;">
+                                                        <span style="font-size: 0.72rem;">🎬</span>
+                                                        <span style="font-size: 0.65rem; font-weight: 800; color: #eb1000; text-transform: uppercase; letter-spacing: 0.04em;" data-i18n="tutorialVideoLabel">Tutorial Video</span>
+                                                    </div>
+                                                    <h3 id="aotm-tutorial-title" style="color: var(--color-text-primary); font-size: 0.835rem; font-weight: 800; margin: 0; font-family: var(--font-heading); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" data-i18n="aotmTutorialTitle">Children's Day Activity Tutorial Video</h3>
+                                                    <p id="aotm-tutorial-subtitle" style="color: var(--color-text-secondary); font-size: 0.7rem; margin: 0.1rem 0 0 0; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" data-i18n="aotmTutorialSubtitle">Learn how to use Adobe Express step-by-step</p>
+                                                </div>
+
+                                                <!-- Right: Watch Button -->
+                                                <span class="btn btn-primary" id="aotm-tutorial-watch-btn" style="background-color: #eb1000; border: none; padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.25rem; flex-shrink: 0; white-space: nowrap;" data-i18n="watchVideoBtn">▶ Watch Video</span>
+                                            </a>
+                                        </div>
+
+                                        <p class="submission-disclaimer" style="margin: 0; font-size: 0.68rem; color: var(--color-text-secondary); line-height: 1.3; border-top: 1px dashed rgba(0, 0, 0, 0.12); padding-top: 0.25rem;" data-i18n="submissionDisclaimer">Disclaimer: Submission of details is voluntary and exclusively used for personalized certificates.</p>
                                     </div>
                                 </div>
                             </div>
