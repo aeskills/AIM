@@ -728,6 +728,44 @@ function setupEventListeners() {
         });
     }
 
+    // Activity of the Month buttons for English & Hindi Longitudinal Boxes
+    const exploreActivityBtnEn = document.getElementById('explore-activity-btn-en');
+    if (exploreActivityBtnEn) {
+        exploreActivityBtnEn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const uri = exploreActivityBtnEn.href || MONTHLY_ACTIVITIES.en.templateUrl;
+            window.open(uri, "_blank", "noopener,noreferrer");
+        });
+    }
+
+    const exploreActivityBtnHi = document.getElementById('explore-activity-btn-hi');
+    if (exploreActivityBtnHi) {
+        exploreActivityBtnHi.addEventListener('click', (e) => {
+            e.preventDefault();
+            const uri = exploreActivityBtnHi.href || MONTHLY_ACTIVITIES.hi.templateUrl;
+            window.open(uri, "_blank", "noopener,noreferrer");
+        });
+    }
+
+    const aotmTutorialCardLinkEn = document.getElementById('aotm-tutorial-card-link-en');
+    if (aotmTutorialCardLinkEn) {
+        aotmTutorialCardLinkEn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const uri = aotmTutorialCardLinkEn.href || MONTHLY_ACTIVITIES.en.videoUrl;
+            window.open(uri, "_blank", "noopener,noreferrer");
+        });
+    }
+
+    const aotmTutorialCardLinkHi = document.getElementById('aotm-tutorial-card-link-hi');
+    if (aotmTutorialCardLinkHi) {
+        aotmTutorialCardLinkHi.addEventListener('click', (e) => {
+            e.preventDefault();
+            const uri = aotmTutorialCardLinkHi.href || MONTHLY_ACTIVITIES.hi.videoUrl;
+            window.open(uri, "_blank", "noopener,noreferrer");
+        });
+    }
+
+    // Fallback for previous single button IDs if present
     const exploreActivityBtn = document.getElementById('explore-activity-btn');
     if (exploreActivityBtn) {
         exploreActivityBtn.addEventListener('click', (e) => {
@@ -739,21 +777,6 @@ function setupEventListeners() {
         });
     }
 
-    // Activity of the Month language tab buttons
-    const aotmBtnEn = document.getElementById('aotm-btn-en');
-    const aotmBtnHi = document.getElementById('aotm-btn-hi');
-    if (aotmBtnEn) {
-        aotmBtnEn.addEventListener('click', () => {
-            updateAotmDisplay('en');
-        });
-    }
-    if (aotmBtnHi) {
-        aotmBtnHi.addEventListener('click', () => {
-            updateAotmDisplay('hi');
-        });
-    }
-
-    // Tutorial Video card click handler on Welcome Screen
     const aotmTutorialCardLink = document.getElementById('aotm-tutorial-card-link');
     if (aotmTutorialCardLink) {
         aotmTutorialCardLink.addEventListener('click', (e) => {
