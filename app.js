@@ -377,6 +377,9 @@ async function init() {
     // Wipe all existing submissions unconditionally for a clean slate
     localStorage.setItem('aim_submissions', JSON.stringify([]));
     state.submissions = [];
+
+    // Instant data hydration from pre-compiled curriculum data for lightning-fast first paint
+    hydrateFromPrecompiledData();
     
     detectMode();
     setupEventListeners();
@@ -384,6 +387,27 @@ async function init() {
     render();
     
     await loadDefaultExcel();
+}
+
+/**
+ * Hydrates state with precompiled curriculum data for instant, zero-latency rendering and offline capability.
+ * @returns {boolean} True if precompiled data was present and loaded.
+ */
+function hydrateFromPrecompiledData() {
+    if (typeof window !== 'undefined' && window.AIM_DEFAULT_DATA) {
+        if (Array.isArray(window.AIM_DEFAULT_DATA.activities) && window.AIM_DEFAULT_DATA.activities.length > 0) {
+            state.allActivities = window.AIM_DEFAULT_DATA.activities;
+        }
+        if (Array.isArray(window.AIM_DEFAULT_DATA.kaushalBodh) && window.AIM_DEFAULT_DATA.kaushalBodh.length > 0) {
+            state.kaushalBodhActivities = window.AIM_DEFAULT_DATA.kaushalBodh;
+        }
+        if (state.allActivities.length > 0) {
+            hideError();
+            hideLoader();
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -1149,38 +1173,73 @@ function parseKaushalBodhExcel(arrayBuffer) {
 }
 
 /**
- * Fetches the default Excel curriculum sheets from the server.
+ * Fetches the default Excel curriculum sheets from the server or loads precompiled data.
+ * Fully offline-resilient, cached, and handles URI-encoding properly.
  * @returns {Promise<void>}
  */
 async function loadDefaultExcel() {
-    showLoader();
+    // 1. Try instant hydration first from precompiled bundle
+    const hasPrecompiledData = hydrateFromPrecompiledData();
+
+    // Only show loader if we have zero activities loaded yet
+    if (!hasPrecompiledData && state.allActivities.length === 0) {
+        showLoader();
+    }
+
+    // If opened directly as a local file (file:///), fetch is blocked by browser CORS security.
+    // If precompiled data is loaded, gracefully complete without error.
+    if (typeof window !== 'undefined' && window.location && window.location.protocol === 'file:') {
+        if (state.allActivities.length > 0) {
+            hideError();
+            hideLoader();
+            return;
+        }
+    }
+
     try {
-        const fetchUrl1 = 'Adobe Express_Implementation plan.xlsx?v=' + Date.now();
-        const fetchUrl2 = 'final of Kaushal Bodh Implementation Table.xlsx?v=' + Date.now();
+        // Use properly URI-encoded filenames and stable versioning for browser caching
+        const fetchUrl1 = encodeURI('Adobe Express_Implementation plan.xlsx') + '?v=3.0';
+        const fetchUrl2 = encodeURI('final of Kaushal Bodh Implementation Table.xlsx') + '?v=3.0';
 
         const [res1, res2] = await Promise.allSettled([
             fetch(fetchUrl1),
             fetch(fetchUrl2)
         ]);
 
-        if (res1.status === 'fulfilled' && res1.value.ok) {
+        let updated = false;
+
+        if (res1.status === 'fulfilled' && res1.value && res1.value.ok) {
             const buf1 = await res1.value.arrayBuffer();
             parseExcel(buf1);
+            updated = true;
         } else {
-            console.error('Could not load Adobe Express_Implementation plan.xlsx');
+            console.warn('Could not fetch live Adobe Express_Implementation plan.xlsx. Using pre-bundled dataset.');
         }
 
-        if (res2.status === 'fulfilled' && res2.value.ok) {
+        if (res2.status === 'fulfilled' && res2.value && res2.value.ok) {
             const buf2 = await res2.value.arrayBuffer();
             parseKaushalBodhExcel(buf2);
+            updated = true;
         } else {
-            console.warn('Could not load final of Kaushal Bodh Implementation Table.xlsx');
+            console.warn('Could not fetch live final of Kaushal Bodh Implementation Table.xlsx. Using pre-bundled dataset.');
         }
 
         hideError();
         hideLoader();
+
+        // If updated dynamically while not on welcome step, re-render smoothly
+        if (updated && state.currentStep !== 'welcome') {
+            render();
+        }
     } catch (error) {
-        showError('Could not auto-load the curriculum excel files. Please make sure Adobe Express_Implementation plan.xlsx is in the root folder.');
+        console.warn('Network sync encountered an error:', error);
+        // If we already have activities loaded from precompiled data, never display error screen
+        if (state.allActivities && state.allActivities.length > 0) {
+            hideError();
+            hideLoader();
+        } else {
+            showError('Could not auto-load the curriculum excel files. Please make sure Adobe Express_Implementation plan.xlsx is in the root folder.');
+        }
     }
 }
 
@@ -1331,17 +1390,23 @@ function parseExcel(arrayBuffer) {
         }
 
         if (parsedActivities.length === 0) {
-            showError('Could not read any valid activity rows from spreadsheet.');
+            if (!state.allActivities || state.allActivities.length === 0) {
+                showError('Could not read any valid activity rows from spreadsheet.');
+            }
             return;
         }
 
         state.allActivities = parsedActivities;
         hideError();
         hideLoader();
-        resetState();
+        if (state.currentStep !== 'welcome' && !state.selectedActivity) {
+            resetState();
+        }
     } catch (err) {
         console.error(err);
-        showError('Error reading the Excel workbook. Please upload a valid sheet.');
+        if (!state.allActivities || state.allActivities.length === 0) {
+            showError('Error reading the Excel workbook. Please upload a valid sheet.');
+        }
     }
 }
 
