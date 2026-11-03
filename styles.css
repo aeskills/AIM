@@ -3105,7 +3105,7 @@ body:has(#step-welcome:not(.hidden)) {
 
 body:has(#step-welcome:not(.hidden)) .app-main {
     max-width: 1360px;
-    padding: 1.25rem 2rem 1.5rem;
+    padding: 0.5rem 2rem 1.25rem;
     height: calc(100vh - 64px);
     display: flex;
     flex-direction: column;
@@ -3130,14 +3130,14 @@ body:has(#step-welcome:not(.hidden)) #step-welcome {
     justify-content: space-between;
     box-sizing: border-box;
     height: 100%;
-    gap: 1.25rem;
+    gap: 1rem;
 }
 
 /* Hero Section */
 .ae-hero-block {
     text-align: center;
-    max-width: 900px;
-    margin: 0.25rem auto 1rem;
+    max-width: 920px;
+    margin: 0 auto 0.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3150,31 +3150,12 @@ body:has(#step-welcome:not(.hidden)) #step-welcome {
     padding: 0;
 }
 
-.ae-hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(235, 16, 0, 0.2);
-    border-radius: 9999px;
-    padding: 0.35rem 1rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #eb1000;
-    box-shadow: 0 2px 10px rgba(235, 16, 0, 0.08);
-    margin-bottom: 0.65rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-}
-
 .ae-hero-title {
     font-size: clamp(2.8rem, 4.8vw, 3.75rem);
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 1.12;
-    margin: 0 0 0.55rem 0;
+    margin: 0 0 0.35rem 0;
     font-family: var(--font-heading);
     background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 45%, #eb1000 80%, #ff3b30 100%);
     -webkit-background-clip: text;
