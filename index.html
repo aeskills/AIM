@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIM - Activity Implementation Plan</title>
     <meta name="description" content="Explore and learn with AIM - Activity Implementation Plan, a self-paced tutorial platform for K-12 students. Choose your grade and start learning today.">
-    <!-- Google Fonts: Inter (all weights) -->
+    <!-- Google Fonts: Inter & Noto Sans Devanagari for high-contrast Hindi readability -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=3.0">
     <!-- Fast pre-compiled curriculum data & offline-first resilience -->
     <script src="curriculum-data.js?v=3.0" defer></script>
@@ -23,8 +23,18 @@
                 <span class="logo-icon-box">AIM</span>
                 <span class="logo-text-solid">Activity Implementation Plan</span>
             </a>
+
+            <!-- Adobe Express style nav links (Image 1 & 2) -->
+            <nav class="ae-header-nav" id="ae-header-nav" aria-label="Main Navigation">
+                <a href="#" class="ae-nav-link active" id="nav-item-home">Home</a>
+                <a href="#" class="ae-nav-link" id="nav-item-aotm">Activity of the Month</a>
+                <a href="#" class="ae-nav-link" id="nav-item-ict">ICT Activities</a>
+                <a href="#" class="ae-nav-link" id="nav-item-dcais">DCAIS</a>
+                <a href="#" class="ae-nav-link" id="nav-item-kaushal">Kaushal Bodh</a>
+            </nav>
+
             <div class="header-right">
-                <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+                <nav class="breadcrumb-nav hidden" aria-label="Breadcrumb">
                     <ol class="breadcrumbs" id="breadcrumbs-list">
                         <!-- Breadcrumbs will be rendered dynamically -->
                     </ol>
@@ -62,218 +72,91 @@
 
         <!-- Step 0: Welcome / Language Selection Screen -->
         <section id="step-welcome" class="step-section">
-            <div style="display: flex; flex-direction: column; min-height: calc(100vh - 64px); margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); margin-top: 0; margin-bottom: -2rem;">
+            <div class="ae-welcome-wrapper">
                 
-                <!-- Main Container Wrapper (Max Width 1280px) -->
-                <div style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-                    
-                    <!-- Top Header Row: Welcome to AIM (Left 64%) & Important Note (Right 32%) -->
-                    <div class="welcome-header-wrapper" style="width: 100%; display: flex; flex-direction: row; align-items: stretch; justify-content: space-between; gap: 1.5rem; min-height: auto; flex-wrap: wrap;">
-                        <!-- Left (64%): Welcome Title & Description -->
-                        <div style="flex: 1 1 60%; min-width: 300px; text-align: left; display: flex; flex-direction: column; justify-content: center; gap: 0.25rem;">
-                            <h1 class="hero-title" style="margin: 0; font-size: 1.95rem; text-align: left; line-height: 1.2;" data-i18n="welcomeTitle">Welcome to AIM</h1>
-                            <p class="hero-subtitle" style="margin: 0; color: var(--color-text-secondary); line-height: 1.4; font-size: 0.875rem; text-align: left;" data-i18n="welcomeDesc">AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.</p>
-                        </div>
-
-                        <!-- Right (32%): Important Note Callout Banner (Aligned with Kaushal Bodh Tile) -->
-                        <div class="important-note-card" style="flex: 0 0 32%; min-width: 280px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: var(--radius-lg); padding: 0.65rem 0.95rem; border-left: 4px solid #eb1000; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); text-align: left; display: flex; align-items: center; box-sizing: border-box;">
-                            <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
-                                <span style="font-size: 1.15rem; line-height: 1;">⭐</span>
-                                <div>
-                                    <strong style="display: block; font-size: 0.775rem; color: #eb1000; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.15rem;" data-i18n="importantNoteHeading">Earn DCAIS CERTIFICATE</strong>
-                                    <p style="font-size: 0.775rem; color: var(--color-text-secondary); line-height: 1.35; margin: 0; font-weight: 500;" data-i18n="importantNoteText">Earn accredited DCAIS certification upon completion of minimum one activity per month and Submitting the creative assignments.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Main Grid Row: Left 68% vs Right 32% -->
-                    <div style="width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; align-items: stretch; margin-top: 0.25rem;">
-                        
-                        <!-- Left Column (68%) - Activity of the Month Card -->
-                        <div style="flex: 1 1 65%; min-width: 320px; display: flex; flex-direction: column;">
-                            
-                            <!-- Content Card: Activity of the Month (Children's Day) -->
-                            <div style="background: #ffffff; border-radius: var(--radius-xl); box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid var(--color-border); border-top: 4px solid #eb1000; z-index: 10; width: 100%; overflow: hidden; box-sizing: border-box; display: flex; flex-direction: column; height: 100%;">
-                                
-                                <!-- Top Visual Banner with Children's Day Illustration -->
-                                <div style="width: 100%; height: 115px; position: relative; overflow: hidden; background-color: #e0f2fe;">
-                                    <img src="childrens_day_bg.jpg?v=6" alt="Children's Day Activity Banner" style="width: 100%; height: 100%; object-fit: cover; object-position: center 58%; display: block;" />
-                                    <!-- Badge Pill Tag Overlay -->
-                                    <div style="position: absolute; top: 0.55rem; right: 0.75rem; background: linear-gradient(135deg, #eb1000, #c40d00); color: white; padding: 0.22rem 0.7rem; border-radius: var(--radius-full); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25); display: inline-flex; align-items: center; gap: 0.3rem;" data-i18n="activityOfMonthTag">
-                                        <span>⭐</span> Activity of the Month
-                                    </div>
-                                </div>
-
-                                <!-- Bottom Content: 2 Longitudinal Boxes (English & Hindi) -->
-                                <div style="display: flex; flex-direction: column; width: 100%; flex: 1; justify-content: space-between;">
-                                    
-                                    <!-- 2 Longitudinal Boxes Side-by-Side -->
-                                    <div class="aotm-dual-boxes">
-                                        
-                                        <!-- Left Box: English Activity -->
-                                        <div class="aotm-longitudinal-box aotm-box-en" id="aotm-box-en">
-                                            <div>
-                                                <!-- Language Badge -->
-                                                <div class="aotm-box-badge aotm-badge-en">
-                                                    English
-                                                </div>
-
-                                                <!-- Title -->
-                                                <h3 class="aotm-box-title">
-                                                    Happy Children's Day! ✨
-                                                </h3>
-
-                                                <!-- Description -->
-                                                <div class="aotm-box-desc">
-                                                    <p style="margin: 0 0 0.2rem 0; line-height: 1.35;">Think of a magical childhood memory that still makes you smile. Write about what made it special, then transform it into an Adobe Express visual!</p>
-                                                    <strong style="color: #eb1000; font-size: 0.75rem;">Imagine. Create. Express your story!</strong>
-                                                </div>
-
-                                                <!-- Highlighted Eye-Catching Tutorial Video Box -->
-                                                <div class="highlighted-tutorial-box">
-                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-                                                        <div style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.67rem; font-weight: 800; color: #eb1000; text-transform: uppercase; letter-spacing: 0.04em;">
-                                                            <span class="live-pulse-dot"></span> 🎬 Step-by-Step Tutorial
-                                                        </div>
-                                                        <span style="font-size: 0.62rem; font-weight: 800; color: #b91c1c; background: #fee2e2; padding: 0.12rem 0.45rem; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.03em;">Must Watch</span>
-                                                    </div>
-
-                                                    <a href="https://youtu.be/eRA7DjSb5gs" target="_blank" rel="noopener noreferrer" id="aotm-tutorial-card-link-en" style="text-decoration: none; display: block;">
-                                                        <!-- Video Thumbnail with Pulsing Play Button -->
-                                                        <div class="tutorial-thumb-wrap">
-                                                            <img src="https://img.youtube.com/vi/eRA7DjSb5gs/hqdefault.jpg" alt="Children's Day English Tutorial Video Thumbnail" />
-                                                            <div class="pulse-play-btn">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-left: 2px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                                            </div>
-                                                            <div class="watch-video-overlay-banner">▶ Click to Watch Tutorial</div>
-                                                        </div>
-
-                                                        <!-- Bottom Row: Title & Action -->
-                                                        <div style="margin-top: 0.4rem; display: flex; align-items: center; justify-content: space-between; gap: 0.4rem;">
-                                                            <div style="min-width: 0; text-align: left;">
-                                                                <div style="font-size: 0.78rem; font-weight: 800; color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;">Tutorial</div>
-                                                                <div style="font-size: 0.68rem; color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; margin-top: 0.1rem;">Watch before you design</div>
-                                                            </div>
-                                                            <span class="btn btn-primary" style="background-color: #eb1000; border: none; padding: 0.35rem 0.7rem; font-size: 0.74rem; font-weight: 800; white-space: nowrap; box-shadow: 0 2px 8px rgba(235, 16, 0, 0.4); flex-shrink: 0;">▶ Watch</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <!-- Action Buttons -->
-                                            <div class="aotm-box-actions">
-                                                <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:fcf64e48-8456-5141-9d68-55b0d404d468?category=text&entryPoint=template&taskID=poster" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn-en" style="background-color: #eb1000; border: none; box-shadow: 0 3px 10px rgba(235, 16, 0, 0.3); color: white;">Activity Template</a>
-                                                <a href="https://docs.google.com/forms/d/e/1FAIpQLScu7n1TAs4qke7E8vrL-iyzpVzewa9ChQkpMB9wpOyv2cpbAQ/viewform" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="border-color: #eb1000; color: #eb1000; background-color: #ffffff;">Submit Link</a>
-                                            </div>
-                                        </div>
-
-                                        <!-- Right Box: Hindi Activity -->
-                                        <div class="aotm-longitudinal-box aotm-box-hi" id="aotm-box-hi">
-                                            <div>
-                                                <!-- Language Badge -->
-                                                <div class="aotm-box-badge aotm-badge-hi">
-                                                    Hindi
-                                                </div>
-
-                                                <!-- Title -->
-                                                <h3 class="aotm-box-title">
-                                                    बाल दिवस की शुभकामनाएँ! ✨
-                                                </h3>
-
-                                                <!-- Description -->
-                                                <div class="aotm-box-desc">
-                                                    <p style="margin: 0 0 0.25rem 0; line-height: 1.35;">अपने बचपन की किसी जादुई याद के बारे में सोचिए—दिवाली मनाने, दोस्तों संग खेलने या नाना-नानी के घर छुट्टियों की याद। लिखिए कि वह पल खास क्यों था और ट्यूटोरियल देखकर इसे Adobe Express से सुंदर चित्र में बदलें!</p>
-                                                    <strong style="color: #d97706; font-size: 0.74rem;">कल्पना करें। रचना करें। अपनी कहानी को रचनात्मक रंगों में सजाएँ!</strong>
-                                                </div>
-
-                                                <!-- Highlighted Eye-Catching Tutorial Video Box -->
-                                                <div class="highlighted-tutorial-box">
-                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-                                                        <div style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.67rem; font-weight: 800; color: #eb1000; text-transform: uppercase; letter-spacing: 0.04em;">
-                                                            <span class="live-pulse-dot"></span> 🎬 ट्यूटोरियल वीडियो
-                                                        </div>
-                                                        <span style="font-size: 0.62rem; font-weight: 800; color: #b45309; background: #fef3c7; padding: 0.12rem 0.45rem; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.03em;">ज़रूर देखें</span>
-                                                    </div>
-
-                                                    <a href="https://youtu.be/M1s8vTaJLrY" target="_blank" rel="noopener noreferrer" id="aotm-tutorial-card-link-hi" style="text-decoration: none; display: block;">
-                                                        <!-- Video Thumbnail with Pulsing Play Button -->
-                                                        <div class="tutorial-thumb-wrap">
-                                                            <img src="https://img.youtube.com/vi/M1s8vTaJLrY/hqdefault.jpg" alt="Hindi Activity Tutorial Video Thumbnail" />
-                                                            <div class="pulse-play-btn">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-left: 2px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                                            </div>
-                                                            <div class="watch-video-overlay-banner">▶ ट्यूटोरियल देखने के लिए यहाँ क्लिक करें</div>
-                                                        </div>
-
-                                                        <!-- Bottom Row: Title & Action -->
-                                                        <div style="margin-top: 0.4rem; display: flex; align-items: center; justify-content: space-between; gap: 0.4rem;">
-                                                            <div style="min-width: 0; text-align: left;">
-                                                                <div style="font-size: 0.78rem; font-weight: 800; color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;">ट्यूटोरियल</div>
-                                                                <div style="font-size: 0.68rem; color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; margin-top: 0.1rem;">डिज़ाइन करने से पहले देखें</div>
-                                                            </div>
-                                                            <span class="btn btn-primary" style="background-color: #eb1000; border: none; padding: 0.35rem 0.7rem; font-size: 0.74rem; font-weight: 800; white-space: nowrap; box-shadow: 0 2px 8px rgba(235, 16, 0, 0.4); flex-shrink: 0;">▶ देखें</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <!-- Action Buttons -->
-                                            <div class="aotm-box-actions">
-                                                <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:3fda717c-85e0-57ed-8cab-bf340edd76d9?category=text&entryPoint=template&taskID=poster" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="explore-activity-btn-hi" style="background-color: #eb1000; border: none; box-shadow: 0 3px 10px rgba(235, 16, 0, 0.3); color: white;">गतिविधि टेम्पलेट</a>
-                                                <a href="https://docs.google.com/forms/d/e/1FAIpQLScu7n1TAs4qke7E8vrL-iyzpVzewa9ChQkpMB9wpOyv2cpbAQ/viewform" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="border-color: #eb1000; color: #eb1000; background-color: #ffffff;">लिंक जमा करें</a>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <!-- Disclaimer -->
-                                    <p class="submission-disclaimer" style="margin: 0.2rem 0.85rem 0.45rem; font-size: 0.68rem; color: var(--color-text-secondary); line-height: 1.3; border-top: 1px dashed rgba(0, 0, 0, 0.12); padding-top: 0.25rem; text-align: center;" data-i18n="submissionDisclaimer">Disclaimer: Submission of details is voluntary and exclusively used for personalized certificates.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column (32%) - Language Tabs -->
-                        <div style="flex: 0 0 31%; min-width: 270px; display: flex; flex-direction: column; gap: 0.5rem; justify-content: space-between; align-items: center;">
-                            <h3 class="go-to-activity-heading" style="color: var(--color-text-primary); text-shadow: none; font-size: 1.25rem; font-weight: 800; margin: 0; text-align: center; letter-spacing: -0.01em;" data-i18n="goToActivityPage">Go to activity page</h3>
-                            
-                            <!-- 1st Tab: Kaushal Bodh Activities -->
-                            <a href="#" class="welcome-choice-card card-accent-yellow" id="choice-kaushal-bodh" style="width: 100%; max-width: 360px; text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 0.6rem 0.95rem; border: 1px solid var(--color-border); border-top: 3px solid #f59e0b; border-radius: var(--radius-lg); background-color: var(--color-surface); transition: var(--transition-normal); gap: 0.3rem; box-shadow: var(--shadow-sm); flex: 1; justify-content: center;">
-                                <div class="welcome-icon-wrapper" style="width: 36px; height: 36px; border-radius: 50%; background-color: rgba(245, 158, 11, 0.12); color: #d97706; display: flex; justify-content: center; align-items: center; margin-bottom: 0;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                    </svg>
-                                </div>
-                                <h3 style="font-size: 0.875rem; margin: 0; color: var(--color-text-primary); text-align: center; font-weight: 700;" data-i18n="kaushalBodhTab">Kaushal Bodh Activities</h3>
-                                <span class="btn btn-primary" style="width: 100%; margin-top: 0.1rem; padding: 0.4rem; background-color: #f59e0b; border-color: #f59e0b; font-size: 0.8rem;" data-i18n="startBtn">Start</span>
-                            </a>
-
-                            <!-- 2nd Tab: DCAIS Activities / English -->
-                            <a href="#" class="welcome-choice-card card-accent-indigo" id="choice-english" style="width: 100%; max-width: 360px; text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 0.6rem 0.95rem; border: 1px solid var(--color-border); border-top: 3px solid var(--color-subject-1); border-radius: var(--radius-lg); background-color: var(--color-surface); transition: var(--transition-normal); gap: 0.3rem; box-shadow: var(--shadow-sm); flex: 1; justify-content: center;">
-                                <div class="welcome-icon-wrapper" style="width: 36px; height: 36px; border-radius: 50%; background-color: var(--color-subject-1-bg); color: var(--color-subject-1); display: flex; justify-content: center; align-items: center; margin-bottom: 0;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                                    </svg>
-                                </div>
-                                <h3 style="font-size: 0.875rem; margin: 0; color: var(--color-text-primary); text-align: center; font-weight: 700;" data-i18n="englishTutorials">DCAIS Activities / English</h3>
-                                <span class="btn btn-primary" style="width: 100%; margin-top: 0.1rem; padding: 0.4rem; font-size: 0.8rem;" data-i18n="startBtn">Start</span>
-                            </a>
-
-                            <!-- 3rd Tab: DCAIS Activities / Hindi -->
-                            <a href="#" class="welcome-choice-card card-accent-pink" id="choice-hindi" style="width: 100%; max-width: 360px; text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 0.6rem 0.95rem; border: 1px solid var(--color-border); border-top: 3px solid var(--color-subject-5); border-radius: var(--radius-lg); background-color: var(--color-surface); transition: var(--transition-normal); gap: 0.3rem; box-shadow: var(--shadow-sm); flex: 1; justify-content: center;">
-                                <div class="welcome-icon-wrapper" style="width: 36px; height: 36px; border-radius: 50%; background-color: var(--color-subject-5-bg); color: var(--color-subject-5); display: flex; justify-content: center; align-items: center; margin-bottom: 0;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M12 20h9"></path>
-                                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                                    </svg>
-                                </div>
-                                <h3 style="font-size: 0.875rem; margin: 0; color: var(--color-text-primary); text-align: center; font-weight: 700;" data-i18n="hindiTutorials">DCAIS Activities / Hindi</h3>
-                                <span class="btn btn-primary" style="width: 100%; margin-top: 0.1rem; padding: 0.4rem; font-size: 0.8rem;" data-i18n="startBtn">Start</span>
-                            </a>
-                        </div>
-                    </div>
+                <!-- Adobe Express Hero Header (Image 1 & 2) -->
+                <div class="ae-hero-block">
+                    <h1 class="ae-hero-title" data-i18n="welcomeTitle">Welcome to AIM</h1>
+                    <p class="ae-hero-desc" data-i18n="welcomeDesc">AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours.</p>
                 </div>
+
+                <!-- Highlighted Rectangular Tile for Earn DCAIS Certificate (Image 1) -->
+                <div class="ae-cert-banner" id="cert-banner" style="cursor: pointer;">
+                    <div class="ae-cert-banner-left">
+                        <div class="ae-cert-icon-star">⭐</div>
+                        <div class="ae-cert-text">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.15rem;">
+                                <strong data-i18n="importantNoteHeading">Earn DCAIS Certificate</strong>
+                                <span class="cert-grade-tag">Grades 6, 7 & 8 Only</span>
+                            </div>
+                            <span data-i18n="importantNoteText">All students of Grades 6, 7 and 8, please submit your Creative Assessment by 31st December to earn your Digital Creativity and AI Skills certificate. Note: DCAIS is exclusively for students of Grades 6, 7 and 8.</span>
+                        </div>
+                    </div>
+                    <a href="https://new.express.adobe.com/webpage/Cgir6LQ7u0AIb/remix" target="_blank" rel="noopener noreferrer" class="ae-cert-click-btn" id="cert-learn-more-btn" title="Click here to submit your Creative Assessment">
+                        <span>Click Here</span> <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
+
+                <!-- 4 Main Activity Tiles Grid -->
+                <div class="ae-tiles-grid" id="ae-tiles-grid">
+                    
+                    <!-- Tile 1: Activity of the Month -->
+                    <div class="ae-tile-card" id="tile-aotm" tabindex="0" role="button" aria-label="Activity of the Month">
+                        <div class="ae-tile-thumb-wrap">
+                            <img src="childrens_day_bg.jpg?v=6" alt="Activity of the Month Illustration" class="ae-tile-thumb-img" />
+                            <div class="ae-tile-badge" data-i18n="activityOfMonthTag">⭐ Activity of the Month</div>
+                        </div>
+                        <div class="ae-tile-info">
+                            <h3 class="ae-tile-title" id="tile-1-title" data-i18n="activityOfMonthTitle">Happy Children's Day! ✨</h3>
+                            <p class="ae-tile-desc" id="tile-1-desc" data-i18n="independenceDesc">Think of a magical childhood memory that still makes you smile. Write about what made it special, then transform it into an Adobe Express visual! Imagine. Create. Express your story!</p>
+                        </div>
+                    </div>
+
+                    <!-- Tile 2: ICT-Based Activities (Grades 3, 4, 5) -->
+                    <div class="ae-tile-card" id="tile-ict" tabindex="0" role="button" aria-label="ICT-Based Activities (Grades 3, 4 and 5)">
+                        <div class="ae-tile-thumb-wrap">
+                            <img src="ict_activities_bg.jpg" alt="ICT-Based Activities Illustration" class="ae-tile-thumb-img" />
+                            <div class="ae-tile-badge ae-badge-teal">Grades 3, 4 & 5</div>
+                        </div>
+                        <div class="ae-tile-info">
+                            <h3 class="ae-tile-title" id="tile-ict-title">ICT-Based Activities</h3>
+                            <p class="ae-tile-desc" id="tile-ict-desc">Digital creativity, coding blocks, visual art templates and graphic design activities for Grades 3, 4 and 5.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tile 3: DCAIS Activities (Grades 6, 7, 8) -->
+                    <div class="ae-tile-card" id="tile-dcais" tabindex="0" role="button" aria-label="DCAIS Activities (Grades 6, 7 and 8)">
+                        <div class="ae-tile-thumb-wrap">
+                            <img src="dcais_activities_bg.jpg" alt="DCAIS Activities Templates" class="ae-tile-thumb-img" />
+                            <div class="ae-tile-badge ae-badge-blue">Grades 6, 7 & 8</div>
+                        </div>
+                        <div class="ae-tile-info">
+                            <h3 class="ae-tile-title" id="tile-2-title">DCAIS Activities</h3>
+                            <p class="ae-tile-desc" id="tile-2-desc">Digital Creativity & AI Skills curriculum with creative poster templates, graphic art, and visual layouts.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tile 4: Kaushal Bodh Activities -->
+                    <div class="ae-tile-card" id="tile-kaushal" tabindex="0" role="button" aria-label="Kaushal Bodh Activities">
+                        <div class="ae-tile-thumb-wrap">
+                            <img src="kaushal_bodh_bg.jpg" alt="Kaushal Bodh Activities Illustration" class="ae-tile-thumb-img" />
+                            <div class="ae-tile-badge ae-badge-amber">Vocational Skills</div>
+                        </div>
+                        <div class="ae-tile-info">
+                            <h3 class="ae-tile-title" id="tile-3-title" data-i18n="kaushalBodhTab">Kaushal Bodh Activities</h3>
+                            <p class="ae-tile-desc" id="tile-3-desc">Skill-focused learning, mechanical engineering structures, innovation projects, and creative tools.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Hidden anchors for backward compatibility if any legacy function references them -->
+                <div style="display: none;" aria-hidden="true">
+                    <a href="#" id="choice-english">English</a>
+                    <a href="#" id="choice-hindi">Hindi</a>
+                    <a href="#" id="choice-kaushal-bodh">Kaushal Bodh</a>
+                </div>
+
             </div>
         </section>
 
@@ -289,28 +172,22 @@
                 <p class="hero-subtitle" data-i18n="heroSubtitle">Choose your grade level and proceed with the activities</p>
             </div>
 
-            <!-- Quick Activity Search Section -->
-            <div id="quick-search-section" class="quick-search-wrapper" style="width: 100%; max-width: 1000px; margin: 1.75rem auto 2.25rem; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: var(--radius-xl); border: 1px solid var(--color-border); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); padding: 1.5rem 1.75rem; display: flex; flex-wrap: wrap; gap: 1.75rem;">
-                <!-- Left Column: Search Input & Heading -->
-                <div style="flex: 1 1 300px; display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; border-right: 1px solid var(--color-border); padding-right: 1.5rem;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="font-size: 1.4rem;">⚡</span>
-                        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--color-text-primary); margin: 0; font-family: var(--font-heading);" data-i18n="quickSearchTitle">Quick Activity Search</h3>
-                    </div>
-                    <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; line-height: 1.4;" data-i18n="quickSearchDesc">Search activities across all grades directly by name</p>
-                    <div class="search-input-wrapper" style="margin-top: 0.25rem; width: 100%; position: relative;">
-                        <span class="search-icon" aria-hidden="true" style="position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); color: var(--color-text-tertiary);">🔍</span>
-                        <input type="text" id="quick-activity-search" placeholder="Search activity by name" aria-label="Search activity by name" data-i18n-placeholder="searchActivityByName" style="width: 100%; border-radius: var(--radius-full); padding: 0.75rem 2.25rem 0.75rem 2.5rem; border: 1px solid var(--color-border); font-size: 0.9rem; outline: none; background: var(--color-surface); color: var(--color-text-primary); transition: all 0.2s ease;">
-                        <button type="button" id="clear-quick-search-btn" class="clear-search-btn hidden" aria-label="Clear search" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); border: none; background: transparent; font-size: 1.25rem; cursor: pointer; color: var(--color-text-tertiary);">&times;</button>
-                    </div>
+            <!-- Single Line Month & Activity Search Bar (Image 2) -->
+            <div class="month-search-container" id="month-search-container">
+                <div class="month-search-bar-wrap">
+                    <span class="month-search-icon" aria-hidden="true">🔍</span>
+                    <input 
+                        type="text" 
+                        id="month-search-bar" 
+                        class="month-search-input" 
+                        placeholder="Search Activity by Month (e.g. July, August)..." 
+                        data-i18n-placeholder="searchActivityByMonth"
+                        aria-label="Search Activity by Month" 
+                        autocomplete="off"
+                    />
+                    <button type="button" id="clear-month-search-btn" class="clear-search-btn hidden" aria-label="Clear search">&times;</button>
                 </div>
-
-                <!-- Right Column: Real-time Search Results -->
-                <div style="flex: 1.5 1 380px; display: flex; flex-direction: column; gap: 0.5rem; max-height: 240px; overflow-y: auto; padding-right: 0.25rem;">
-                    <div id="quick-activity-results" style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
-                        <!-- Real-time results rendered dynamically -->
-                    </div>
-                </div>
+                <div id="month-search-results" class="month-search-results hidden" role="listbox"></div>
             </div>
 
             <!-- Grade Selection Section -->
@@ -366,21 +243,6 @@
                 <p class="section-subtitle" id="activities-subtitle">Showing activities for your selected grade</p>
             </div>
 
-            <!-- Standard Filter Bar (DCAIS Mode) -->
-            <div id="standard-filter-bar" class="filter-bar" role="search" aria-label="Filter activities" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; background: var(--color-surface); padding: 1.25rem 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm); margin-bottom: 2rem;">
-                <div class="filter-group" style="display: flex; align-items: center; gap: 0.75rem;">
-                    <label for="subject-filter" class="filter-label" id="filter-label-text" data-i18n="monthLabel">Month</label>
-                    <div class="select-wrapper" id="subject-filter-wrapper" style="width: 180px;">
-                        <select id="subject-filter" class="filter-select">
-                            <option value="All" data-i18n="allMonthsOption">All Months</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="filter-cert-notice" style="flex: 1 1 320px; display: flex; align-items: center; gap: 0.6rem; color: var(--color-text-secondary); font-size: 0.875rem; font-weight: 500; background: rgba(235, 16, 0, 0.05); padding: 0.6rem 1rem; border-radius: var(--radius-md); border: 1px solid rgba(235, 16, 0, 0.15);">
-                    <span style="font-size: 1.15rem; color: #eb1000;">🎓</span>
-                    <span data-i18n="certNotice" style="line-height: 1.4;">To earn your certificate, please complete at least one activity per month</span>
-                </div>
-            </div>
 
             <!-- Kaushal Bodh Tabs Container (Kaushal Bodh Mode) -->
             <div id="kaushal-tabs-container" class="kaushal-tabs-container hidden"></div>
@@ -515,6 +377,156 @@
     </div>
 
 
+
+    <!-- Activity of the Month (AOTM) Modal -->
+    <div id="aotm-selection-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="aotm-modal-title">
+        <div class="modal-content ae-modal-content">
+            <button type="button" class="modal-close-btn" id="close-aotm-modal-btn" aria-label="Close popup">&times;</button>
+            <div class="ae-modal-header">
+                <span class="ae-modal-badge" data-i18n="activityOfMonthTag">⭐ Activity of the Month</span>
+                <h2 id="aotm-modal-title" class="ae-modal-title" data-i18n="activityOfMonthTitle">Happy Children's Day! ✨</h2>
+            </div>
+
+            <!-- In-Modal Language Selection (English / Hindi) -->
+            <div class="ae-modal-lang-toggle">
+                <span class="ae-modal-lang-label">Select Language:</span>
+                <div class="ae-pill-group">
+                    <button type="button" class="ae-pill-btn active" id="aotm-modal-lang-en">English</button>
+                    <button type="button" class="ae-pill-btn" id="aotm-modal-lang-hi">हिंदी</button>
+                </div>
+            </div>
+
+            <div id="aotm-modal-desc" class="ae-modal-desc">
+                <!-- Description populated dynamically -->
+            </div>
+
+            <!-- Tutorial Video Card -->
+            <div class="ae-modal-tutorial-card">
+                <div class="ae-modal-tutorial-header">
+                    <span class="live-pulse-dot"></span>
+                    <strong id="aotm-modal-tutorial-label">🎬 Step-by-Step Tutorial</strong>
+                    <span class="ae-must-watch-badge">Must Watch</span>
+                </div>
+                <a href="https://youtu.be/eRA7DjSb5gs" target="_blank" rel="noopener noreferrer" id="aotm-modal-video-link" class="ae-modal-video-thumb-link">
+                    <div class="tutorial-thumb-wrap">
+                        <img id="aotm-modal-video-thumb" src="https://img.youtube.com/vi/eRA7DjSb5gs/hqdefault.jpg" alt="Tutorial Video Thumbnail" />
+                        <div class="pulse-play-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                        <div class="watch-video-overlay-banner">▶ Click to Watch Tutorial</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="ae-modal-actions">
+                <a href="https://new.express.adobe.com/design/template/urn:aaid:sc:VA6C2:fcf64e48-8456-5141-9d68-55b0d404d468?category=text&entryPoint=template&taskID=poster" target="_blank" rel="noopener noreferrer" id="aotm-modal-template-btn" class="btn btn-primary" style="background-color: #5448ff; border-color: #5448ff; flex: 1.2;">
+                    Activity Template
+                </a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScu7n1TAs4qke7E8vrL-iyzpVzewa9ChQkpMB9wpOyv2cpbAQ/viewform" target="_blank" rel="noopener noreferrer" id="aotm-modal-submit-btn" class="btn btn-secondary" style="flex: 1;">
+                    Submit Link
+                </a>
+            </div>
+
+            <p class="submission-disclaimer" style="margin-top: 1rem; font-size: 0.75rem; color: var(--color-text-secondary); text-align: center;" data-i18n="submissionDisclaimer">Disclaimer: Submission of details is voluntary and exclusively used for personalized certificates.</p>
+        </div>
+    </div>
+
+    <!-- DCAIS Language Selection Modal (Grades 6, 7 & 8) -->
+    <div id="dcais-lang-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="dcais-lang-modal-title">
+        <div class="modal-content ae-modal-content" style="max-width: 490px; text-align: center;">
+            <button type="button" class="modal-close-btn" id="close-dcais-lang-modal-btn" aria-label="Close popup">&times;</button>
+            <div class="ae-modal-header" style="align-items: center; text-align: center;">
+                <h2 id="dcais-lang-modal-title" class="ae-modal-title" style="margin-top: 0.35rem;">DCAIS Activities</h2>
+                <div class="modal-lang-subtitle-group">
+                    <span class="modal-sub-en">Select your preferred language (Grades 6, 7 & 8)</span>
+                    <span class="modal-sub-hi">अपनी पसंदीदा भाषा चुनें (कक्षा 6, 7 और 8)</span>
+                </div>
+            </div>
+
+            <!-- Two prominent language choices -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0 0.5rem;">
+                <button type="button" id="dcais-select-en-btn" class="ae-lang-choice-card">
+                    <strong style="font-size: 1.15rem; display: block; color: #111827; margin-top: 0.25rem;">English</strong>
+                    <span class="btn btn-primary" style="margin-top: 1rem; width: 100%; padding: 0.5rem; font-size: 0.85rem; border-radius: 9999px; background: #5448ff; border: none; font-weight: 700; color: white; display: block;">Proceed →</span>
+                </button>
+
+                <button type="button" id="dcais-select-hi-btn" class="ae-lang-choice-card">
+                    <strong class="ae-lang-hi-title" style="font-size: 1.25rem; font-weight: 800; display: block; color: #111827; margin-top: 0.25rem;">हिंदी</strong>
+                    <span class="btn btn-primary ae-lang-hi-btn" style="margin-top: 1rem; width: 100%; padding: 0.5rem; font-size: 0.92rem; border-radius: 9999px; background: #eb1000; border: none; font-weight: 700; color: white; display: block;">आगे बढ़ें →</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ICT-Based Activities Language Selection Modal (Grades 3, 4 & 5) -->
+    <div id="ict-lang-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="ict-lang-modal-title">
+        <div class="modal-content ae-modal-content" style="max-width: 490px; text-align: center;">
+            <button type="button" class="modal-close-btn" id="close-ict-lang-modal-btn" aria-label="Close popup">&times;</button>
+            <div class="ae-modal-header" style="align-items: center; text-align: center;">
+                <h2 id="ict-lang-modal-title" class="ae-modal-title" style="margin-top: 0.35rem;">ICT-Based Activities</h2>
+                <div class="modal-lang-subtitle-group">
+                    <span class="modal-sub-en">Select your preferred language (Grades 3, 4 & 5)</span>
+                    <span class="modal-sub-hi">अपनी पसंदीदा भाषा चुनें (कक्षा 3, 4 और 5)</span>
+                </div>
+            </div>
+
+            <!-- Two prominent language choices -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0 0.5rem;">
+                <button type="button" id="ict-select-en-btn" class="ae-lang-choice-card">
+                    <strong style="font-size: 1.15rem; display: block; color: #111827; margin-top: 0.25rem;">English</strong>
+                    <span class="btn btn-primary" style="margin-top: 1rem; width: 100%; padding: 0.5rem; font-size: 0.85rem; border-radius: 9999px; background: #0284c7; border: none; font-weight: 700; color: white; display: block;">Proceed →</span>
+                </button>
+
+                <button type="button" id="ict-select-hi-btn" class="ae-lang-choice-card">
+                    <strong class="ae-lang-hi-title" style="font-size: 1.25rem; font-weight: 800; display: block; color: #111827; margin-top: 0.25rem;">हिंदी</strong>
+                    <span class="btn btn-primary ae-lang-hi-btn" style="margin-top: 1rem; width: 100%; padding: 0.5rem; font-size: 0.92rem; border-radius: 9999px; background: #eb1000; border: none; font-weight: 700; color: white; display: block;">आगे बढ़ें →</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DCAIS Certificate Details Modal -->
+    <div id="dcais-cert-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="dcais-cert-modal-title">
+        <div class="modal-content ae-modal-content" style="max-width: 540px;">
+            <button type="button" class="modal-close-btn" id="close-cert-modal-btn" aria-label="Close popup">&times;</button>
+            <div class="ae-modal-header" style="text-align: center; align-items: center;">
+                <div style="font-size: 2.5rem; line-height: 1; margin-bottom: 0.5rem;">🌟</div>
+                <h2 id="dcais-cert-modal-title" class="ae-modal-title" data-i18n="importantNoteHeading">Earn DCAIS Certificate</h2>
+                <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-top: 0.25rem;" data-i18n="importantNoteText">Earn accredited DCAIS certification upon completion of minimum one activity per month and Submitting the creative assignments.</p>
+            </div>
+
+            <div class="ae-cert-steps-list">
+                <div class="ae-cert-step-item">
+                    <span class="ae-cert-step-num">1</span>
+                    <div>
+                        <strong>Complete 1 Activity Monthly</strong>
+                        <p>Explore creative activities across Grade levels and finish at least 1 project every month on Adobe Express.</p>
+                    </div>
+                </div>
+                <div class="ae-cert-step-item">
+                    <span class="ae-cert-step-num">2</span>
+                    <div>
+                        <strong>Submit Your Creative Work</strong>
+                        <p>Share your Adobe Express work link through the submission link or Google form.</p>
+                    </div>
+                </div>
+                <div class="ae-cert-step-item">
+                    <span class="ae-cert-step-num">3</span>
+                    <div>
+                        <strong>Earn DCAIS Certification</strong>
+                        <p>Receive your accredited DCAIS student certificate recognizing your creativity and digital design skills!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+                <button type="button" id="cert-modal-start-btn" class="btn btn-primary" style="flex: 1; border-radius: 9999px; background-color: #5448ff; border: none; font-weight: 700; padding: 0.7rem;">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Floating Tooltip for Activities -->
     <div id="activity-tooltip" class="activity-tooltip hidden" aria-hidden="true">

@@ -44,8 +44,57 @@ const state = {
     submissions: [],
     language: 'en', // 'en' or 'hi'
     userExplicitLanguage: 'en', // Manually set via language toggle
-    tutorialMode: 'choose', // 'choose' | 'hindi' | 'english' | 'kaushal-bodh'
+    tutorialMode: 'choose', // 'choose' | 'hindi' | 'english' | 'kaushal-bodh' | 'ict-english' | 'ict-hindi'
+    curriculumType: 'dcais', // 'dcais' | 'ict' | 'kaushal-bodh'
     aotmLanguage: 'en'
+};
+
+const MONTH_TRANSLATION_MAP = {
+    // English
+    'january': { en: 'January', hi: 'जनवरी', altHi: ['जनवरी'], index: 1 },
+    'jan': { en: 'January', hi: 'जनवरी', altHi: ['जनवरी'], index: 1 },
+    'february': { en: 'February', hi: 'फ़रवरी', altHi: ['फरवरी', 'फ़रवरी'], index: 2 },
+    'feb': { en: 'February', hi: 'फ़रवरी', altHi: ['फरवरी', 'फ़रवरी'], index: 2 },
+    'march': { en: 'March', hi: 'मार्च', altHi: ['मार्च'], index: 3 },
+    'mar': { en: 'March', hi: 'मार्च', altHi: ['मार्च'], index: 3 },
+    'april': { en: 'April', hi: 'अप्रैल', altHi: ['अप्रैल', 'अप्रेल'], index: 4 },
+    'apr': { en: 'April', hi: 'अप्रैल', altHi: ['अप्रैल', 'अप्रेल'], index: 4 },
+    'may': { en: 'May', hi: 'मई', altHi: ['मई'], index: 5 },
+    'june': { en: 'June', hi: 'जून', altHi: ['जून'], index: 6 },
+    'jun': { en: 'June', hi: 'जून', altHi: ['जून'], index: 6 },
+    'july': { en: 'July', hi: 'जुलाई', altHi: ['जुलाई'], index: 7 },
+    'jul': { en: 'July', hi: 'जुलाई', altHi: ['जुलाई'], index: 7 },
+    'august': { en: 'August', hi: 'अगस्त', altHi: ['अगस्त'], index: 8 },
+    'aug': { en: 'August', hi: 'अगस्त', altHi: ['अगस्त'], index: 8 },
+    'september': { en: 'September', hi: 'सितम्बर', altHi: ['सितंबर', 'सितम्बर'], index: 9 },
+    'sep': { en: 'September', hi: 'सितम्बर', altHi: ['सितंबर', 'सितम्बर'], index: 9 },
+    'sept': { en: 'September', hi: 'सितम्बर', altHi: ['सितंबर', 'सितम्बर'], index: 9 },
+    'october': { en: 'October', hi: 'अक्टूबर', altHi: ['अक्टूबर', 'अक्तूबर'], index: 10 },
+    'oct': { en: 'October', hi: 'अक्टूबर', altHi: ['अक्टूबर', 'अक्तूबर'], index: 10 },
+    'november': { en: 'November', hi: 'नवंबर', altHi: ['नवंबर', 'नवम्बर'], index: 11 },
+    'nov': { en: 'November', hi: 'नवंबर', altHi: ['नवंबर', 'नवम्बर'], index: 11 },
+    'december': { en: 'December', hi: 'दिसंबर', altHi: ['दिसंबर', 'दिसम्बर'], index: 12 },
+    'dec': { en: 'December', hi: 'दिसंबर', altHi: ['दिसंबर', 'दिसम्बर'], index: 12 },
+
+    // Hindi
+    'जनवरी': { en: 'January', hi: 'जनवरी', altHi: ['जनवरी'], index: 1 },
+    'फरवरी': { en: 'February', hi: 'फ़रवरी', altHi: ['फरवरी', 'फ़रवरी'], index: 2 },
+    'फ़रवरी': { en: 'February', hi: 'फ़रवरी', altHi: ['फरवरी', 'फ़रवरी'], index: 2 },
+    'मार्च': { en: 'March', hi: 'मार्च', altHi: ['मार्च'], index: 3 },
+    'अप्रैल': { en: 'April', hi: 'अप्रैल', altHi: ['अप्रैल', 'अप्रेल'], index: 4 },
+    'अप्रेल': { en: 'April', hi: 'अप्रैल', altHi: ['अप्रैल', 'अप्रेल'], index: 4 },
+    'मई': { en: 'May', hi: 'मई', altHi: ['मई'], index: 5 },
+    'जून': { en: 'June', hi: 'जून', altHi: ['जून'], index: 6 },
+    'जुलाई': { en: 'July', hi: 'जुलाई', altHi: ['जुलाई'], index: 7 },
+    'अगस्त': { en: 'August', hi: 'अगस्त', altHi: ['अगस्त'], index: 8 },
+    'सितंबर': { en: 'September', hi: 'सितम्बर', altHi: ['सितंबर', 'सितम्बर'], index: 9 },
+    'सितम्बर': { en: 'September', hi: 'सितम्बर', altHi: ['सितंबर', 'सितम्बर'], index: 9 },
+    'अक्टूबर': { en: 'October', hi: 'अक्टूबर', altHi: ['अक्टूबर', 'अक्तूबर'], index: 10 },
+    'अक्तूबर': { en: 'October', hi: 'अक्टूबर', altHi: ['अक्टूबर', 'अक्तूबर'], index: 10 },
+    'नवंबर': { en: 'November', hi: 'नवंबर', altHi: ['नवंबर', 'नवम्बर'], index: 11 },
+    'नवम्बर': { en: 'November', hi: 'नवंबर', altHi: ['नवंबर', 'नवम्बर'], index: 11 },
+    'दिसंबर': { en: 'December', hi: 'दिसंबर', altHi: ['दिसंबर', 'दिसम्बर'], index: 12 },
+    'दिसम्बर': { en: 'December', hi: 'दिसंबर', altHi: ['दिसंबर', 'दिसम्बर'], index: 12 }
 };
 
 const MONTHLY_ACTIVITIES = {
@@ -76,7 +125,7 @@ const MONTHLY_ACTIVITIES = {
 const translations = {
     en: {
         welcomeTitle: "Welcome to AIM",
-        welcomeDesc: "AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours. Start simple. Level up every week.",
+        welcomeDesc: "AIM is a creative learning space for students in India. Every week you get fresh activities built on Adobe Express. Design posters, generate images, create videos, and build things that are yours.",
         activityOfMonthTag: "Activity of the Month",
         activityOfMonthTitle: "Happy Children's Day! ✨",
         independenceTitle: "Happy Children's Day! ✨",
@@ -112,11 +161,15 @@ const translations = {
         kaushalHeroSubtitle: "Choose your grade level from Kaushal Bodh curriculum",
         kaushalActivitiesSubtitle: "Showing Kaushal Bodh projects for {grade}",
         importantNoteHeading: "Earn DCAIS Certificate",
-        importantNoteText: "Earn accredited DCAIS certification upon completion of minimum one activity per month and Submitting the creative assignments.",
+        importantNoteText: "All students of Grades 6, 7 and 8, please submit your Creative Assessment by 31st December to earn your Digital Creativity and AI Skills certificate. Note: DCAIS is exclusively for students of Grades 6, 7 and 8.",
         certNotice: "To earn your certificate, please complete at least one activity per month",
-        quickSearchTitle: "Quick Activity Search",
-        quickSearchDesc: "Search activities across all grades directly by name",
-        searchActivityByName: "Search activity by name",
+        quickSearchTitle: "Search Activity by Month",
+        quickSearchDesc: "Filter activities across months in English and Hindi",
+        searchActivityByName: "Search Activity by Month (e.g. July, August)...",
+        searchActivityByMonth: "Search Activity by Month (e.g. July, August)...",
+        ictTab: "ICT-Based Activities",
+        dcaisTab: "DCAIS Activities",
+        clickHereBtn: "Click Here ↗",
         startBtn: "Start",
         readyToExplore: "Let's begin!",
         heroSubtitle: "Choose your grade level and proceed with the activities",
@@ -219,7 +272,7 @@ const translations = {
     },
     hi: {
         welcomeTitle: "AIM में आपका स्वागत है",
-        welcomeDesc: "AIM भारत में छात्रों के लिए एक रचनात्मक शिक्षण स्थल है। हर हफ्ते आपको Adobe Express पर बनी नई गतिविधियाँ मिलती हैं। पोस्टर डिज़ाइन करें, इमेजेस जनरेट करें, वीडियो बनाएँ, और अपनी चीज़ें बनाएँ। सरल से शुरुआत करें और हर हफ्ते आगे बढ़ें।",
+        welcomeDesc: "AIM भारत में छात्रों के लिए एक रचनात्मक शिक्षण स्थल है। हर हफ्ते आपको Adobe Express पर बनी नई गतिविधियाँ मिलती हैं। पोस्टर डिज़ाइन करें, इमेजेस जनरेट करें, वीडियो बनाएँ, और अपनी चीज़ें बनाएँ।",
         activityOfMonthTag: "महीने की गतिविधि",
         activityOfMonthTitle: "बाल दिवस की शुभकामनाएँ! ✨",
         independenceTitle: "बाल दिवस की शुभकामनाएँ! ✨",
@@ -255,11 +308,15 @@ const translations = {
         kaushalHeroSubtitle: "कौशल बोध प्रोजेक्ट्स और लर्निंग जर्नल देखने के लिए अपनी कक्षा चुनें",
         kaushalActivitiesSubtitle: "{grade} के कौशल बोध प्रोजेक्ट्स",
         importantNoteHeading: "DCAIS प्रमाण पत्र",
-        importantNoteText: "मासिक न्यूनतम एक गतिविधि पूरी करने और रचनात्मक कार्य जमा करने पर मान्यता प्राप्त DCAIS प्रमाण पत्र प्राप्त करें।",
+        importantNoteText: "कक्षा 6, 7 और 8 के सभी छात्र, कृपया अपना डिजिटल क्रिएटिविटी और एआई स्किल्स (DCAIS) प्रमाण पत्र प्राप्त करने के लिए 31 दिसंबर तक अपना रचनात्मक मूल्यांकन (Creative Assessment) जमा करें। (नोट: DCAIS केवल कक्षा 6, 7 और 8 के छात्रों के लिए है)",
         certNotice: "प्रमाण पत्र प्राप्त करने के लिए, कृपया सुनिश्चित करें कि आप प्रति माह एक गतिविधि अवश्य पूरी करें",
-        quickSearchTitle: "त्वरित गतिविधि खोज",
-        quickSearchDesc: "नाम से सभी कक्षाओं की गतिविधियों को सीधे खोजें",
-        searchActivityByName: "गतिविधि के नाम से खोजें...",
+        quickSearchTitle: "महीने के अनुसार गतिविधि खोजें",
+        quickSearchDesc: "अंग्रेजी और हिंदी दोनों में महीने के अनुसार गतिविधियों को खोजें",
+        searchActivityByName: "महीने के अनुसार गतिविधि खोजें (जैसे: जुलाई, अगस्त)...",
+        searchActivityByMonth: "महीने के अनुसार गतिविधि खोजें (जैसे: जुलाई, अगस्त / July, August)...",
+        ictTab: "आईसीटी-आधारित गतिविधियाँ",
+        dcaisTab: "DCAIS गतिविधियाँ",
+        clickHereBtn: "यहाँ क्लिक करें ↗",
         startBtn: "प्रारंभ करें",
         readyToExplore: "आइए शुरू करें!",
         heroSubtitle: "अपनी कक्षा चुनें और गतिविधियों के साथ आगे बढ़ें",
@@ -439,6 +496,7 @@ function pushNavigationState(step) {
         const payload = {
             step: step,
             tutorialMode: state.tutorialMode,
+            curriculumType: state.curriculumType,
             language: state.language,
             selectedGrade: state.selectedGrade,
             filterSubject: state.filterSubject,
@@ -567,6 +625,377 @@ function setupEventListeners() {
             state.currentStep = 'grade';
             pushNavigationState('grade');
             render();
+        });
+    }
+
+    // =========================================================================
+    // ADOBE EXPRESS THEME INTERACTION HANDLERS (Image 1 & 2)
+    // =========================================================================
+    let tile1Lang = 'en';
+    let tile2Lang = 'en';
+    let tile3Lang = 'en';
+
+    // Helper: Open AOTM Modal
+    window.openAotmModal = function(lang) {
+        const targetLang = lang || tile1Lang || state.language || 'en';
+        tile1Lang = targetLang;
+        updateAotmModalDisplay(targetLang);
+        const modal = document.getElementById('aotm-selection-modal');
+        if (modal) modal.classList.remove('hidden');
+    };
+
+    // Helper: Close AOTM Modal
+    window.closeAotmModal = function() {
+        const modal = document.getElementById('aotm-selection-modal');
+        if (modal) modal.classList.add('hidden');
+    };
+
+    // Helper: Update AOTM Modal Display
+    function updateAotmModalDisplay(lang) {
+        const targetLang = (lang === 'hi') ? 'hi' : 'en';
+        const aotmData = MONTHLY_ACTIVITIES[targetLang] || MONTHLY_ACTIVITIES.en;
+        
+        const titleEl = document.getElementById('aotm-modal-title');
+        if (titleEl) titleEl.textContent = aotmData.title;
+
+        const descEl = document.getElementById('aotm-modal-desc');
+        if (descEl) descEl.innerHTML = aotmData.desc;
+
+        const labelEl = document.getElementById('aotm-modal-tutorial-label');
+        if (labelEl) labelEl.textContent = targetLang === 'hi' ? '🎬 ट्यूटोरियल वीडियो' : '🎬 Step-by-Step Tutorial';
+
+        const videoLink = document.getElementById('aotm-modal-video-link');
+        if (videoLink) videoLink.href = aotmData.videoUrl;
+
+        const videoThumb = document.getElementById('aotm-modal-video-thumb');
+        if (videoThumb) {
+            videoThumb.src = `https://img.youtube.com/vi/${aotmData.videoId}/hqdefault.jpg`;
+            videoThumb.alt = aotmData.videoTitle;
+        }
+
+        const templateBtn = document.getElementById('aotm-modal-template-btn');
+        if (templateBtn) {
+            templateBtn.href = aotmData.templateUrl;
+            templateBtn.textContent = aotmData.btnText;
+        }
+
+        const submitBtn = document.getElementById('aotm-modal-submit-btn');
+        if (submitBtn) {
+            submitBtn.textContent = targetLang === 'hi' ? 'लिंक जमा करें' : 'Submit Link';
+        }
+
+        const btnEn = document.getElementById('aotm-modal-lang-en');
+        const btnHi = document.getElementById('aotm-modal-lang-hi');
+        if (btnEn && btnHi) {
+            if (targetLang === 'hi') {
+                btnEn.classList.remove('active');
+                btnHi.classList.add('active');
+            } else {
+                btnHi.classList.remove('active');
+                btnEn.classList.add('active');
+            }
+        }
+    }
+
+    // Helper: Open Certificate Modal
+    window.openCertModal = function() {
+        const modal = document.getElementById('dcais-cert-modal');
+        if (modal) modal.classList.remove('hidden');
+    };
+
+    // Helper: Close Certificate Modal
+    window.closeCertModal = function() {
+        const modal = document.getElementById('dcais-cert-modal');
+        if (modal) modal.classList.add('hidden');
+    };
+
+    // Modal Close Buttons
+    const closeAotmBtn = document.getElementById('close-aotm-modal-btn');
+    if (closeAotmBtn) {
+        closeAotmBtn.addEventListener('click', () => closeAotmModal());
+    }
+
+    const aotmModal = document.getElementById('aotm-selection-modal');
+    if (aotmModal) {
+        aotmModal.addEventListener('click', (e) => {
+            if (e.target === aotmModal) closeAotmModal();
+        });
+    }
+
+    const modalLangEn = document.getElementById('aotm-modal-lang-en');
+    const modalLangHi = document.getElementById('aotm-modal-lang-hi');
+    if (modalLangEn) {
+        modalLangEn.addEventListener('click', () => {
+            tile1Lang = 'en';
+            updateAotmModalDisplay('en');
+            updateAotmDisplay('en');
+        });
+    }
+    if (modalLangHi) {
+        modalLangHi.addEventListener('click', () => {
+            tile1Lang = 'hi';
+            updateAotmModalDisplay('hi');
+            updateAotmDisplay('hi');
+        });
+    }
+
+    const closeCertBtn = document.getElementById('close-cert-modal-btn');
+    if (closeCertBtn) {
+        closeCertBtn.addEventListener('click', () => closeCertModal());
+    }
+
+    const certModalStartBtn = document.getElementById('cert-modal-start-btn');
+    if (certModalStartBtn) {
+        certModalStartBtn.addEventListener('click', () => {
+            closeCertModal();
+            const grid = document.getElementById('ae-tiles-grid');
+            if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    const dcaisCertModal = document.getElementById('dcais-cert-modal');
+    if (dcaisCertModal) {
+        dcaisCertModal.addEventListener('click', (e) => {
+            if (e.target === dcaisCertModal) closeCertModal();
+        });
+    }
+
+    // Highlighted Rectangular Banner: Assignment Link
+    const certLearnMoreBtn = document.getElementById('cert-learn-more-btn');
+    if (certLearnMoreBtn) {
+        certLearnMoreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.open("https://new.express.adobe.com/webpage/Cgir6LQ7u0AIb/remix", "_blank", "noopener,noreferrer");
+        });
+    }
+    const certBanner = document.getElementById('cert-banner');
+    if (certBanner) {
+        certBanner.addEventListener('click', (e) => {
+            if (e.target.closest('#cert-learn-more-btn')) return;
+            window.open("https://new.express.adobe.com/webpage/Cgir6LQ7u0AIb/remix", "_blank", "noopener,noreferrer");
+        });
+    }
+
+    // Hero Action Buttons
+    const heroWatchTutorialBtn = document.getElementById('hero-watch-tutorial-btn');
+    if (heroWatchTutorialBtn) {
+        heroWatchTutorialBtn.addEventListener('click', () => openAotmModal(tile1Lang));
+    }
+
+    const heroGetStartedBtn = document.getElementById('hero-get-started-btn');
+    if (heroGetStartedBtn) {
+        heroGetStartedBtn.addEventListener('click', () => {
+            const grid = document.getElementById('ae-tiles-grid');
+            if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    // Tile 1: Language Toggle & Click inside
+    const tile1LangToggle = document.getElementById('tile-1-lang-toggle');
+    if (tile1LangToggle) {
+        tile1LangToggle.querySelectorAll('.ae-toggle-lang-opt').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const chosenLang = btn.getAttribute('data-lang') || 'en';
+                tile1Lang = chosenLang;
+                updateAotmDisplay(chosenLang);
+            });
+        });
+    }
+
+    const tileAotm = document.getElementById('tile-aotm');
+    const tile1StartBtn = document.getElementById('tile-1-start-btn');
+    if (tileAotm) {
+        tileAotm.addEventListener('click', () => openAotmModal(tile1Lang));
+    }
+    if (tile1StartBtn) {
+        tile1StartBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openAotmModal(tile1Lang);
+        });
+    }
+
+    // =========================================================================
+    // =========================================================================
+    // DCAIS ACTIVITIES LANGUAGE SELECTION & ROUTING (Grades 6, 7 & 8)
+    // =========================================================================
+    function startDCAIS(lang) {
+        resetInstructionPopupState();
+        state.curriculumType = 'dcais';
+        if (lang === 'hi') {
+            state.tutorialMode = 'hindi';
+            state.language = 'hi';
+        } else {
+            state.tutorialMode = 'english';
+            state.language = 'en';
+        }
+        state.selectedGrade = null;
+        state.selectedActivity = null;
+        state.currentStep = 'grade';
+        pushNavigationState('grade');
+        render();
+    }
+
+    window.openDCAISLangModal = function() {
+        const modal = document.getElementById('dcais-lang-modal');
+        if (modal) modal.classList.remove('hidden');
+    };
+
+    window.closeDCAISLangModal = function() {
+        const modal = document.getElementById('dcais-lang-modal');
+        if (modal) modal.classList.add('hidden');
+    };
+
+    const closeDCAISLangBtn = document.getElementById('close-dcais-lang-modal-btn');
+    if (closeDCAISLangBtn) {
+        closeDCAISLangBtn.addEventListener('click', () => closeDCAISLangModal());
+    }
+
+    const dcaisLangModal = document.getElementById('dcais-lang-modal');
+    if (dcaisLangModal) {
+        dcaisLangModal.addEventListener('click', (e) => {
+            if (e.target === dcaisLangModal) closeDCAISLangModal();
+        });
+    }
+
+    const dcaisSelectEnBtn = document.getElementById('dcais-select-en-btn');
+    if (dcaisSelectEnBtn) {
+        dcaisSelectEnBtn.addEventListener('click', () => {
+            closeDCAISLangModal();
+            startDCAIS('en');
+        });
+    }
+
+    const dcaisSelectHiBtn = document.getElementById('dcais-select-hi-btn');
+    if (dcaisSelectHiBtn) {
+        dcaisSelectHiBtn.addEventListener('click', () => {
+            closeDCAISLangModal();
+            startDCAIS('hi');
+        });
+    }
+
+    const tileDcais = document.getElementById('tile-dcais');
+    if (tileDcais) {
+        tileDcais.addEventListener('click', () => openDCAISLangModal());
+    }
+
+    // =========================================================================
+    // ICT-BASED ACTIVITIES LANGUAGE SELECTION & ROUTING (Grades 3, 4 & 5)
+    // =========================================================================
+    function startICT(lang) {
+        resetInstructionPopupState();
+        state.curriculumType = 'ict';
+        state.tutorialMode = (lang === 'hi') ? 'ict-hindi' : 'ict-english';
+        state.language = lang;
+        state.selectedGrade = null;
+        state.selectedActivity = null;
+        state.currentStep = 'grade';
+        pushNavigationState('grade');
+        render();
+    }
+
+    window.openICTLangModal = function() {
+        const modal = document.getElementById('ict-lang-modal');
+        if (modal) modal.classList.remove('hidden');
+    };
+
+    window.closeICTLangModal = function() {
+        const modal = document.getElementById('ict-lang-modal');
+        if (modal) modal.classList.add('hidden');
+    };
+
+    const closeICTLangBtn = document.getElementById('close-ict-lang-modal-btn');
+    if (closeICTLangBtn) {
+        closeICTLangBtn.addEventListener('click', () => closeICTLangModal());
+    }
+
+    const ictLangModal = document.getElementById('ict-lang-modal');
+    if (ictLangModal) {
+        ictLangModal.addEventListener('click', (e) => {
+            if (e.target === ictLangModal) closeICTLangModal();
+        });
+    }
+
+    const ictSelectEnBtn = document.getElementById('ict-select-en-btn');
+    if (ictSelectEnBtn) {
+        ictSelectEnBtn.addEventListener('click', () => {
+            closeICTLangModal();
+            startICT('en');
+        });
+    }
+
+    const ictSelectHiBtn = document.getElementById('ict-select-hi-btn');
+    if (ictSelectHiBtn) {
+        ictSelectHiBtn.addEventListener('click', () => {
+            closeICTLangModal();
+            startICT('hi');
+        });
+    }
+
+    const tileIct = document.getElementById('tile-ict');
+    if (tileIct) {
+        tileIct.addEventListener('click', () => openICTLangModal());
+    }
+
+    // =========================================================================
+    // KAUSHAL BODH ACTIVITIES (Vocational Skills)
+    // =========================================================================
+    function startTile3Kaushal() {
+        resetInstructionPopupState();
+        state.curriculumType = 'kaushal-bodh';
+        state.tutorialMode = 'kaushal-bodh';
+        state.selectedGrade = null;
+        state.selectedActivity = null;
+        state.currentStep = 'grade';
+        pushNavigationState('grade');
+        render();
+    }
+
+    const tileKaushal = document.getElementById('tile-kaushal');
+    if (tileKaushal) {
+        tileKaushal.addEventListener('click', () => startTile3Kaushal());
+    }
+
+    // =========================================================================
+    // HEADER NAVIGATION LINKS
+    // =========================================================================
+    const navItemHome = document.getElementById('nav-item-home');
+    if (navItemHome) {
+        navItemHome.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateToHome();
+        });
+    }
+
+    const navItemAotm = document.getElementById('nav-item-aotm');
+    if (navItemAotm) {
+        navItemAotm.addEventListener('click', (e) => {
+            e.preventDefault();
+            openAotmModal(tile1Lang);
+        });
+    }
+
+    const navItemIct = document.getElementById('nav-item-ict');
+    if (navItemIct) {
+        navItemIct.addEventListener('click', (e) => {
+            e.preventDefault();
+            openICTLangModal();
+        });
+    }
+
+    const navItemDcais = document.getElementById('nav-item-dcais');
+    if (navItemDcais) {
+        navItemDcais.addEventListener('click', (e) => {
+            e.preventDefault();
+            openDCAISLangModal();
+        });
+    }
+
+    const navItemKaushal = document.getElementById('nav-item-kaushal');
+    if (navItemKaushal) {
+        navItemKaushal.addEventListener('click', (e) => {
+            e.preventDefault();
+            startTile3Kaushal();
         });
     }
 
@@ -821,38 +1250,60 @@ function setupEventListeners() {
         });
     }
 
-    // Quick Activity Search Input listeners
-    const quickSearchInput = document.getElementById('quick-activity-search');
-    const clearQuickSearchBtn = document.getElementById('clear-quick-search-btn');
+    // Single Line Month Search Input listeners (Image 2)
+    const monthSearchBar = document.getElementById('month-search-bar');
+    const clearMonthSearchBtn = document.getElementById('clear-month-search-btn');
+    const monthSearchResults = document.getElementById('month-search-results');
 
-    if (quickSearchInput) {
-        quickSearchInput.addEventListener('input', (e) => {
+    if (monthSearchBar) {
+        monthSearchBar.addEventListener('input', (e) => {
             const val = e.target.value;
-            if (clearQuickSearchBtn) {
+            if (clearMonthSearchBtn) {
                 if (val.trim().length > 0) {
-                    clearQuickSearchBtn.classList.remove('hidden');
+                    clearMonthSearchBtn.classList.remove('hidden');
                 } else {
-                    clearQuickSearchBtn.classList.add('hidden');
+                    clearMonthSearchBtn.classList.add('hidden');
                 }
             }
-            renderQuickSearchResults(val);
+            renderMonthSearchResults(val);
+        });
+
+        monthSearchBar.addEventListener('focus', () => {
+            if (monthSearchBar.value.trim().length > 0) {
+                renderMonthSearchResults(monthSearchBar.value);
+            }
+        });
+
+        monthSearchBar.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (monthSearchResults) monthSearchResults.classList.add('hidden');
+            }
         });
     }
 
-    if (clearQuickSearchBtn && quickSearchInput) {
-        clearQuickSearchBtn.addEventListener('click', () => {
-            quickSearchInput.value = '';
-            clearQuickSearchBtn.classList.add('hidden');
-            renderQuickSearchResults('');
-            quickSearchInput.focus();
+    if (clearMonthSearchBtn && monthSearchBar) {
+        clearMonthSearchBtn.addEventListener('click', () => {
+            monthSearchBar.value = '';
+            clearMonthSearchBtn.classList.add('hidden');
+            if (monthSearchResults) monthSearchResults.classList.add('hidden');
+            renderMonthSearchResults('');
+            monthSearchBar.focus();
         });
     }
+
+    // Close month search dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (monthSearchResults && !e.target.closest('#month-search-container')) {
+            monthSearchResults.classList.add('hidden');
+        }
+    });
 
     // Listen for browser back/forward buttons (HTML5 History API)
     window.addEventListener('popstate', (e) => {
         const pop = e.state;
         if (!pop || pop.step === 'welcome') {
             state.tutorialMode = 'choose';
+            state.curriculumType = 'dcais';
             state.selectedGrade = null;
             state.selectedActivity = null;
             state.filterSubject = 'All';
@@ -862,6 +1313,7 @@ function setupEventListeners() {
         }
 
         state.tutorialMode = pop.tutorialMode || state.tutorialMode;
+        state.curriculumType = pop.curriculumType || (state.tutorialMode === 'kaushal-bodh' ? 'kaushal-bodh' : (state.tutorialMode && state.tutorialMode.startsWith('ict') ? 'ict' : 'dcais'));
         state.language = pop.language || state.language;
         state.selectedGrade = pop.selectedGrade || null;
         state.filterSubject = pop.filterSubject || 'All';
@@ -1416,7 +1868,7 @@ function parseExcel(arrayBuffer) {
  * @returns {string[]} Naturally sorted array of grade strings.
  */
 function extractGrades(activities) {
-    if (state.tutorialMode === 'kaushal-bodh') {
+    if (state.curriculumType === 'kaushal-bodh' || state.tutorialMode === 'kaushal-bodh') {
         const kbSet = new Set((state.kaushalBodhActivities || []).map(a => a.grade).filter(Boolean));
         let kbGrades = Array.from(kbSet);
         return kbGrades.sort((a, b) => {
@@ -1429,11 +1881,21 @@ function extractGrades(activities) {
     const gradesSet = new Set(activities.map(a => a.grade).filter(Boolean));
     let gradesArray = Array.from(gradesSet);
 
-    // Filter grades based on the active tutorialMode
-    if (state.tutorialMode === 'hindi') {
-        gradesArray = gradesArray.filter(g => g.toLowerCase().includes('(hindi)'));
-    } else if (state.tutorialMode === 'english') {
-        gradesArray = gradesArray.filter(g => !g.toLowerCase().includes('(hindi)'));
+    if (state.curriculumType === 'ict') {
+        // ICT-Based Activities: strictly Grades 3, 4, 5
+        const hasExplicitHindi = gradesArray.some(g => /(3|4|5)/.test(g) && g.toLowerCase().includes('(hindi)'));
+        if (state.language === 'hi' && hasExplicitHindi) {
+            gradesArray = gradesArray.filter(g => /(3|4|5)/.test(g) && g.toLowerCase().includes('(hindi)'));
+        } else {
+            gradesArray = gradesArray.filter(g => /(3|4|5)/.test(g) && !g.toLowerCase().includes('(hindi)'));
+        }
+    } else {
+        // DCAIS Activities: strictly Grades 6, 7, 8
+        if (state.language === 'hi' || state.tutorialMode === 'hindi') {
+            gradesArray = gradesArray.filter(g => /(6|7|8)/.test(g) && g.toLowerCase().includes('(hindi)'));
+        } else {
+            gradesArray = gradesArray.filter(g => /(6|7|8)/.test(g) && !g.toLowerCase().includes('(hindi)'));
+        }
     }
 
     return gradesArray.sort((a, b) => {
@@ -1657,6 +2119,9 @@ function render() {
     document.getElementById('step-activities').classList.add('hidden');
     document.getElementById('step-detail').classList.add('hidden');
 
+    document.body.setAttribute('data-step', state.currentStep);
+    document.body.setAttribute('data-curriculum', state.curriculumType || '');
+
     let focusId = '';
 
     const isChoose = state.tutorialMode === 'choose';
@@ -1686,13 +2151,13 @@ function render() {
     } else if (state.currentStep === 'grade') {
         document.getElementById('step-grade').classList.remove('hidden');
         
-        // Hide Quick Activity Search in Kaushal Bodh mode
-        const quickSearchSec = document.getElementById('quick-search-section');
-        if (quickSearchSec) {
+        // Toggle Month Search Bar visibility
+        const monthSearchSec = document.getElementById('month-search-container');
+        if (monthSearchSec) {
             if (state.tutorialMode === 'kaushal-bodh') {
-                quickSearchSec.classList.add('hidden');
+                monthSearchSec.classList.add('hidden');
             } else {
-                quickSearchSec.classList.remove('hidden');
+                monthSearchSec.classList.remove('hidden');
             }
         }
 
@@ -1741,6 +2206,27 @@ function render() {
         focusId = 'detail-title';
     }
 
+    // Update active navigation links in header
+    const navItemHome = document.getElementById('nav-item-home');
+    const navItemAotm = document.getElementById('nav-item-aotm');
+    const navItemIct = document.getElementById('nav-item-ict');
+    const navItemDcais = document.getElementById('nav-item-dcais');
+    const navItemKaushal = document.getElementById('nav-item-kaushal');
+
+    [navItemHome, navItemAotm, navItemIct, navItemDcais, navItemKaushal].forEach(el => {
+        if (el) el.classList.remove('active');
+    });
+
+    if (state.currentStep === 'welcome') {
+        if (navItemHome) navItemHome.classList.add('active');
+    } else if (state.curriculumType === 'ict') {
+        if (navItemIct) navItemIct.classList.add('active');
+    } else if (state.curriculumType === 'kaushal-bodh') {
+        if (navItemKaushal) navItemKaushal.classList.add('active');
+    } else {
+        if (navItemDcais) navItemDcais.classList.add('active');
+    }
+
     renderBreadcrumbs();
     renderDCAISInstructionPopup(state.currentStep);
 
@@ -1779,12 +2265,14 @@ function renderBreadcrumbs() {
 
     // Level 2: Section / Mode
     let modeLabel = '';
-    if (state.tutorialMode === 'kaushal-bodh') {
+    if (state.curriculumType === 'kaushal-bodh' || state.tutorialMode === 'kaushal-bodh') {
         modeLabel = (translations[state.language || 'en'] && translations[state.language || 'en'].kaushalBodhTab) || 'Kaushal Bodh';
-    } else if (state.tutorialMode === 'hindi') {
-        modeLabel = (translations[state.language || 'en'] && translations[state.language || 'en'].hindiTutorials) || 'DCAIS Hindi';
+    } else if (state.curriculumType === 'ict' || (state.tutorialMode && state.tutorialMode.startsWith('ict'))) {
+        modeLabel = state.language === 'hi' ? 'आईसीटी गतिविधियाँ (कक्षा 3-5)' : 'ICT Activities (Grades 3-5)';
+    } else if (state.tutorialMode === 'hindi' || state.language === 'hi') {
+        modeLabel = (translations[state.language || 'en'] && translations[state.language || 'en'].hindiTutorials) || 'DCAIS Activities / Hindi';
     } else {
-        modeLabel = (translations[state.language || 'en'] && translations[state.language || 'en'].englishTutorials) || 'DCAIS English';
+        modeLabel = (translations[state.language || 'en'] && translations[state.language || 'en'].englishTutorials) || 'DCAIS Activities / English';
     }
 
     if (state.currentStep === 'grade') {
@@ -1889,16 +2377,34 @@ function renderGradeSelection() {
     const activitiesList = isKB ? state.kaushalBodhActivities : state.allActivities;
     let grades = extractGrades(activitiesList);
     
-    // Update subtitle for Kaushal Bodh mode if applicable
+    // Update subtitle dynamically for ICT vs DCAIS vs Kaushal Bodh
     const heroSubtitleEl = document.getElementById('hero-subtitle');
     if (heroSubtitleEl) {
         const dict = translations[state.language || 'en'];
-        heroSubtitleEl.innerText = isKB ? (dict.kaushalHeroSubtitle || dict.heroSubtitle) : dict.heroSubtitle;
+        if (isKB) {
+            heroSubtitleEl.innerText = dict.kaushalHeroSubtitle || dict.heroSubtitle;
+        } else if (state.curriculumType === 'ict') {
+            heroSubtitleEl.innerText = state.language === 'hi' 
+                ? "कक्षा 3, 4 और 5 की गतिविधियाँ देखने के लिए अपनी कक्षा चुनें"
+                : "Choose your grade level for ICT-Based Activities (Grades 3, 4 & 5)";
+        } else {
+            heroSubtitleEl.innerText = state.language === 'hi'
+                ? "कक्षा 6, 7 और 8 की DCAIS गतिविधियाँ देखने के लिए अपनी कक्षा चुनें"
+                : "Choose your grade level for DCAIS Activities (Grades 6, 7 & 8)";
+        }
     }
 
-    // Render Quick Activity Search results
-    const quickSearchInput = document.getElementById('quick-activity-search');
-    renderQuickSearchResults(quickSearchInput ? quickSearchInput.value : '');
+    // Refresh month search placeholder
+    const monthSearchBar = document.getElementById('month-search-bar');
+    if (monthSearchBar && !monthSearchBar.value) {
+        monthSearchBar.placeholder = (translations[state.language || 'en'] && translations[state.language || 'en'].searchActivityByMonth) 
+            || "Search Activity by Month (e.g. July, August / जुलाई, अगस्त)...";
+    }
+
+    // Render Month Search results if input has active text
+    if (monthSearchBar && monthSearchBar.value.trim().length > 0) {
+        renderMonthSearchResults(monthSearchBar.value);
+    }
 
     let html = '';
 
@@ -1921,12 +2427,24 @@ function renderGradeSelection() {
         const numStr = grade.replace(/\D/g, '');
         let icon = '🎓';
         let accentClass = 'indigo';
-        if (numStr === '6' || numStr === '5') {
+        if (numStr === '3') {
+            accentClass = 'teal';
+            icon = '🎨';
+        } else if (numStr === '4') {
+            accentClass = 'cyan';
+            icon = '💻';
+        } else if (numStr === '5') {
+            accentClass = 'blue';
+            icon = '🚀';
+        } else if (numStr === '6') {
             accentClass = 'pink';
+            icon = '💡';
         } else if (numStr === '7') {
             accentClass = 'green';
+            icon = '📐';
         } else if (numStr === '8') {
             accentClass = 'indigo';
+            icon = '🤖';
         }
 
         html += `
@@ -1965,76 +2483,179 @@ function renderGradeSelection() {
 }
 
 /**
- * Renders real-time activity search results inside Quick Activity Search on Step 1.
- * Matches both DCAIS activities and Kaushal Bodh projects.
+ * Renders month-based search results with bi-directional English & Hindi matching,
+ * strictly scoped to the student's active language medium and curriculum.
+ * - If student is in English: shows ONLY English activities (no Hindi activities).
+ * - If student is in Hindi: allows searching in English ("july") or Hindi ("जुलाई"), and shows ONLY Hindi activities.
+ * - Works strictly for both ICT (Grades 3, 4, 5) and DCAIS (Grades 6, 7, 8).
  * @param {string} query
  */
-function renderQuickSearchResults(query = '') {
-    const container = document.getElementById('quick-activity-results');
-    if (!container) return;
+function renderMonthSearchResults(query = '') {
+    const resultsContainer = document.getElementById('month-search-results');
+    if (!resultsContainer) return;
 
     const cleanQuery = (query || '').trim().toLowerCase();
-    const lang = state.language || 'en';
+    const isHindiMedium = (state.language === 'hi' || state.tutorialMode === 'hindi' || state.tutorialMode === 'ict-hindi');
+    const lang = isHindiMedium ? 'hi' : 'en';
+    const dict = translations[lang] || translations.en;
 
     if (!cleanQuery) {
-        container.innerHTML = `
-            <div style="text-align: center; color: var(--color-text-secondary); padding: 1.5rem 1rem; font-size: 0.875rem;">
-                <span style="font-size: 1.75rem; display: block; margin-bottom: 0.35rem;">🔎</span>
-                <span>${lang === 'hi' ? 'गतिविधि खोजने के लिए नाम दर्ज करें' : 'Type an activity name on the left for instant results!'}</span>
-            </div>
-        `;
+        resultsContainer.innerHTML = '';
+        resultsContainer.classList.add('hidden');
         return;
     }
 
-    const allCombined = [...state.allActivities, ...state.kaushalBodhActivities];
-    const matches = allCombined.filter(a =>
-        a.activity_name && a.activity_name.toLowerCase().includes(cleanQuery)
-    );
+    // 1. Identify target months from query bi-directionally
+    // E.g. 'july', 'jul', 'जुलाई' all resolve to month index 7 (July / जुलाई)
+    let matchedMonthObjects = [];
+    for (const [key, val] of Object.entries(MONTH_TRANSLATION_MAP)) {
+        if (key.toLowerCase().startsWith(cleanQuery) || key.toLowerCase().includes(cleanQuery)) {
+            if (!matchedMonthObjects.some(m => m.index === val.index)) {
+                matchedMonthObjects.push(val);
+            }
+        }
+    }
+
+    // 2. Candidate activity pool strictly based on active curriculumType and student language medium
+    let pool = [];
+    if (state.curriculumType === 'ict') {
+        // ICT-Based Activities: strictly Grades 3, 4, 5
+        const hasExplicitIctHindi = (state.allActivities || []).some(a => /(3|4|5)/.test(a.grade) && a.grade.toLowerCase().includes('(hindi)'));
+        if (isHindiMedium && hasExplicitIctHindi) {
+            pool = (state.allActivities || []).filter(a => /(3|4|5)/.test(a.grade) && a.grade.toLowerCase().includes('(hindi)'));
+        } else {
+            pool = (state.allActivities || []).filter(a => /(3|4|5)/.test(a.grade) && !a.grade.toLowerCase().includes('(hindi)'));
+        }
+    } else if (state.curriculumType === 'kaushal-bodh') {
+        pool = state.kaushalBodhActivities || [];
+    } else {
+        // DCAIS Activities: strictly Grades 6, 7, 8
+        if (isHindiMedium) {
+            // Hindi medium: ONLY show Hindi curriculum activities (Grade 6 (Hindi), etc.)
+            pool = (state.allActivities || []).filter(a => /(6|7|8)/.test(a.grade) && a.grade.toLowerCase().includes('(hindi)'));
+        } else {
+            // English medium: ONLY show English curriculum activities (Grade 6, 7, 8)
+            pool = (state.allActivities || []).filter(a => /(6|7|8)/.test(a.grade) && !a.grade.toLowerCase().includes('(hindi)'));
+        }
+    }
+
+    // Fallback if specific pool is empty
+    if (pool.length === 0) {
+        if (isHindiMedium) {
+            pool = (state.allActivities || []).filter(a => a.grade.toLowerCase().includes('(hindi)'));
+        } else {
+            pool = (state.allActivities || []).filter(a => !a.grade.toLowerCase().includes('(hindi)'));
+        }
+    }
+
+    // 3. Filter pool for activities that match the resolved month or name
+    const matches = pool.filter(act => {
+        const actMonth = (act.month || '').trim().toLowerCase();
+        const actName = (act.activity_name || '').trim().toLowerCase();
+
+        // Check if activity month matches any resolved target month
+        if (matchedMonthObjects.length > 0) {
+            for (const m of matchedMonthObjects) {
+                const enMonth = m.en.toLowerCase();
+                const hiMonth = m.hi.toLowerCase();
+                const alts = (m.altHi || []).map(a => a.toLowerCase());
+                if (actMonth === enMonth || actMonth === hiMonth || alts.includes(actMonth) ||
+                    actMonth.includes(enMonth) || actMonth.includes(hiMonth)) {
+                    return true;
+                }
+            }
+        }
+
+        // Direct substring match on month or activity name
+        if (actMonth && actMonth.includes(cleanQuery)) return true;
+        if (actName && actName.includes(cleanQuery)) return true;
+
+        return false;
+    });
+
+    resultsContainer.classList.remove('hidden');
 
     if (matches.length === 0) {
-        container.innerHTML = `
-            <div style="text-align: center; color: var(--color-text-secondary); padding: 1.5rem 1rem; font-size: 0.875rem;">
-                <span style="font-size: 1.75rem; display: block; margin-bottom: 0.35rem;">🤔</span>
-                <span>${lang === 'hi' ? 'कोई मेल खाती गतिविधि नहीं मिली' : 'No activities matching "' + escapeHTML(cleanQuery) + '"'}</span>
+        resultsContainer.innerHTML = `
+            <div style="text-align: center; color: var(--color-text-secondary); padding: 1.25rem 1rem; font-size: 0.88rem;">
+                <span style="font-size: 1.5rem; display: block; margin-bottom: 0.35rem;">🔍</span>
+                <span>${isHindiMedium 
+                    ? `"${escapeHTML(cleanQuery)}" के लिए कोई गतिविधि नहीं मिली। कृपया जुलाई, अगस्त, सितंबर जैसे महीने खोजें।` 
+                    : `No activities found for "${escapeHTML(cleanQuery)}". Try searching for July, August, September...`}</span>
             </div>
         `;
         return;
     }
 
     let html = '';
-    matches.slice(0, 15).forEach(act => {
+    // Show up to 25 relevant matches strictly matching the student's language
+    matches.slice(0, 25).forEach(act => {
         const isKB = act.isKaushalBodh;
-        const tagText = isKB ? (act.form_of_work || 'Kaushal Bodh') : (act.month || '');
+        const rawMonth = act.month || '';
+        // Localize month label to student language (e.g. English -> July; Hindi -> जुलाई)
+        const monthLabel = dict.monthNames[rawMonth] || rawMonth;
+        const gradeDisplay = getDisplayGradeName(act.grade);
 
         html += `
-            <div class="quick-result-item" data-activity-name="${encodeURIComponent(act.activity_name)}" data-activity-grade="${encodeURIComponent(act.grade)}" data-is-kb="${isKB ? 'true' : 'false'}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; box-shadow: var(--shadow-sm);">
-                <div style="display: flex; flex-direction: column; gap: 0.15rem; flex: 1; padding-right: 0.5rem; text-align: left;">
-                    <span style="font-weight: 700; color: var(--color-text-primary); font-size: 0.9rem;">${escapeHTML(act.activity_name)}</span>
-                    <span style="font-size: 0.775rem; color: var(--color-text-secondary);">${escapeHTML(tagText)} ${act.skills ? '• ' + escapeHTML(act.skills.substring(0, 60)) + '...' : ''}</span>
+            <button type="button" class="month-search-item" 
+                data-activity-name="${encodeURIComponent(act.activity_name)}" 
+                data-activity-grade="${encodeURIComponent(act.grade)}" 
+                data-is-kb="${isKB ? 'true' : 'false'}"
+                aria-label="${escapeHTML(act.activity_name)}, ${escapeHTML(gradeDisplay)}, ${escapeHTML(monthLabel)}">
+                <div style="display: flex; flex-direction: column; gap: 0.2rem; flex: 1; text-align: left;">
+                    <span class="month-search-item-title">${escapeHTML(act.activity_name)}</span>
+                    <span style="font-size: 0.82rem; color: var(--color-text-secondary); font-weight: 500; line-height: 1.35;">
+                        ${act.skills ? escapeHTML(act.skills.substring(0, 70)) + '...' : ''}
+                    </span>
                 </div>
-                <span class="grade-badge" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: var(--radius-full); background: ${isKB ? 'rgba(37, 99, 235, 0.1)' : 'var(--color-subject-1-bg)'}; color: ${isKB ? '#2563eb' : 'var(--color-subject-1)'}; font-weight: 700; white-space: nowrap;">${getDisplayGradeName(act.grade)}</span>
-            </div>
+                <div class="month-search-item-meta">
+                    <span class="month-search-item-badge">📅 ${escapeHTML(monthLabel)}</span>
+                    <span class="grade-badge" style="font-size: 0.72rem; padding: 0.15rem 0.55rem; border-radius: 9999px; background: #f1f5f9; color: #334155; font-weight: 700; white-space: nowrap;">
+                        ${escapeHTML(gradeDisplay)}
+                    </span>
+                </div>
+            </button>
         `;
     });
 
-    container.innerHTML = html;
+    resultsContainer.innerHTML = html;
 
-    container.querySelectorAll('.quick-result-item').forEach(item => {
+    // Bind click events on search results
+    resultsContainer.querySelectorAll('.month-search-item').forEach(item => {
         item.addEventListener('click', () => {
             const actName = decodeURIComponent(item.getAttribute('data-activity-name'));
             const actGrade = decodeURIComponent(item.getAttribute('data-activity-grade'));
             const isKB = item.getAttribute('data-is-kb') === 'true';
 
-            const pool = isKB ? state.kaushalBodhActivities : state.allActivities;
-            const selected = pool.find(a => a.grade === actGrade && a.activity_name === actName);
+            const poolToSearch = isKB ? state.kaushalBodhActivities : state.allActivities;
+            const selected = poolToSearch.find(a => a.grade === actGrade && a.activity_name === actName);
 
             if (selected) {
                 if (isKB) {
+                    state.curriculumType = 'kaushal-bodh';
                     state.tutorialMode = 'kaushal-bodh';
+                } else if (/(3|4|5)/.test(actGrade)) {
+                    state.curriculumType = 'ict';
+                    if (state.language === 'hi') {
+                        state.tutorialMode = 'ict-hindi';
+                    } else {
+                        state.tutorialMode = 'ict-english';
+                    }
+                } else {
+                    state.curriculumType = 'dcais';
+                    if (actGrade.toLowerCase().includes('(hindi)') || state.language === 'hi') {
+                        state.tutorialMode = 'hindi';
+                        state.language = 'hi';
+                    } else {
+                        state.tutorialMode = 'english';
+                        state.language = 'en';
+                    }
                 }
+
                 state.selectedGrade = actGrade;
                 state.selectedActivity = selected;
                 state.currentStep = 'detail';
+                resultsContainer.classList.add('hidden');
                 pushNavigationState('detail');
                 render();
             }
@@ -3126,6 +3747,9 @@ function translateUIInternal() {
     const lang = state.language || 'en';
     const dict = translations[lang] || translations.en;
 
+    // Set document root language attribute for CSS :lang() and typography hooks
+    document.documentElement.lang = lang;
+
     // Synchronize language toggle UI buttons
     updateLangToggleUI();
 
@@ -3157,6 +3781,40 @@ function translateUIInternal() {
         }
     });
 
+    // Synchronize month search bar placeholder
+    const monthSearchBar = document.getElementById('month-search-bar');
+    if (monthSearchBar) {
+        monthSearchBar.placeholder = dict.searchActivityByMonth || "Search Activity by Month (e.g. July, August / जुलाई, अगस्त)...";
+    }
+
+    // Synchronize Tile titles and descriptions
+    const tileIctTitle = document.getElementById('tile-ict-title');
+    if (tileIctTitle) {
+        tileIctTitle.textContent = dict.ictTab || "ICT-Based Activities";
+    }
+    const tileIctDesc = document.getElementById('tile-ict-desc');
+    if (tileIctDesc) {
+        tileIctDesc.textContent = (lang === 'hi')
+            ? "कक्षा 3, 4 और 5 के लिए डिजिटल रचनात्मकता, कोडिंग ब्लॉक्स, विज़ुअल आर्ट टेम्पलेट्स और ग्राफिक डिज़ाइन गतिविधियाँ।"
+            : "Digital creativity, coding blocks, visual art templates and graphic design activities for Grades 3, 4 and 5.";
+    }
+    const tileDcaisTitle = document.getElementById('tile-2-title');
+    if (tileDcaisTitle) {
+        tileDcaisTitle.textContent = dict.dcaisTab || "DCAIS Activities";
+    }
+    const tileDcaisDesc = document.getElementById('tile-2-desc');
+    if (tileDcaisDesc) {
+        tileDcaisDesc.textContent = (lang === 'hi')
+            ? "रचनात्मक पोस्टर टेम्पलेट्स, ग्राफिक कला और दृश्य लेआउट के साथ डिजिटल क्रिएटिविटी और एआई स्किल्स पाठ्यक्रम।"
+            : "Digital Creativity & AI Skills curriculum with creative poster templates, graphic art, and visual layouts.";
+    }
+
+    // Synchronize Certificate button text
+    const certLearnMoreBtn = document.getElementById('cert-learn-more-btn');
+    if (certLearnMoreBtn) {
+        certLearnMoreBtn.innerHTML = `<span>${dict.clickHereBtn || 'Click Here ↗'}</span>`;
+    }
+
     // Synchronize Activity of the Month card (English vs Hindi)
     const aotmLang = state.aotmLanguage || state.language || 'en';
     updateAotmDisplay(aotmLang);
@@ -3171,63 +3829,80 @@ function updateAotmDisplay(lang) {
     state.aotmLanguage = targetLang;
     const aotmData = MONTHLY_ACTIVITIES[targetLang] || MONTHLY_ACTIVITIES.en;
 
-    const titleEl = document.getElementById('aotm-title');
-    if (titleEl) {
-        titleEl.textContent = aotmData.title;
+    // Tile 1 elements in new Adobe Express layout
+    const tile1Title = document.getElementById('tile-1-title');
+    if (tile1Title) {
+        tile1Title.textContent = aotmData.title;
     }
 
-    const descEl = document.getElementById('aotm-desc');
-    if (descEl) {
-        descEl.innerHTML = aotmData.desc;
+    const tile1Desc = document.getElementById('tile-1-desc');
+    if (tile1Desc) {
+        tile1Desc.innerHTML = targetLang === 'hi'
+            ? 'अपने बचपन की किसी जादुई याद के बारे में सोचिए। लिखिए कि वह पल खास क्यों था और ट्यूटोरियल देखकर इसे Adobe Express से सुंदर चित्र में बदलें! कल्पना करें। रचना करें।'
+            : 'Think of a magical childhood memory that still makes you smile. Write about what made it special, then transform it into an Adobe Express visual! Imagine. Create. Express your story!';
     }
+
+    const tile1LangToggle = document.getElementById('tile-1-lang-toggle');
+    if (tile1LangToggle) {
+        tile1LangToggle.querySelectorAll('.ae-toggle-lang-opt').forEach(btn => {
+            if (btn.getAttribute('data-lang') === targetLang) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    // Modal elements
+    const modalTitle = document.getElementById('aotm-modal-title');
+    if (modalTitle) modalTitle.textContent = aotmData.title;
+
+    const modalDesc = document.getElementById('aotm-modal-desc');
+    if (modalDesc) modalDesc.innerHTML = aotmData.desc;
+
+    const modalVideoThumb = document.getElementById('aotm-modal-video-thumb');
+    if (modalVideoThumb) {
+        modalVideoThumb.src = `https://img.youtube.com/vi/${aotmData.videoId}/hqdefault.jpg`;
+        modalVideoThumb.alt = aotmData.videoTitle;
+    }
+
+    const modalVideoLink = document.getElementById('aotm-modal-video-link');
+    if (modalVideoLink) modalVideoLink.href = aotmData.videoUrl;
+
+    const modalTemplateBtn = document.getElementById('aotm-modal-template-btn');
+    if (modalTemplateBtn) {
+        modalTemplateBtn.href = aotmData.templateUrl;
+        modalTemplateBtn.textContent = aotmData.btnText;
+    }
+
+    const modalSubmitBtn = document.getElementById('aotm-modal-submit-btn');
+    if (modalSubmitBtn) {
+        modalSubmitBtn.textContent = targetLang === 'hi' ? 'लिंक जमा करें' : 'Submit Link';
+    }
+
+    const modalBtnEn = document.getElementById('aotm-modal-lang-en');
+    const modalBtnHi = document.getElementById('aotm-modal-lang-hi');
+    if (modalBtnEn && modalBtnHi) {
+        if (targetLang === 'hi') {
+            modalBtnEn.classList.remove('active');
+            modalBtnHi.classList.add('active');
+        } else {
+            modalBtnHi.classList.remove('active');
+            modalBtnEn.classList.add('active');
+        }
+    }
+
+    // Legacy fallbacks
+    const titleEl = document.getElementById('aotm-title');
+    if (titleEl) titleEl.textContent = aotmData.title;
+
+    const descEl = document.getElementById('aotm-desc');
+    if (descEl) descEl.innerHTML = aotmData.desc;
 
     const templateBtn = document.getElementById('explore-activity-btn');
     if (templateBtn) {
         templateBtn.href = aotmData.templateUrl;
         templateBtn.textContent = aotmData.btnText;
-    }
-
-    // Tutorial Video Preview Card
-    const tutorialCardLink = document.getElementById('aotm-tutorial-card-link');
-    if (tutorialCardLink) {
-        tutorialCardLink.href = aotmData.videoUrl;
-    }
-
-    const tutorialThumb = document.getElementById('aotm-tutorial-thumb');
-    if (tutorialThumb) {
-        tutorialThumb.src = `https://img.youtube.com/vi/${aotmData.videoId}/hqdefault.jpg`;
-        tutorialThumb.alt = aotmData.videoTitle;
-    }
-
-    const tutorialTitle = document.getElementById('aotm-tutorial-title');
-    if (tutorialTitle) {
-        tutorialTitle.textContent = aotmData.videoTitle;
-    }
-
-    const tutorialSub = document.getElementById('aotm-tutorial-subtitle');
-    if (tutorialSub) {
-        tutorialSub.textContent = aotmData.videoSubtitle;
-    }
-
-    const watchBtn = document.getElementById('aotm-tutorial-watch-btn');
-    if (watchBtn) {
-        watchBtn.textContent = aotmData.watchBtnText;
-    }
-
-    const btnEn = document.getElementById('aotm-btn-en');
-    const btnHi = document.getElementById('aotm-btn-hi');
-    if (btnEn && btnHi) {
-        if (targetLang === 'hi') {
-            btnEn.classList.remove('active');
-            btnEn.setAttribute('aria-selected', 'false');
-            btnHi.classList.add('active');
-            btnHi.setAttribute('aria-selected', 'true');
-        } else {
-            btnHi.classList.remove('active');
-            btnHi.setAttribute('aria-selected', 'false');
-            btnEn.classList.add('active');
-            btnEn.setAttribute('aria-selected', 'true');
-        }
     }
 }
 
