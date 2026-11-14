@@ -161,7 +161,7 @@ const translations = {
         kaushalHeroSubtitle: "Choose your grade level from Kaushal Bodh curriculum",
         kaushalActivitiesSubtitle: "Showing Kaushal Bodh projects for {grade}",
         importantNoteHeading: "Earn DCAIS Certificate",
-        importantNoteText: "All students of Grades 6, 7 and 8, please submit your Creative Assessment by 31st December to earn your Digital Creativity and AI Skills certificate. Note: DCAIS is exclusively for students of Grades 6, 7 and 8.",
+        importantNoteText: "All students of Grades 6, 7, 8 and 9, please submit your Creative Assessment by 31st December to earn your Digital Creativity and AI Skills certificate. Note: DCAIS is exclusively for students of Grades 6, 7, 8 and 9.",
         certNotice: "To earn your certificate, please complete at least one activity per month",
         quickSearchTitle: "Search Activity by Month",
         quickSearchDesc: "Filter activities across months in English and Hindi",
@@ -308,7 +308,7 @@ const translations = {
         kaushalHeroSubtitle: "कौशल बोध प्रोजेक्ट्स और लर्निंग जर्नल देखने के लिए अपनी कक्षा चुनें",
         kaushalActivitiesSubtitle: "{grade} के कौशल बोध प्रोजेक्ट्स",
         importantNoteHeading: "DCAIS प्रमाण पत्र",
-        importantNoteText: "कक्षा 6, 7 और 8 के सभी छात्र, कृपया अपना डिजिटल क्रिएटिविटी और एआई स्किल्स (DCAIS) प्रमाण पत्र प्राप्त करने के लिए 31 दिसंबर तक अपना रचनात्मक मूल्यांकन (Creative Assessment) जमा करें। (नोट: DCAIS केवल कक्षा 6, 7 और 8 के छात्रों के लिए है)",
+        importantNoteText: "कक्षा 6, 7, 8 और 9 के सभी छात्र, कृपया अपना डिजिटल क्रिएटिविटी और एआई स्किल्स (DCAIS) प्रमाण पत्र प्राप्त करने के लिए 31 दिसंबर तक अपना रचनात्मक मूल्यांकन (Creative Assessment) जमा करें। (नोट: DCAIS केवल कक्षा 6, 7, 8 और 9 के छात्रों के लिए है)",
         certNotice: "प्रमाण पत्र प्राप्त करने के लिए, कृपया सुनिश्चित करें कि आप प्रति माह एक गतिविधि अवश्य पूरी करें",
         quickSearchTitle: "महीने के अनुसार गतिविधि खोजें",
         quickSearchDesc: "अंग्रेजी और हिंदी दोनों में महीने के अनुसार गतिविधियों को खोजें",
@@ -817,7 +817,7 @@ function setupEventListeners() {
 
     // =========================================================================
     // =========================================================================
-    // DCAIS ACTIVITIES LANGUAGE SELECTION & ROUTING (Grades 6, 7 & 8)
+    // DCAIS ACTIVITIES LANGUAGE SELECTION & ROUTING (Grades 6, 7, 8 & 9)
     // =========================================================================
     function startDCAIS(lang) {
         resetInstructionPopupState();
@@ -1890,11 +1890,11 @@ function extractGrades(activities) {
             gradesArray = gradesArray.filter(g => /(3|4|5)/.test(g) && !g.toLowerCase().includes('(hindi)'));
         }
     } else {
-        // DCAIS Activities: strictly Grades 6, 7, 8
+        // DCAIS Activities: strictly Grades 6, 7, 8, 9
         if (state.language === 'hi' || state.tutorialMode === 'hindi') {
-            gradesArray = gradesArray.filter(g => /(6|7|8)/.test(g) && g.toLowerCase().includes('(hindi)'));
+            gradesArray = gradesArray.filter(g => /(6|7|8|9)/.test(g) && g.toLowerCase().includes('(hindi)'));
         } else {
-            gradesArray = gradesArray.filter(g => /(6|7|8)/.test(g) && !g.toLowerCase().includes('(hindi)'));
+            gradesArray = gradesArray.filter(g => /(6|7|8|9)/.test(g) && !g.toLowerCase().includes('(hindi)'));
         }
     }
 
@@ -2389,8 +2389,8 @@ function renderGradeSelection() {
                 : "Choose your grade level for ICT-Based Activities (Grades 3, 4 & 5)";
         } else {
             heroSubtitleEl.innerText = state.language === 'hi'
-                ? "कक्षा 6, 7 और 8 की DCAIS गतिविधियाँ देखने के लिए अपनी कक्षा चुनें"
-                : "Choose your grade level for DCAIS Activities (Grades 6, 7 & 8)";
+                ? "कक्षा 6, 7, 8 और 9 की DCAIS गतिविधियाँ देखने के लिए अपनी कक्षा चुनें"
+                : "Choose your grade level for DCAIS Activities (Grades 6, 7, 8 & 9)";
         }
     }
 
@@ -2529,13 +2529,13 @@ function renderMonthSearchResults(query = '') {
     } else if (state.curriculumType === 'kaushal-bodh') {
         pool = state.kaushalBodhActivities || [];
     } else {
-        // DCAIS Activities: strictly Grades 6, 7, 8
+        // DCAIS Activities: strictly Grades 6, 7, 8, 9
         if (isHindiMedium) {
             // Hindi medium: ONLY show Hindi curriculum activities (Grade 6 (Hindi), etc.)
-            pool = (state.allActivities || []).filter(a => /(6|7|8)/.test(a.grade) && a.grade.toLowerCase().includes('(hindi)'));
+            pool = (state.allActivities || []).filter(a => /(6|7|8|9)/.test(a.grade) && a.grade.toLowerCase().includes('(hindi)'));
         } else {
-            // English medium: ONLY show English curriculum activities (Grade 6, 7, 8)
-            pool = (state.allActivities || []).filter(a => /(6|7|8)/.test(a.grade) && !a.grade.toLowerCase().includes('(hindi)'));
+            // English medium: ONLY show English curriculum activities (Grade 6, 7, 8, 9)
+            pool = (state.allActivities || []).filter(a => /(6|7|8|9)/.test(a.grade) && !a.grade.toLowerCase().includes('(hindi)'));
         }
     }
 
