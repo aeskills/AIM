@@ -49,6 +49,99 @@ const state = {
     aotmLanguage: 'en'
 };
 
+// ===== AIM Analytics (Google Analytics 4) =====
+// Sends anonymous usage data only. Never pass student names, school names or anything typed by a student.
+const AIM_LANDING_QUERY = window.location.search; // keeps ?utm_... tags before the URL is cleaned
+const AIM_SCREEN_TITLES = {
+    'welcome': 'Home',
+    'grade': 'Select Grade',
+    'form-of-work': 'Select Form of Work',
+    'activities': 'Activity List',
+    'detail': 'Activity Detail'
+};
+let aimLastView = '';
+let aimLastTrack = 'choose';
+let aimLastGrade = '';
+let aimFirstView = true;
+let aimLastOutbound = { url: '', time: 0 };
+
+function trackEvent(name, params) {
+    try {
+        if (typeof gtag === 'function') gtag('event', name, params || {});
+    } catch (e) { /* analytics must never break the site */ }
+}
+
+function trackCurrentView() {
+    const step = state.currentStep || 'welcome';
+    const track = state.tutorialMode || 'choose';
+    const grade = state.selectedGrade || '';
+    const activity = state.selectedActivity ? state.selectedActivity.activity_name : '';
+
+    const key = [step, track, grade, activity].join('|');
+    if (key === aimLastView) return; // ignore re-renders of the same screen
+    aimLastView = key;
+
+    const virtualPath = step === 'welcome' ? '' : step;
+    trackEvent('page_view', {
+        page_title: 'AIM - ' + (AIM_SCREEN_TITLES[step] || step),
+        page_location: window.location.origin + window.location.pathname + virtualPath + (aimFirstView ? AIM_LANDING_QUERY : ''),
+        track: track,
+        grade: grade,
+        activity_name: activity
+    });
+    aimFirstView = false;
+
+    if (track !== 'choose' && track !== aimLastTrack) {
+        trackEvent('select_track', { track: track });
+    }
+    aimLastTrack = track;
+
+    if (step === 'welcome' || step === 'grade') {
+        aimLastGrade = '';
+    } else if (grade && grade !== aimLastGrade) {
+        trackEvent('select_grade', { grade: grade, track: track });
+        aimLastGrade = grade;
+    }
+
+    if (step === 'detail' && activity) {
+        trackEvent('view_activity', { activity_name: activity, grade: grade, track: track });
+    }
+}
+
+function trackOutbound(url) {
+    const link = String(url || '');
+    const now = Date.now();
+    if (link === aimLastOutbound.url && now - aimLastOutbound.time < 1500) return; // same click seen twice
+    aimLastOutbound = { url: link, time: now };
+
+    const u = link.toLowerCase();
+    let name = 'open_external_link';
+    if (u.includes('youtu')) name = 'open_tutorial';
+    else if (u.includes('forms.gle') || u.includes('docs.google.com/forms')) name = 'open_submit_form';
+    else if (u.includes('adobe.com') || u.includes('adobe.ly')) name = 'open_template';
+
+    trackEvent(name, {
+        link_url: link,
+        activity_name: state.selectedActivity ? state.selectedActivity.activity_name : 'Activity of the Month',
+        grade: state.selectedGrade || '',
+        track: state.tutorialMode || 'choose'
+    });
+}
+
+// Most AIM buttons open links with window.open(), which GA4 cannot see on its own.
+const aimOriginalOpen = window.open.bind(window);
+window.open = function (url, ...rest) {
+    trackOutbound(url);
+    return aimOriginalOpen(url, ...rest);
+};
+
+// Plain links that open in a new tab
+document.addEventListener('click', (e) => {
+    const a = e.target && e.target.closest ? e.target.closest('a[target="_blank"]') : null;
+    if (a && a.href) trackOutbound(a.href);
+}, true);
+// ===== End AIM Analytics =====
+
 const MONTH_TRANSLATION_MAP = {
     // English
     'january': { en: 'January', hi: 'जनवरी', altHi: ['जनवरी'], index: 1 },
@@ -568,6 +661,7 @@ function setupEventListeners() {
     if (langToggleEn) {
         langToggleEn.addEventListener('click', () => {
             state.userExplicitLanguage = 'en';
+            trackEvent('change_language', { language: 'en' });
             state.language = 'en';
             state.aotmLanguage = 'en';
             render();
@@ -577,6 +671,7 @@ function setupEventListeners() {
     if (langToggleHi) {
         langToggleHi.addEventListener('click', () => {
             state.userExplicitLanguage = 'hi';
+            trackEvent('change_language', { language: 'hi' });
             state.language = 'hi';
             state.aotmLanguage = 'hi';
             render();
@@ -1021,6 +1116,7 @@ function setupEventListeners() {
     if (subjectFilter) {
         subjectFilter.addEventListener('change', (e) => {
             state.filterSubject = e.target.value;
+            trackEvent('filter_month', { month: e.target.value, grade: state.selectedGrade || '' });
             renderFilteredActivities();
         });
     }
@@ -2233,6 +2329,7 @@ function render() {
     // Translate all strings in the document DOM
     translateUIInternal();
 
+    trackCurrentView(); // AIM Analytics
     // Fire focus updates for screen readers without scrolling the viewport
     if (focusId) {
         const focusEl = document.getElementById(focusId);
